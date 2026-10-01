@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-b5ea9318-4dde-4402-8eda-41e7e7b5c11d/styles.css">
+<script src="_ds/organic-b5ea9318-4dde-4402-8eda-41e7e7b5c11d/_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--color-bg)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}</style>
+</helmet>
+<div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+  <header style="position:sticky;top:0;z-index:10;background:color-mix(in srgb, var(--color-bg) 88%, transparent);backdrop-filter:blur(8px);border-bottom:2px solid var(--color-text)">
+    <nav style="max-width:1200px;margin:0 auto;padding:var(--space-4) var(--space-8);display:flex;align-items:center;gap:var(--space-8)">
+      <div style="display:flex;align-items:center;gap:var(--space-2)">
+        <span style="width:30px;height:30px;border-radius:999px;background:var(--color-accent-2-600);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-2-100)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+        </span>
+        <span style="font-family:var(--font-heading);font-size:19px">Guardiões do Leça</span>
+      </div>
+      <div style="display:flex;gap:var(--space-2)">
+        <a href="#" onClick="{{ back }}" style="font-family:var(--font-heading);font-size:14px;text-decoration:none;color:var(--color-accent-2-900);background:{{ navMainBg }};padding:8px 18px;border-radius:999px;white-space:nowrap" style-hover="background:var(--color-accent-2-200)">Main</a>
+        <a href="#" onClick="{{ goReports }}" style="font-family:var(--font-heading);font-size:14px;text-decoration:none;color:var(--color-accent-2-900);background:{{ navRepBg }};padding:8px 18px;border-radius:999px;white-space:nowrap" style-hover="background:var(--color-accent-2-200)">View reports</a>
+      </div>
+    </nav>
+  </header>
+
+  <sc-if value="{{ showGrid }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:1200px;margin:0 auto;padding:var(--space-8) var(--space-8) 96px">
+    <section style="display:flex;flex-direction:column;gap:var(--space-3);max-width:640px;padding:48px 0 64px">
+      <span class="tag tag-accent-2" style="align-self:flex-start">Rio Leça · Porto</span>
+      <h1 style="font-size:54px;margin:0;text-wrap:balance">Invasive plants along the river</h1>
+      <p style="font-size:17px;margin:0;color:var(--color-neutral-700);text-wrap:pretty">Non-native species crowd out the plants and animals that depend on the Leça’s banks. Learn to recognise them.</p>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:72px;row-gap:48px;align-items:start;max-width:960px;margin:0 auto">
+      <sc-for list="{{ species }}" as="s" hint-placeholder-count="9">
+        <div onMouseEnter="{{ s.enter }}" onMouseLeave="{{ s.leave }}" onClick="{{ s.open }}" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--space-4);cursor:pointer">
+          <div style="width:100%;aspect-ratio:1;border-radius:50%;overflow:hidden;background:var(--color-surface);transition:transform .35s cubic-bezier(.3,1.5,.5,1), box-shadow .35s;transform:{{ s.transform }};box-shadow:{{ s.shadow }}">
+            <sc-if value="{{ s.src }}" hint-placeholder-val="{{ false }}">
+              <img src="{{ s.src }}" alt="{{ s.common }}" class="washed" style="width:100%;height:100%;object-fit:cover"></img>
+            </sc-if>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px;padding:0 var(--space-2)">
+            <span style="font-family:var(--font-heading);font-size:21px;line-height:1.15">{{ s.common }}</span>
+            <span style="font-size:14px;font-style:italic;color:var(--color-accent-2-700)">{{ s.latin }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ showDetail }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:1200px;margin:0 auto;padding:var(--space-8) var(--space-8) 120px;display:flex;flex-direction:column;gap:48px">
+    <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+      <button class="btn btn-ghost" onClick="{{ back }}" style="align-self:flex-start;margin-left:-12px;white-space:nowrap;flex-shrink:0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+        All plants
+      </button>
+      <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
+        <span class="tag tag-accent">Invasive</span>
+        <span class="tag tag-neutral">{{ p.family }}</span>
+      </div>
+      <h1 style="font-size:68px;margin:0;line-height:1.02">{{ p.common }}</h1>
+      <span style="font-size:22px;font-style:italic;color:var(--color-accent-2-700)">{{ p.latin }}</span>
+    </div>
+
+    <section style="display:flex;flex-direction:column;gap:var(--space-4)">
+      <div style="width:100%;height:min(62vw,600px);border-radius:var(--radius-lg);overflow:hidden;background:var(--color-surface)">
+        <sc-if value="{{ heroSrc }}" hint-placeholder-val="{{ false }}">
+          <img src="{{ heroSrc }}" alt="{{ p.common }}" class="washed" style="width:100%;height:100%;object-fit:cover"></img>
+        </sc-if>
+      </div>
+      <div style="display:flex;gap:var(--space-4);flex-wrap:wrap;align-items:center">
+        <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="5">
+          <button onClick="{{ g.select }}" style="width:92px;height:92px;padding:0;border-radius:50%;overflow:hidden;cursor:pointer;background:var(--color-surface);border:3px solid {{ g.ring }};transition:transform .2s" style-hover="transform:scale(1.06)">
+            <img src="{{ g.src }}" alt="" class="washed" style="width:100%;height:100%;object-fit:cover"></img>
+          </button>
+        </sc-for>
+        <span style="font-size:13px;color:var(--color-neutral-700)">{{ galleryNote }}</span>
+      </div>
+    </section>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,320px);gap:72px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:72px;min-width:0">
+
+        <section style="display:flex;flex-direction:column;gap:var(--space-6)">
+          <h2 style="font-size:36px;margin:0">Characteristics</h2>
+          <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+            <sc-for list="{{ p.chars }}" as="c" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:var(--space-6);align-items:baseline">
+                <span style="font-family:var(--font-heading);font-size:17px;color:var(--color-accent-2-700)">{{ c.label }}</span>
+                <p style="margin:0;font-size:16px;text-wrap:pretty">{{ c.text }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:var(--space-6)">
+          <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+            <h2 style="font-size:36px;margin:0">Native look-alikes</h2>
+            <p style="margin:0;font-size:16px;color:var(--color-neutral-700);max-width:560px">Native plants that can be mistaken for {{ p.common }}. Check these differences before removing anything.</p>
+          </div>
+          <sc-for list="{{ p.look }}" as="l" hint-placeholder-count="2">
+            <div style="background:var(--color-surface);border-radius:var(--radius-lg);padding:var(--space-8);display:flex;flex-direction:column;gap:var(--space-6)">
+              <div style="display:flex;align-items:center;gap:var(--space-6)">
+                <div style="width:128px;height:128px;flex:none;border-radius:50%;overflow:hidden;background:var(--color-neutral-300)">
+                  <sc-if value="{{ l.src }}" hint-placeholder-val="{{ false }}">
+                    <img src="{{ l.src }}" alt="{{ l.common }}" class="washed" style="width:100%;height:100%;object-fit:cover"></img>
+                  </sc-if>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:4px">
+                  <span class="tag tag-accent-2" style="align-self:flex-start">Native</span>
+                  <span style="font-family:var(--font-heading);font-size:26px;line-height:1.1">{{ l.common }}</span>
+                  <span style="font-size:15px;font-style:italic;color:var(--color-accent-2-700)">{{ l.latin }}</span>
+                </div>
+                <button class="btn btn-secondary" onClick="{{ l.gallery }}" style="margin-left:auto;align-self:center;white-space:nowrap;flex-shrink:0;gap:10px;padding:14px 26px;font-size:16px;cursor:pointer">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
+                  More photos
+                </button>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--space-8)">
+                <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+                  <h6 style="margin:0;color:var(--color-neutral-700)">Looks similar</h6>
+                  <div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
+                    <sc-for list="{{ l.shared }}" as="t" hint-placeholder-count="3">
+                      <span class="tag tag-outline" style="white-space:nowrap">{{ t }}</span>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+                  <h6 style="margin:0;color:var(--color-neutral-700)">How to tell them apart</h6>
+                  <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+                    <sc-for list="{{ l.diffs }}" as="d" hint-placeholder-count="3">
+                      <div style="display:flex;gap:var(--space-3);align-items:baseline">
+                        <span style="width:8px;height:8px;flex:none;border-radius:50%;background:var(--color-accent);transform:translateY(-2px)"></span>
+                        <span style="font-size:15px;text-wrap:pretty">{{ d }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:var(--space-6)">
+          <h2 style="font-size:36px;margin:0">Procedure</h2>
+          <div style="background:var(--color-accent-100);border-radius:999px;padding:var(--space-3) var(--space-6);display:flex;gap:var(--space-3);align-items:center;align-self:flex-start">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-700)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+            <span style="font-size:15px;color:var(--color-accent-800)">{{ p.caution }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+            <sc-for list="{{ p.steps }}" as="st" hint-placeholder-count="4">
+              <div style="display:flex;gap:var(--space-6);align-items:flex-start">
+                <span style="width:44px;height:44px;flex:none;border-radius:50%;background:var(--color-accent-2-600);color:var(--color-accent-2-100);font-family:var(--font-heading);font-size:18px;display:flex;align-items:center;justify-content:center">{{ st.n }}</span>
+                <div style="display:flex;flex-direction:column;gap:4px;padding-top:8px">
+                  <span style="font-family:var(--font-heading);font-size:19px">{{ st.title }}</span>
+                  <p style="margin:0;font-size:16px;text-wrap:pretty">{{ st.text }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+
+      <aside style="position:sticky;top:96px;background:var(--color-accent-2-200);border-radius:var(--radius-lg);padding:var(--space-8);display:flex;flex-direction:column;gap:var(--space-6)">
+        <h3 style="margin:0;font-size:24px">Key facts</h3>
+        <sc-for list="{{ p.facts }}" as="f" hint-placeholder-count="5">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <h6 style="margin:0;color:var(--color-accent-2-800)">{{ f.label }}</h6>
+            <span style="font-size:15px">{{ f.value }}</span>
+          </div>
+        </sc-for>
+      </aside>
+    </div>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ showReports }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:1200px;margin:0 auto;padding:var(--space-8) var(--space-8) 140px;display:flex;flex-direction:column;gap:var(--space-8)">
+    <section style="display:flex;flex-direction:column;gap:var(--space-3);padding:48px 0 8px;max-width:640px">
+      <span class="tag tag-accent-2" style="align-self:flex-start">Rio Leça · Porto</span>
+      <h1 style="font-size:54px;margin:0">Reports</h1>
+      <p style="font-size:17px;margin:0;color:var(--color-neutral-700);text-wrap:pretty">Every sighting of an invasive plant along the river. Open a report to see it in full, correct it or remove it.</p>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:var(--space-4)">
+      <div style="display:grid;grid-template-columns:minmax(220px,2fr) repeat(4,minmax(150px,1fr));gap:var(--space-3)">
+        <div style="position:relative;display:flex;align-items:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:14px;pointer-events:none"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <input class="input" value="{{ fq }}" onChange="{{ onFq }}" placeholder="Search place, reporter or species" style="padding-left:38px;min-height:44px;font-size:15px;width:100%"></input>
+        </div>
+        <sc-for list="{{ filterSelects }}" as="fs" hint-placeholder-count="4">
+          <select class="input" value="{{ fs.value }}" onChange="{{ fs.onChange }}" aria-label="{{ fs.label }}" style="min-height:44px;font-size:15px;cursor:pointer;width:100%">
+            <sc-for list="{{ fs.options }}" as="o" hint-placeholder-count="4">
+              <option value="{{ o.value }}">{{ o.label }}</option>
+            </sc-for>
+          </select>
+        </sc-for>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap">
+        <span style="font-size:14px;color:var(--color-neutral-700)">{{ countLabel }}</span>
+        <sc-if value="{{ hasFilters }}" hint-placeholder-val="{{ false }}">
+          <button class="btn btn-ghost" onClick="{{ clearFilters }}" style="padding:6px 12px;font-size:14px">Clear filters</button>
+        </sc-if>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:var(--space-3)">
+          <span style="font-size:14px;color:var(--color-neutral-700);white-space:nowrap">Sort by date</span>
+          <div role="group" aria-label="Sort by date" style="display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--color-surface);box-shadow:inset 0 0 0 1.5px var(--color-divider)">
+            <sc-for list="{{ sortOpts }}" as="so" hint-placeholder-count="2">
+              <button onClick="{{ so.pick }}" aria-pressed="{{ so.on }}" style="display:flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:999px;cursor:pointer;font:inherit;font-size:14px;white-space:nowrap;background:{{ so.bg }};color:{{ so.fg }};box-shadow:{{ so.shadow }};transition:background .2s, color .2s" style-hover="background:{{ so.hover }}">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="transform:{{ so.rot }}"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>
+                {{ so.label }}
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="overflow-x:auto;background:var(--color-surface);border-radius:var(--radius-lg);padding:var(--space-2) var(--space-4)">
+      <table class="table" style="width:100%;min-width:860px">
+        <thead>
+          <tr>
+            <th>Species</th><th>Date</th><th>Location</th><th>Abundance</th><th>State</th><th>Flower or fruit</th><th style="text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <tr onClick="{{ r.view }}" style="cursor:pointer" style-hover="background:var(--color-accent-2-100)">
+              <td>
+                <div style="display:flex;align-items:center;gap:var(--space-3)">
+                  <span style="width:44px;height:44px;flex:none;border-radius:50%;overflow:hidden;background:var(--color-neutral-300)">
+                    <img src="{{ r.src }}" alt="" class="washed" style="width:100%;height:100%;object-fit:cover"></img>
+                  </span>
+                  <span style="display:flex;flex-direction:column">
+                    <span style="font-family:var(--font-heading);font-size:16px;white-space:nowrap">{{ r.common }}</span>
+                    <span style="font-size:13px;font-style:italic;color:var(--color-accent-2-700);white-space:nowrap">{{ r.latin }}</span>
+                  </span>
+                </div>
+              </td>
+              <td style="white-space:nowrap">{{ r.dateLabel }}</td>
+              <td>{{ r.location }}</td>
+              <td><span class="tag tag-neutral" style="white-space:nowrap">{{ r.abundance }}</span></td>
+              <td><span class="tag tag-outline" style="white-space:nowrap">{{ r.stage }}</span></td>
+              <td><span class="tag tag-accent-2" style="white-space:nowrap">{{ r.pheno }}</span></td>
+              <td onClick="{{ stop }}">
+                <div style="display:flex;justify-content:flex-end;gap:var(--space-1)">
+                  <button class="btn btn-ghost btn-icon" onClick="{{ r.view }}" aria-label="View" title="View">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  </button>
+                  <button class="btn btn-ghost btn-icon" onClick="{{ r.edit }}" aria-label="Edit" title="Edit">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>
+                  </button>
+                  <button class="btn btn-ghost btn-icon" onClick="{{ r.del }}" aria-label="Delete" title="Delete" style="color:var(--color-accent-700)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:48px var(--space-4);display:flex;flex-direction:column;align-items:center;gap:var(--space-3);text-align:center">
+          <span style="font-family:var(--font-heading);font-size:20px">No reports match these filters</span>
+          <button class="btn btn-secondary" onClick="{{ clearFilters }}">Clear filters</button>
+        </div>
+      </sc-if>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ showView }}" hint-placeholder-val="{{ false }}">
+  <div class="dialog-backdrop" onClick="{{ closeView }}" style="z-index:50">
+    <div class="dialog" onClick="{{ stop }}" style="width:min(640px,100%);max-height:calc(100vh - 48px);overflow-y:auto;padding:0;gap:0;scrollbar-width:thin;scrollbar-color:var(--color-neutral-400) transparent">
+      <div style="position:relative;height:280px;background:var(--color-surface);flex:none">
+        <img src="{{ v.src }}" alt="{{ v.common }}" class="washed" style="width:100%;height:100%;object-fit:cover"></img>
+        <button onClick="{{ closeView }}" aria-label="Close" style="position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;background:var(--color-bg);color:var(--color-text);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+      <div style="padding:var(--space-8);display:flex;flex-direction:column;gap:var(--space-6)">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <span style="font-size:13px;color:var(--color-neutral-700)">Report {{ v.code }}</span>
+          <span style="font-family:var(--font-heading);font-size:30px;line-height:1.1">{{ v.common }}</span>
+          <span style="font-size:15px;font-style:italic;color:var(--color-accent-2-700)">{{ v.latin }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-6) var(--space-8)">
+          <sc-for list="{{ v.fields }}" as="vf" hint-placeholder-count="8">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <h6 style="margin:0;color:var(--color-accent-2-800)">{{ vf.label }}</h6>
+              <span style="font-size:15px">{{ vf.value }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ v.hasNotes }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <h6 style="margin:0;color:var(--color-accent-2-800)">Notes</h6>
+            <p style="margin:0;font-size:15px;text-wrap:pretty">{{ v.notes }}</p>
+          </div>
+        </sc-if>
+      </div>
+      <div style="position:sticky;bottom:0;padding:var(--space-4) var(--space-8) var(--space-6);background:var(--color-bg);box-shadow:0 -1px 0 var(--color-divider), 0 -12px 24px -12px color-mix(in srgb, var(--color-text) 18%, transparent);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:var(--space-3)">
+        <button onClick="{{ v.del }}" style="display:flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 20px;border-radius:999px;border:2px solid var(--color-accent-300);background:transparent;color:var(--color-accent-800);font-family:var(--font-heading);font-size:16px;cursor:pointer;white-space:nowrap;transition:background .2s, border-color .2s" style-hover="background:var(--color-accent-100);border-color:var(--color-accent-500)" style-active="background:var(--color-accent-200)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+          Delete
+        </button>
+        <button onClick="{{ v.edit }}" style="display:flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;border:none;background:var(--color-accent-2-600);color:var(--color-accent-2-100);font-family:var(--font-heading);font-size:16px;cursor:pointer;white-space:nowrap;box-shadow:var(--shadow-md);transition:background .2s, transform .2s" style-hover="background:var(--color-accent-2-700);transform:translateY(-1px)" style-active="background:var(--color-accent-2-800);transform:none">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>
+          Edit report
+        </button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showDel }}" hint-placeholder-val="{{ false }}">
+  <div class="dialog-backdrop" onClick="{{ cancelDel }}" style="z-index:70">
+    <div class="dialog" onClick="{{ stop }}" style="width:min(440px,100%)">
+      <span class="dialog-title">Delete this report?</span>
+      <p class="dialog-body" style="margin:0">The {{ delName }} report from {{ delDate }} will be removed. This can’t be undone.</p>
+      <div class="dialog-actions">
+        <button class="btn btn-ghost" onClick="{{ cancelDel }}">Cancel</button>
+        <button class="btn btn-primary" onClick="{{ confirmDel }}">Delete</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <div style="position:fixed;left:0;right:0;bottom:var(--space-6);display:flex;justify-content:center;pointer-events:none;z-index:20">
+    <button class="btn btn-primary" onClick="{{ openReport }}" style="pointer-events:auto;padding:14px 28px;font-size:16px;box-shadow:var(--shadow-lg);gap:10px;white-space:nowrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      Report an occurrence
+    </button>
+  </div>
+
+  <sc-if value="{{ showLb }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeLb }}" style="position:fixed;inset:0;z-index:60;background:color-mix(in srgb, var(--color-neutral-900) 94%, transparent);display:flex;flex-direction:column;padding:var(--space-6);gap:var(--space-4)">
+    <div onClick="{{ stop }}" style="display:flex;align-items:center;gap:var(--space-4);color:var(--color-neutral-100)">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <span style="font-family:var(--font-heading);font-size:24px">{{ lbCommon }}</span>
+        <span style="font-size:14px;font-style:italic;color:var(--color-accent-2-300)">{{ lbLatin }}</span>
+      </div>
+      <span style="margin-left:auto;font-size:14px;color:var(--color-neutral-300)">{{ lbCount }}</span>
+      <button onClick="{{ closeLb }}" aria-label="Close" style="width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;background:color-mix(in srgb, var(--color-neutral-100) 14%, transparent);color:var(--color-neutral-100);display:flex;align-items:center;justify-content:center" style-hover="background:color-mix(in srgb, var(--color-neutral-100) 26%, transparent)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+      </button>
+    </div>
+    <div style="flex:1;min-height:0;display:flex;align-items:center;gap:var(--space-4)">
+      <button onClick="{{ lbPrev }}" aria-label="Previous" style="width:52px;height:52px;flex:none;border-radius:50%;border:none;cursor:pointer;background:color-mix(in srgb, var(--color-neutral-100) 14%, transparent);color:var(--color-neutral-100);display:flex;align-items:center;justify-content:center" style-hover="background:color-mix(in srgb, var(--color-neutral-100) 26%, transparent)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+      </button>
+      <div style="flex:1;min-width:0;height:100%;display:flex;align-items:center;justify-content:center">
+        <sc-if value="{{ lbSrc }}" hint-placeholder-val="{{ false }}">
+          <img src="{{ lbSrc }}" alt="{{ lbCommon }}" onClick="{{ stop }}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--radius-lg)"></img>
+        </sc-if>
+        <sc-if value="{{ lbLoading }}" hint-placeholder-val="{{ false }}">
+          <span style="color:var(--color-neutral-300);font-size:15px">Loading photos…</span>
+        </sc-if>
+      </div>
+      <button onClick="{{ lbNext }}" aria-label="Next" style="width:52px;height:52px;flex:none;border-radius:50%;border:none;cursor:pointer;background:color-mix(in srgb, var(--color-neutral-100) 14%, transparent);color:var(--color-neutral-100);display:flex;align-items:center;justify-content:center" style-hover="background:color-mix(in srgb, var(--color-neutral-100) 26%, transparent)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+      </button>
+    </div>
+    <div onClick="{{ stop }}" style="display:flex;justify-content:center;gap:var(--space-3);flex-wrap:wrap">
+      <sc-for list="{{ lbThumbs }}" as="t" hint-placeholder-count="5">
+        <button onClick="{{ t.pick }}" onMouseEnter="{{ t.pick }}" style="width:64px;height:64px;padding:0;border-radius:50%;overflow:hidden;cursor:pointer;background:var(--color-neutral-800);border:3px solid {{ t.ring }};opacity:{{ t.op }};transition:opacity .2s">
+          <img src="{{ t.src }}" alt="" style="width:100%;height:100%;object-fit:cover"></img>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showReport }}" hint-placeholder-val="{{ false }}">
+  <div class="dialog-backdrop" onClick="{{ closeReport }}" style="z-index:50">
+    <div class="dialog" onClick="{{ stop }}" style="width:min(580px,100%);max-height:calc(100vh - 48px);overflow-y:auto;padding:var(--space-8);gap:var(--space-6);scrollbar-width:thin;scrollbar-color:var(--color-neutral-400) transparent">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-4)">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <span class="dialog-title" style="font-size:28px">{{ formTitle }}</span>
+          <span style="font-size:14px;color:var(--color-neutral-700)">Rio Leça · Porto</span>
+        </div>
+        <button class="btn btn-ghost btn-icon" onClick="{{ closeReport }}" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+
+      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+        <div class="field" style="position:relative">
+          <label>Species</label>
+          <div style="position:relative;display:flex;align-items:center">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:14px;pointer-events:none"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <input class="input" value="{{ query }}" onChange="{{ onQuery }}" onFocus="{{ openList }}" placeholder="Search invasive species" style="padding-left:38px;padding-right:40px;min-height:44px;font-size:15px"></input>
+            <button onClick="{{ toggleList }}" aria-label="Show list" style="position:absolute;right:6px;width:32px;height:32px;border:none;background:transparent;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--color-text)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+          </div>
+          <sc-if value="{{ listOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:5;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:var(--space-2);max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ options }}" as="o" hint-placeholder-count="5">
+                <button onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:var(--space-3);padding:8px 10px;border:none;border-radius:var(--radius-md);background:{{ o.bg }};cursor:pointer;text-align:left;font:inherit;color:var(--color-text)" style-hover="background:var(--color-accent-2-200)">
+                  <span style="width:32px;height:32px;flex:none;border-radius:50%;overflow:hidden;background:var(--color-surface)">
+                    <img src="{{ o.src }}" alt="" class="washed" style="width:100%;height:100%;object-fit:cover"></img>
+                  </span>
+                  <span style="display:flex;flex-direction:column">
+                    <span style="font-size:15px">{{ o.common }}</span>
+                    <span style="font-size:13px;font-style:italic;color:var(--color-accent-2-700)">{{ o.latin }}</span>
+                  </span>
+                </button>
+              </sc-for>
+              <sc-if value="{{ noMatch }}" hint-placeholder-val="{{ false }}">
+                <span style="padding:10px;font-size:14px;color:var(--color-neutral-700)">No species match “{{ query }}”</span>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+
+        <div class="field">
+          <label>Photo</label>
+          <label style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-4);border:2px dashed var(--color-divider);border-radius:var(--radius-lg);cursor:pointer;margin:0;font-size:14px;color:var(--color-text)" style-hover="border-color:var(--color-accent);background:var(--color-accent-100)">
+            <input type="file" accept="image/*" onChange="{{ onPhoto }}" style="position:absolute;opacity:0;width:0;height:0"></input>
+            <span style="width:64px;height:64px;flex:none;border-radius:50%;overflow:hidden;background:var(--color-accent-2-200);display:flex;align-items:center;justify-content:center">
+              <sc-if value="{{ photoUrl }}" hint-placeholder-val="{{ false }}">
+                <img src="{{ photoUrl }}" alt="" style="width:100%;height:100%;object-fit:cover"></img>
+              </sc-if>
+              <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ true }}">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-2-800)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+              </sc-if>
+            </span>
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+              <span style="font-family:var(--font-heading);font-size:16px">{{ photoLabel }}</span>
+              <span style="font-size:13px;color:var(--color-neutral-700);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ photoHint }}</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label>Date and time</label>
+          <input class="input" type="datetime-local" value="{{ date }}" onChange="{{ onDate }}" style="min-height:44px;font-size:15px"></input>
+        </div>
+
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+          <div class="field">
+            <label>{{ g.label }}</label>
+            <div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
+              <sc-for list="{{ g.opts }}" as="c" hint-placeholder-count="4">
+                <button onClick="{{ c.pick }}" style="padding:9px 16px;border-radius:999px;border:1.5px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};font:inherit;font-size:14px;cursor:pointer;white-space:nowrap;transition:background .15s">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+
+        <div class="dialog-actions" style="margin-top:0">
+          <button class="btn btn-ghost" onClick="{{ closeReport }}">Cancel</button>
+          <button class="btn btn-primary" onClick="{{ submit }}" disabled="{{ cantSubmit }}">{{ submitLabel }}</button>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-4);padding:var(--space-4) 0">
+          <span style="width:64px;height:64px;border-radius:50%;background:var(--color-accent-2-600);display:flex;align-items:center;justify-content:center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-2-100)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+          </span>
+          <span style="font-family:var(--font-heading);font-size:24px">Thank you</span>
+          <p style="margin:0;font-size:15px;text-wrap:pretty">Your report of {{ sentName }} has been recorded.</p>
+          <button class="btn btn-primary" onClick="{{ closeReport }}">Done</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PLANTS = [
+  { id: 'acacia', common: 'Mimosa', latin: 'Acacia dealbata', pt: 'Mimosa', family: 'Fabaceae', native: 'South-east Australia', flowering: 'January – March', habitat: 'Banks, slopes and burnt ground',
+    status: 'Listed invasive in Portugal (Decreto-Lei 92/2019)',
+    chars: [['Form', 'Evergreen tree, usually 5–15 m, forming dense stands.'], ['Leaves', 'Feathery, twice-divided, silvery blue-green; very small leaflets.'], ['Flowers', 'Bright yellow, fluffy round heads in large clusters; strong scent.'], ['Fruit', 'Flat brown pods with hard seeds that stay viable in the soil for decades.'], ['Spread', 'Seeds and vigorous suckers from the roots, especially after fire or cutting.']],
+    look: [
+      { common: 'Gorse', latin: 'Ulex europaeus', shared: ['Yellow flowers', 'Winter flowering', 'Dense growth'], diffs: ['Spiny shrub, rarely over 2 m', 'Pea-shaped flowers, not fluffy balls', 'No feathery leaves, only spines'] },
+      { common: 'Portuguese broom', latin: 'Cytisus striatus', shared: ['Yellow flowers', 'Pods', 'Grows on slopes'], diffs: ['Shrub with green, nearly leafless stems', 'Pea-shaped flowers in spring', 'Hairy pods'] }],
+    caution: 'Cutting alone makes it resprout from the stump and roots.',
+    steps: [['Pull seedlings', 'Hand-pull young plants when soil is moist, removing the whole root.'], ['Ring-bark adults', 'Remove a 20–30 cm band of bark to below the cambium around the trunk, down to the roots.'], ['Leave to die standing', 'Let the tree dry out for 1–2 years before felling.'], ['Monitor', 'Return every year to pull new seedlings from the seed bank.']] },
+  { id: 'arundo', common: 'Giant reed', latin: 'Arundo donax', pt: 'Cana', family: 'Poaceae', native: 'Asia', flowering: 'August – November', habitat: 'Riverbanks and wet ditches',
+    status: 'Listed invasive in Portugal (Decreto-Lei 92/2019)',
+    chars: [['Form', 'Giant perennial grass, 2–6 m, in thick clumps.'], ['Stems', 'Hollow, cane-like, 2–4 cm thick, like bamboo.'], ['Leaves', 'Broad (up to 7 cm), grey-green, clasping the stem with a heart-shaped base.'], ['Flowers', 'Large, dense, feathery plume, pale cream.'], ['Spread', 'Thick rhizomes; stem and root fragments carried by floods.']],
+    look: [
+      { common: 'Common reed', latin: 'Phragmites australis', shared: ['Tall reed', 'Feathery plume', 'Wet ground'], diffs: ['Thinner stems, under 1.5 cm', 'Narrower leaves, up to 3 cm', 'Plume purplish-brown', 'Usually 1–4 m tall'] }],
+    caution: 'Never leave cut stems or roots near the water; fragments root downstream.',
+    steps: [['Cut repeatedly', 'Cut stems at ground level several times a year to exhaust the rhizomes.'], ['Dig out rhizomes', 'For small stands, dig out the entire rhizome mass.'], ['Cover', 'Cover cut stands with thick dark sheeting for at least one year.'], ['Dispose safely', 'Dry and remove all material well away from the river.']] },
+  { id: 'tradescantia', common: 'Small-leaf spiderwort', latin: 'Tradescantia fluminensis', pt: 'Erva-da-fortuna', family: 'Commelinaceae', native: 'South America', flowering: 'Spring – autumn', habitat: 'Shaded, damp riverside woodland',
+    status: 'Listed invasive in Portugal (Decreto-Lei 92/2019)',
+    chars: [['Form', 'Low creeping herb forming dense carpets up to 60 cm deep.'], ['Stems', 'Succulent, jointed, rooting at every node.'], ['Leaves', 'Glossy, oval, pointed, with a sheath around the stem.'], ['Flowers', 'Small, white, with three petals.'], ['Spread', 'Stem fragments; any piece with a node can regrow.']],
+    look: [
+      { common: 'Greater stitchwort', latin: 'Stellaria holostea', shared: ['White flowers', 'Shaded banks', 'Low growth'], diffs: ['Five deeply notched petals', 'Narrow, grass-like opposite leaves', 'Thin, square, non-succulent stems'] }],
+    caution: 'Every leftover fragment can regrow into a new plant.',
+    steps: [['Hand-pull', 'Roll up the mat, working inwards from the edges.'], ['Collect fragments', 'Rake the area and pick up every piece of stem.'], ['Bag it', 'Seal in bags and let it rot or dispose of it as green waste away from the river.'], ['Repeat', 'Check every 2–3 months for regrowth.']] },
+  { id: 'pontederia', common: 'Water hyacinth', latin: 'Pontederia crassipes', pt: 'Jacinto-de-água', family: 'Pontederiaceae', native: 'Amazon basin', flowering: 'Summer – autumn', habitat: 'Slow water and still pools',
+    status: 'Listed invasive in Portugal; EU list of concern',
+    chars: [['Form', 'Free-floating aquatic plant forming thick mats on the water.'], ['Leaves', 'Glossy, rounded, in rosettes; leaf stalks swollen and spongy.'], ['Flowers', 'Spikes of lilac flowers, the top petal with a yellow spot.'], ['Roots', 'Dark, feathery, hanging in the water.'], ['Spread', 'Daughter plants on runners; can double in two weeks.']],
+    look: [
+      { common: 'White water lily', latin: 'Nymphaea alba', shared: ['Floating leaves', 'Showy flowers', 'Still water'], diffs: ['Rooted in the riverbed', 'Flat leaves with a deep slit', 'Large white flowers', 'No swollen leaf stalks'] },
+      { common: 'Frogbit', latin: 'Hydrocharis morsus-ranae', shared: ['Floating rosettes', 'Rounded leaves'], diffs: ['Much smaller leaves, 2–5 cm', 'Three white petals', 'Thin, not spongy, stalks'] }],
+    caution: 'Selling, transporting or releasing it is illegal in the EU.',
+    steps: [['Contain', 'Place floating booms to stop the mat moving downstream.'], ['Remove whole plants', 'Lift with nets or rakes, including all roots.'], ['Dry away from water', 'Pile well above flood level to dry out.'], ['Report', 'Record every sighting so new outbreaks are caught early.']] },
+  { id: 'carpobrotus', common: 'Hottentot fig', latin: 'Carpobrotus edulis', pt: 'Chorão', family: 'Aizoaceae', native: 'South Africa', flowering: 'March – July', habitat: 'Sandy ground near the river mouth',
+    status: 'Listed invasive in Portugal (Decreto-Lei 92/2019)',
+    chars: [['Form', 'Mat-forming succulent, spreading several metres.'], ['Leaves', 'Fleshy, three-angled in section, curved, green to red.'], ['Flowers', 'Large, yellow fading to pink, many narrow petals.'], ['Fruit', 'Fleshy, fig-like, eaten and spread by animals.'], ['Spread', 'Rooting stems and seeds.']],
+    look: [
+      { common: 'White stonecrop', latin: 'Sedum album', shared: ['Succulent leaves', 'Mat-forming', 'Dry, sunny ground'], diffs: ['Tiny cylindrical leaves, under 1 cm', 'Clusters of small white star-shaped flowers', 'Low mats, a few cm high'] }],
+    caution: 'Remove the whole mat; buried stems re-root.',
+    steps: [['Pull by hand', 'Lift the edge of the mat and roll it up.'], ['Remove all fragments', 'Sieve or rake the surface for leftover pieces.'], ['Take it away', 'Bag and remove; it survives for months on the ground.'], ['Replant natives', 'Stabilise the bare ground with native species.']] },
+  { id: 'cortaderia', common: 'Pampas grass', latin: 'Cortaderia selloana', pt: 'Erva-das-pampas', family: 'Poaceae', native: 'South America', flowering: 'August – October', habitat: 'Disturbed ground and road verges',
+    status: 'Listed invasive in Portugal (Decreto-Lei 92/2019)',
+    chars: [['Form', 'Large tussock grass, 2–4 m with plumes.'], ['Leaves', 'Long, narrow, arching, with razor-sharp edges.'], ['Flowers', 'Silvery-white to pinkish plumes on tall stalks.'], ['Seeds', 'Up to a million per plant, carried by wind.'], ['Roots', 'Dense crown with deep fibrous roots.']],
+    look: [
+      { common: 'Common reed', latin: 'Phragmites australis', shared: ['Tall plumes', 'Grass', 'Late-summer flowering'], diffs: ['Grows in water, not tussocks', 'Leaves spread along the stem', 'Leaves not sharp-edged', 'Brownish-purple plumes'] }],
+    caution: 'Wear thick gloves and eye protection; the leaves cut.',
+    steps: [['Cut the plumes', 'Before they open, cut and bag all plumes.'], ['Cut the foliage', 'Cut the tussock back close to the crown.'], ['Dig out the crown', 'Dig out the whole root crown with a mattock.'], ['Watch for seedlings', 'Check the area the following year.']] },
+  { id: 'ipomoea', common: 'Blue morning glory', latin: 'Ipomoea indica', pt: 'Bons-dias', family: 'Convolvulaceae', native: 'Tropical America', flowering: 'Spring – autumn', habitat: 'Hedges and riverside trees',
+    status: 'Listed invasive in Portugal (Decreto-Lei 92/2019)',
+    chars: [['Form', 'Vigorous twining climber, smothering trees and shrubs.'], ['Leaves', 'Heart-shaped or three-lobed, soft, hairy.'], ['Flowers', 'Trumpet-shaped, blue-violet fading to pink in the afternoon.'], ['Spread', 'Runners that root where they touch the ground.']],
+    look: [
+      { common: 'Hedge bindweed', latin: 'Calystegia sepium', shared: ['Twining climber', 'Trumpet flowers', 'Hedges'], diffs: ['White flowers', 'Arrow-shaped leaves', 'Less dense growth'] },
+      { common: 'Field bindweed', latin: 'Convolvulus arvensis', shared: ['Trumpet flowers', 'Twining stems'], diffs: ['Small flowers, 1–2 cm', 'White or pale pink', 'Low, creeping growth'] }],
+    caution: 'Cut stems left in trees stay alive for weeks and can re-root.',
+    steps: [['Cut at the base', 'Cut all stems near the ground.'], ['Pull runners', 'Pull runners from the ground and dig out the root.'], ['Remove from canopy', 'Pull down dead stems once dry.'], ['Repeat', 'Check for regrowth every season.']] },
+  { id: 'ailanthus', common: 'Tree of heaven', latin: 'Ailanthus altissima', pt: 'Espanta-lobos', family: 'Simaroubaceae', native: 'China', flowering: 'June – July', habitat: 'Banks, walls and wasteland',
+    status: 'Listed invasive in Portugal; EU list of concern',
+    chars: [['Form', 'Fast-growing deciduous tree, up to 20 m.'], ['Leaves', 'Very large (30–90 cm), with 11–25 leaflets, each with a gland-tipped tooth near the base.'], ['Smell', 'Crushed leaves and stems smell unpleasant.'], ['Fruit', 'Winged seeds in reddish-brown clusters.'], ['Spread', 'Abundant seeds and root suckers.']],
+    look: [
+      { common: 'Narrow-leaved ash', latin: 'Fraxinus angustifolia', shared: ['Pinnate leaves', 'Winged seeds', 'Riverbanks'], diffs: ['Leaves opposite on the twig', 'Leaflets toothed all along the edge', 'Dark buds', 'No bad smell'] }],
+    caution: 'Cutting or felling triggers masses of root suckers.',
+    steps: [['Pull seedlings', 'Pull young plants with the full root.'], ['Treat adults in place', 'Professionals use stem injection or partial ring-barking in summer.'], ['Fell when dead', 'Remove the tree only once it and its roots are dead.'], ['Monitor suckers', 'Pull any suckers for several years.']] },
+  { id: 'oxalis', common: 'Bermuda buttercup', latin: 'Oxalis pes-caprae', pt: 'Azedas', family: 'Oxalidaceae', native: 'South Africa', flowering: 'November – April', habitat: 'Fields, verges and banks',
+    status: 'Listed invasive in Portugal (Decreto-Lei 92/2019)',
+    chars: [['Form', 'Low herb, up to 30 cm, dying back in summer.'], ['Leaves', 'Clover-like, with three heart-shaped leaflets, often purple-spotted.'], ['Flowers', 'Bright yellow, funnel-shaped, five petals.'], ['Spread', 'Small underground bulbils; seeds are not produced in Portugal.']],
+    look: [
+      { common: 'Lesser celandine', latin: 'Ficaria verna', shared: ['Yellow flowers', 'Winter-spring', 'Low growth'], diffs: ['8–12 glossy petals', 'Single, glossy, heart-shaped leaves', 'No three-part leaves'] }],
+    caution: 'Digging or tilling without care spreads the bulbils.',
+    steps: [['Dig carefully', 'Lift the whole plant with the soil around the bulb.'], ['Sieve the soil', 'Remove every small bulbil.'], ['Act before summer', 'Remove before the plant dies back and the bulbils are hidden.'], ['Mulch', 'Cover the area to shade out regrowth.']] },
+];
+
+const ABUND = ['Single plant', 'Few (2–10)', 'Patch (11–100)', 'Dense stand (100+)'];
+const STAGE = ['Seedling', 'Young', 'Mature', 'Dying or dead', 'Already treated'];
+const PHENO = ['None', 'In flower', 'In fruit', 'Both'];
+const PLACES = ['Foz do Leça, Matosinhos', 'Ponte da Pedra', 'Parque Linear do Leça', 'Leça do Balio, mill weirs', 'Santa Cruz do Bispo', 'Ponte de Custió', 'Ermesinde, riverside path', 'Alfena', 'Moinhos de Guifões', 'São Mamede de Infesta'];
+const PEOPLE = ['Ana Ribeiro', 'Tiago Moreira', 'Inês Carvalho', 'Rui Teixeira', 'Marta Sousa', 'João Pinto', 'Beatriz Lopes'];
+const NOTES = ['Spreading onto the path; native willows being shaded out.', 'Near the footbridge, on the right bank.', '', 'Several plants already cut by the parish, regrowing from the base.', 'Close to the water line, risk of fragments washing downstream.', ''];
+const DEMO_REPORTS = (() => {
+  const out = []; let seed = 7;
+  const rnd = n => { seed = (seed * 9301 + 49297) % 233280; return Math.floor(seed / 233280 * n); };
+  for (let k = 0; k < 22; k++) {
+    const d = new Date(2026, 8, 30, 10, 0); d.setDate(d.getDate() - k * 4 - rnd(4)); d.setHours(8 + rnd(10), rnd(4) * 15);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    out.push({ id: 1040 - k, sp: rnd(PLANTS.length), date: d.toISOString().slice(0, 16), abundance: ABUND[rnd(4)], stage: STAGE[rnd(5)], pheno: PHENO[rnd(4)], location: PLACES[rnd(PLACES.length)], reporter: PEOPLE[rnd(PEOPLE.length)], notes: NOTES[rnd(NOTES.length)], photo: '' });
+  }
+  return out;
+})();
+const fmtDate = s => { const d = new Date(s); return isNaN(d) ? s : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); };
+const F0 = { q: '', sp: 'all', ab: 'all', st: 'all', ph: 'all', sort: 'new' };
+
+const fname = u => decodeURIComponent((u || '').split('?')[0].split('/').pop()).replace(/^\d+px-/, '');
+
+class Component extends DCLogic {
+  state = { hover: -1, photos: {}, media: {}, sel: -1, gi: 0, rep: null, page: 'main', reports: DEMO_REPORTS, f: F0, view: null, del: null };
+  setF(patch) { this.setState(s => ({ f: { ...s.f, ...patch } })); }
+  editReport(id) {
+    const r = this.state.reports.find(x => x.id === id); if (!r) return;
+    this.setState({ view: null, rep: { editId: id, sp: r.sp, query: PLANTS[r.sp].common, list: false, photo: r.photo || this.state.photos[PLANTS[r.sp].latin] || '', photoName: r.photo ? 'Your photo' : 'Current photo', date: r.date, abundance: r.abundance, stage: r.stage, pheno: r.pheno, sent: false } });
+  }
+  reportsVals() {
+    const { reports, f, photos, view, del } = this.state;
+    const opt = (all, list) => [{ value: 'all', label: all }, ...list.map(v => ({ value: v, label: v }))];
+    const q = f.q.trim().toLowerCase();
+    let list = reports.filter(r => {
+      const p = PLANTS[r.sp];
+      if (f.sp !== 'all' && String(r.sp) !== f.sp) return false;
+      if (f.ab !== 'all' && r.abundance !== f.ab) return false;
+      if (f.st !== 'all' && r.stage !== f.st) return false;
+      if (f.ph !== 'all' && r.pheno !== f.ph) return false;
+      if (q && !(p.common + ' ' + p.latin + ' ' + r.location + ' ' + r.reporter).toLowerCase().includes(q)) return false;
+      return true;
+    });
+    list = list.slice().sort((a, b) => f.sort === 'new' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
+    const srcOf = r => r.photo || photos[PLANTS[r.sp].latin] || '';
+    const rows = list.map(r => ({
+      common: PLANTS[r.sp].common, latin: PLANTS[r.sp].latin, src: srcOf(r), dateLabel: fmtDate(r.date),
+      location: r.location, abundance: r.abundance, stage: r.stage, pheno: r.pheno,
+      view: () => this.setState({ view: r.id }),
+      edit: () => this.editReport(r.id),
+      del: () => this.setState({ del: r.id }),
+    }));
+    const sel = (key, label, options) => ({ label, value: f[key], options, onChange: e => this.setF({ [key]: e.target.value }) });
+    const out = {
+      fq: f.q, onFq: e => this.setF({ q: e.target.value }),
+      filterSelects: [
+        sel('sp', 'Species', [{ value: 'all', label: 'All species' }, ...PLANTS.map((p, i) => ({ value: String(i), label: p.common }))]),
+        sel('ab', 'Abundance', opt('Any abundance', ABUND)),
+        sel('st', 'State', opt('Any state', STAGE)),
+        sel('ph', 'Flower or fruit', opt('Any flower/fruit', PHENO)),
+      ],
+      countLabel: list.length === reports.length ? reports.length + ' reports' : 'Showing ' + list.length + ' of ' + reports.length + ' reports',
+      hasFilters: JSON.stringify({ ...f, sort: 'new' }) !== JSON.stringify(F0),
+      clearFilters: () => this.setState(s => ({ f: { ...F0, sort: s.f.sort } })),
+      sortOpts: [['new', 'Newest first'], ['old', 'Oldest first']].map(([k, label]) => ({ label, on: f.sort === k, bg: f.sort === k ? 'var(--color-accent-2-600)' : 'transparent', fg: f.sort === k ? 'var(--color-accent-2-100)' : 'var(--color-text)', shadow: f.sort === k ? 'var(--shadow-sm)' : 'none', hover: f.sort === k ? 'var(--color-accent-2-700)' : 'var(--color-accent-2-200)', rot: k === 'new' ? 'none' : 'rotate(180deg)', pick: () => this.setF({ sort: k }) })),
+      rows, noRows: rows.length === 0,
+      showView: false, closeView: () => this.setState({ view: null }),
+      showDel: false, cancelDel: () => this.setState({ del: null }),
+      confirmDel: () => this.setState(s => ({ reports: s.reports.filter(x => x.id !== s.del), del: null, view: null })),
+    };
+    const vr = view != null && reports.find(x => x.id === view);
+    if (vr) {
+      const p = PLANTS[vr.sp];
+      out.showView = true;
+      out.v = {
+        code: '#' + vr.id, common: p.common, latin: p.latin, src: srcOf(vr),
+        fields: [['Date and time', fmtDate(vr.date)], ['Location', vr.location], ['Abundance', vr.abundance], ['State', vr.stage], ['Flower or fruit', vr.pheno], ['Reported by', vr.reporter]].map(([label, value]) => ({ label, value })),
+        hasNotes: !!vr.notes, notes: vr.notes,
+        edit: () => this.editReport(vr.id),
+        del: () => this.setState({ del: vr.id }),
+      };
+    }
+    const dr = del != null && reports.find(x => x.id === del);
+    if (dr) { out.showDel = true; out.delName = PLANTS[dr.sp].common; out.delDate = fmtDate(dr.date); }
+    return out;
+  }
+  nowLocal() {
+    const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 16);
+  }
+  openReport() {
+    const p = PLANTS[this.state.sel];
+    this.setState({ rep: { sp: p ? this.state.sel : -1, query: p ? p.common : '', list: false, photo: '', photoName: '', date: this.nowLocal(), abundance: '', stage: '', pheno: '', sent: false } });
+  }
+  componentDidMount2() {}
+  openLb(l) { this.loadMedia(l.latin); this.setState({ lb: { latin: l.latin, common: l.common, i: 0 } }); }
+  lbImgs() {
+    const lb = this.state.lb; if (!lb) return [];
+    const main = this.state.photos[lb.latin] || '';
+    const extra = (this.state.media[lb.latin] || []).filter(u => fname(u) !== fname(main));
+    return [main, ...extra].filter(Boolean).slice(0, 10);
+  }
+  lbStep(d) { const n = this.lbImgs().length; if (n) this.setState(s => ({ lb: { ...s.lb, i: (s.lb.i + d + n) % n } })); }
+  lbVals() {
+    const lb = this.state.lb;
+    const closeLb = () => this.setState({ lb: null });
+    if (!lb) return { showLb: false, closeLb };
+    const imgs = this.lbImgs();
+    return {
+      showLb: true, closeLb, lbCommon: lb.common, lbLatin: lb.latin,
+      lbSrc: imgs[lb.i] || '', lbLoading: !imgs.length,
+      lbCount: imgs.length ? (lb.i + 1) + ' / ' + imgs.length : '',
+      lbPrev: e => { e.stopPropagation(); this.lbStep(-1); },
+      lbNext: e => { e.stopPropagation(); this.lbStep(1); },
+      lbThumbs: imgs.map((src, k) => ({ src, ring: k === lb.i ? 'var(--color-accent)' : 'transparent', op: k === lb.i ? 1 : 0.6, pick: () => this.setState(s => ({ lb: { ...s.lb, i: k } })) })),
+    };
+  }
+  setRep(patch) { this.setState(s => ({ rep: { ...s.rep, ...patch } })); }
+  reportVals() {
+    const r = this.state.rep;
+    const closeReport = () => this.setState({ rep: null });
+    if (!r) return { showReport: false, closeReport };
+    const q = r.query.trim().toLowerCase();
+    const cur = r.sp >= 0 ? PLANTS[r.sp].common : '';
+    const filtered = PLANTS.map((p, i) => ({ p, i })).filter(({ p }) => !q || q === cur.toLowerCase() || (p.common + ' ' + p.latin + ' ' + p.pt).toLowerCase().includes(q));
+    const options = filtered.map(({ p, i }) => ({
+      common: p.common, latin: p.latin, src: this.state.photos[p.latin] || '',
+      bg: i === r.sp ? 'var(--color-accent-2-200)' : 'transparent',
+      pick: () => this.setRep({ sp: i, query: p.common, list: false }),
+    }));
+    const chips = (key, label, list) => ({ label, opts: list.map(v => {
+      const on = r[key] === v;
+      return { label: v, bg: on ? 'var(--color-accent-2-600)' : 'transparent', fg: on ? 'var(--color-accent-2-100)' : 'var(--color-text)', border: on ? 'var(--color-accent-2-600)' : 'var(--color-divider)', pick: () => this.setRep({ [key]: v }) };
+    }) });
+    return {
+      showReport: true, closeReport, stop: e => e.stopPropagation(),
+      notSent: !r.sent, sent: r.sent, sentName: cur,
+      query: r.query, listOpen: r.list, options, noMatch: options.length === 0,
+      onQuery: e => this.setRep({ query: e.target.value, list: true, sp: -1 }),
+      openList: e => { e.target.select(); this.setRep({ list: true }); },
+      toggleList: () => this.setRep({ list: !r.list }),
+      photoUrl: r.photo, noPhoto: !r.photo,
+      photoLabel: r.photo ? 'Change photo' : 'Add a photo',
+      photoHint: r.photoName || 'Choose an image from your computer',
+      onPhoto: e => { const f = e.target.files && e.target.files[0]; if (f) this.setRep({ photo: URL.createObjectURL(f), photoName: f.name }); },
+      date: r.date, onDate: e => this.setRep({ date: e.target.value }),
+      groups: [
+        chips('abundance', 'Abundance', ['Single plant', 'Few (2–10)', 'Patch (11–100)', 'Dense stand (100+)']),
+        chips('stage', 'State', ['Seedling', 'Young', 'Mature', 'Dying or dead', 'Already treated']),
+        chips('pheno', 'Flower or fruit', ['None', 'In flower', 'In fruit', 'Both']),
+      ],
+      cantSubmit: r.sp < 0 || !r.date,
+      formTitle: r.editId ? 'Edit report' : 'Report an occurrence',
+      submitLabel: r.editId ? 'Save changes' : 'Submit report',
+      submit: () => {
+        const data = { sp: r.sp, date: r.date, abundance: r.abundance || 'Not recorded', stage: r.stage || 'Not recorded', pheno: r.pheno || 'Not recorded' };
+        if (r.editId) {
+          const keepPhoto = r.photoName !== 'Current photo';
+          this.setState(s => ({ reports: s.reports.map(x => x.id === r.editId ? { ...x, ...data, photo: keepPhoto ? r.photo : x.photo } : x), rep: null, view: r.editId }));
+        } else {
+          this.setState(s => ({ reports: [{ id: Math.max(0, ...s.reports.map(x => x.id)) + 1, ...data, photo: r.photo, location: 'Not specified', reporter: 'You', notes: '' }, ...s.reports], rep: { ...s.rep, sent: true, list: false } }));
+        }
+      },
+    };
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKey); }
+  onKey = e => {
+    if (!this.state.lb) return;
+    if (e.key === 'Escape') this.setState({ lb: null });
+    if (e.key === 'ArrowLeft') this.lbStep(-1);
+    if (e.key === 'ArrowRight') this.lbStep(1);
+  };
+  componentDidMount() {
+    window.addEventListener('keydown', this.onKey);
+    PLANTS.forEach(p => this.loadSummary(p.latin));
+  }
+  loadSummary(name) {
+    if (this.state.photos[name] !== undefined) return;
+    this.setState(s => ({ photos: { ...s.photos, [name]: '' } }));
+    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name.replace(/ /g, '_')))
+      .then(r => r.json())
+      .then(d => { const u = d.originalimage?.source || d.thumbnail?.source; if (u) this.setState(s => ({ photos: { ...s.photos, [name]: u } })); })
+      .catch(() => {});
+  }
+  loadMedia(name) {
+    if (this.state.media[name] || this._mload?.[name]) return;
+    (this._mload = this._mload || {})[name] = true;
+    const cat = 'https://commons.wikimedia.org/w/api.php?action=query&generator=categorymembers&gcmtitle=' + encodeURIComponent('Category:' + name) + '&gcmtype=file&gcmlimit=20&prop=imageinfo&iiprop=url|mime&iiurlwidth=1600&format=json&origin=*';
+    fetch(cat).then(r => r.json()).then(d => {
+      const urls = Object.values(d.query?.pages || {}).map(p => p.imageinfo?.[0]).filter(i => i && i.mime === 'image/jpeg').map(i => i.thumburl || i.url);
+      if (urls.length) this.setState(s => ({ media: { ...s.media, [name]: urls } }));
+      else this.loadMediaList(name);
+    }).catch(() => this.loadMediaList(name));
+  }
+  loadMediaList(name) {
+    fetch('https://en.wikipedia.org/api/rest_v1/page/media-list/' + encodeURIComponent(name.replace(/ /g, '_')))
+      .then(r => r.json())
+      .then(d => {
+        const urls = (d.items || []).filter(i => i.type === 'image' && i.srcset && i.srcset.length)
+          .map(i => 'https:' + i.srcset[i.srcset.length - 1].src)
+          .filter(u => /\.(jpe?g)$/i.test(u) || /\.jpe?g\//i.test(u));
+        this.setState(s => ({ media: { ...s.media, [name]: urls } }));
+      })
+      .catch(() => {});
+  }
+  open(i) {
+    const p = PLANTS[i];
+    p.look.forEach(l => this.loadSummary(l.latin));
+    this.loadMedia(p.latin);
+    this.setState({ sel: i, gi: 0, hover: -1 });
+    window.scrollTo({ top: 0 });
+  }
+  renderVals() {
+    const { photos, media, sel, gi } = this.state;
+    const species = PLANTS.map((p, i) => {
+      const on = this.state.hover === i;
+      return {
+        common: p.common, latin: p.latin,
+        src: photos[p.latin] || '',
+        transform: on ? 'translateY(-10px) scale(1.04)' : 'none',
+        shadow: on ? 'var(--shadow-lg)' : 'var(--shadow-sm)',
+        enter: () => this.setState({ hover: i }),
+        leave: () => this.setState({ hover: -1 }),
+        open: () => this.open(i),
+      };
+    });
+    const back = e => { e && e.preventDefault && e.preventDefault(); this.setState({ sel: -1, page: 'main' }); window.scrollTo({ top: 0 }); };
+    const goReports = e => { e && e.preventDefault && e.preventDefault(); this.setState({ sel: -1, page: 'reports' }); window.scrollTo({ top: 0 }); };
+    const onRep = this.state.page === 'reports';
+    const rv = { ...this.reportsVals(), ...this.reportVals(), ...this.lbVals(), stop: e => e.stopPropagation(), openReport: () => this.openReport(), goReports,
+      showReports: onRep, navMainBg: onRep ? 'transparent' : 'var(--color-accent-2-200)', navRepBg: onRep ? 'var(--color-accent-2-200)' : 'transparent' };
+    if (onRep) return { ...rv, species, showGrid: false, showDetail: false, back };
+    if (sel < 0) return { ...rv, species, showGrid: true, showDetail: false, back };
+
+    const P = PLANTS[sel];
+    const main = photos[P.latin] || '';
+    const extra = (media[P.latin] || []).filter(u => fname(u) !== fname(main));
+    const srcs = [main, ...extra].filter(Boolean).slice(0, 6);
+    const gallery = srcs.map((src, k) => ({ src, ring: k === gi ? 'var(--color-accent)' : 'transparent', select: () => this.setState({ gi: k }) }));
+    const p = {
+      ...P,
+      chars: P.chars.map(([label, text]) => ({ label, text })),
+      steps: P.steps.map(([title, text], k) => ({ n: k + 1, title, text })),
+      look: P.look.map(l => ({ ...l, src: photos[l.latin] || '', gallery: () => this.openLb(l) })),
+      facts: [
+        { label: 'Local name', value: P.pt },
+        { label: 'Family', value: P.family },
+        { label: 'Native to', value: P.native },
+        { label: 'Flowering', value: P.flowering },
+        { label: 'Where on the Leça', value: P.habitat },
+        { label: 'Status', value: P.status },
+      ],
+    };
+    return {
+      ...rv, species, showGrid: false, showDetail: true, back, p, gallery,
+      heroSrc: srcs[gi] || main,
+      galleryNote: 'Demo photos · Wikimedia Commons',
+    };
+  }
+}
+</script>
+</body>
+</html>
