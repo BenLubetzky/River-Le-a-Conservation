@@ -7,32 +7,38 @@ A field guide for recognising and reporting invasive plants along the Rio Leça 
 - **Removal procedures:** step-by-step guidance and warnings for each species.
 - **Sighting reports:** log an occurrence with a photo, date, abundance, growth stage and flowering or fruiting. Search, filter, edit and delete reports.
 
-Reports are demo data for now and reset when the page reloads.
+Reports are stored in a database. Editing and deleting reports will come with user accounts.
 
 ## Project structure
 
 | Folder | What's in it |
 | --- | --- |
 | [`frontend/`](frontend) | The website: a [Next.js](https://nextjs.org) app (React, TypeScript). |
-| [`backend/`](backend) | The server. Not built yet. |
+| [`backend/`](backend) | The API: FastAPI, SQLAlchemy and Alembic, on a Supabase Postgres database. |
 | [`design/`](design) | The original design files and the "Organic" design system the frontend is based on. |
 
 ## Running it
 
-You need [Node.js](https://nodejs.org) 20.9 or newer.
+You need [Node.js](https://nodejs.org) 20.9+, Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 
-The first time, install the frontend's dependencies:
+First time:
 
 ```bash
 npm run install:frontend
+npm run install:backend
 ```
 
-Then start the development server:
+Then fill in `backend/.env` (see [backend/README.md](backend/README.md)) and create the database tables:
 
 ```bash
+npm run db:migrate
+```
+
+To run the project, start the API and the website in two terminals:
+
+```bash
+npm run dev:backend
 npm run dev
 ```
 
-and open http://localhost:3000.
-
-These root scripts are shortcuts for running the same commands inside `frontend/` (`cd frontend`, then `npm install` / `npm run dev`).
+Then open http://localhost:3000. The API runs on http://localhost:8000.

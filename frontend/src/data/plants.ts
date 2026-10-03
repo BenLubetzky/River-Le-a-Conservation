@@ -1,25 +1,4 @@
-export type LookAlike = {
-  common: string;
-  latin: string;
-  shared: string[];
-  diffs: string[];
-};
-
-export type Plant = {
-  id: string;
-  common: string;
-  latin: string;
-  pt: string;
-  family: string;
-  native: string;
-  flowering: string;
-  habitat: string;
-  status: string;
-  chars: [string, string][];
-  look: LookAlike[];
-  caution: string;
-  steps: [string, string][];
-};
+import type { Plant } from "@/types/plant";
 
 export const PLANTS: Plant[] = [
   { id: 'acacia', common: 'Mimosa', latin: 'Acacia dealbata', pt: 'Mimosa', family: 'Fabaceae', native: 'South-east Australia', flowering: 'January – March', habitat: 'Banks, slopes and burnt ground',
@@ -89,46 +68,3 @@ export const PLANTS: Plant[] = [
     caution: 'Digging or tilling without care spreads the bulbils.',
     steps: [['Dig carefully', 'Lift the whole plant with the soil around the bulb.'], ['Sieve the soil', 'Remove every small bulbil.'], ['Act before summer', 'Remove before the plant dies back and the bulbils are hidden.'], ['Mulch', 'Cover the area to shade out regrowth.']] },
 ];
-
-export const ABUND = ['Single plant', 'Few (2–10)', 'Patch (11–100)', 'Dense stand (100+)'];
-export const STAGE = ['Seedling', 'Young', 'Mature', 'Dying or dead', 'Already treated'];
-export const PHENO = ['None', 'In flower', 'In fruit', 'Both'];
-
-export type Report = {
-  id: number;
-  sp: number;
-  date: string;
-  abundance: string;
-  stage: string;
-  pheno: string;
-  location: string;
-  reporter: string;
-  notes: string;
-  photo: string;
-};
-
-const PLACES = ['Foz do Leça, Matosinhos', 'Ponte da Pedra', 'Parque Linear do Leça', 'Leça do Balio, mill weirs', 'Santa Cruz do Bispo', 'Ponte de Custió', 'Ermesinde, riverside path', 'Alfena', 'Moinhos de Guifões', 'São Mamede de Infesta'];
-const PEOPLE = ['Ana Ribeiro', 'Tiago Moreira', 'Inês Carvalho', 'Rui Teixeira', 'Marta Sousa', 'João Pinto', 'Beatriz Lopes'];
-const NOTES = ['Spreading onto the path; native willows being shaded out.', 'Near the footbridge, on the right bank.', '', 'Several plants already cut by the parish, regrowing from the base.', 'Close to the water line, risk of fragments washing downstream.', ''];
-
-// Deterministic demo data, built in UTC so the server and browser render the same dates.
-export const DEMO_REPORTS: Report[] = (() => {
-  const out: Report[] = [];
-  let seed = 7;
-  const rnd = (n: number) => { seed = (seed * 9301 + 49297) % 233280; return Math.floor(seed / 233280 * n); };
-  for (let k = 0; k < 22; k++) {
-    const d = new Date(Date.UTC(2026, 8, 30, 10, 0));
-    d.setUTCDate(d.getUTCDate() - k * 4 - rnd(4));
-    d.setUTCHours(8 + rnd(10), rnd(4) * 15);
-    out.push({ id: 1040 - k, sp: rnd(PLANTS.length), date: d.toISOString().slice(0, 16), abundance: ABUND[rnd(4)], stage: STAGE[rnd(5)], pheno: PHENO[rnd(4)], location: PLACES[rnd(PLACES.length)], reporter: PEOPLE[rnd(PEOPLE.length)], notes: NOTES[rnd(NOTES.length)], photo: '' });
-  }
-  return out;
-})();
-
-// Dates are stored as "YYYY-MM-DDTHH:mm" wall-clock strings (the datetime-local format).
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-export const fmtDate = (s: string) => {
-  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(s);
-  if (!m) return s;
-  return `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${m[1]}, ${m[4]}:${m[5]}`;
-};
