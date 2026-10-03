@@ -1,4 +1,4 @@
-import type { Option } from "@/types/report";
+import type { Option, Report } from "@/types/report";
 
 export const labelOf = (options: Option<string>[], value: string | null) =>
   options.find((o) => o.value === value)?.label ?? "Not recorded";
@@ -12,3 +12,13 @@ export const fmtDate = (iso: string) => {
 
 export const fmtCoords = (lat: number, lng: number) =>
   `${Math.abs(lat).toFixed(5)}° ${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(5)}° ${lng >= 0 ? "E" : "W"}`;
+
+export const fmtLocation = (r: Report) =>
+  r.location_text || (r.latitude != null && r.longitude != null ? fmtCoords(r.latitude, r.longitude) : "Not specified");
+
+// Current local time in the format a datetime-local input expects ("YYYY-MM-DDTHH:mm").
+export const nowLocalInput = () => {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 16);
+};

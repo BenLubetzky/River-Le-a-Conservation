@@ -68,3 +68,6 @@ export const PLANTS: Plant[] = [
     caution: 'Digging or tilling without care spreads the bulbils.',
     steps: [['Dig carefully', 'Lift the whole plant with the soil around the bulb.'], ['Sieve the soil', 'Remove every small bulbil.'], ['Act before summer', 'Remove before the plant dies back and the bulbils are hidden.'], ['Mulch', 'Cover the area to shade out regrowth.']] },
 ];
+
+export const plantById = (id: string): Pick<Plant, "common" | "latin"> =>
+  PLANTS.find((p) => p.id === id) ?? { common: id, latin: "" };

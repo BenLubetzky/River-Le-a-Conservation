@@ -1,0 +1,241 @@
+import { useState, type ChangeEvent } from "react";
+import { createReport } from "@/api/reports";
+import Field from "@/components/ui/Field";
+import Icon from "@/components/ui/Icon";
+import Photo from "@/components/ui/Photo";
+import { PLANTS } from "@/data/plants";
+import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
+import { stop } from "@/lib/events";
+import { fmtCoords, nowLocalInput } from "@/lib/format";
+import type { Abundance, Phenology, Report, Stage } from "@/types/report";
+
+type ReportForm = {
+  sp: number;
+  query: string;
+  list: boolean;
+  photo: File | null;
+  photoUrl: string;
+  date: string;
+  abundance: Abundance | "";
+  stage: Stage | "";
+  phenology: Phenology | "";
+  coords: { lat: number; lng: number } | null;
+  locating: boolean;
+  locationError: string;
+  locationText: string;
+  reporterName: string;
+  notes: string;
+  submitting: boolean;
+  error: string;
+  sent: boolean;
+};
+
+const emptyForm = (sp: number): ReportForm => {
+  const p = PLANTS[sp];
+  return {
+    sp: p ? sp : -1, query: p ? p.common : "", list: false, photo: null, photoUrl: "", date: nowLocalInput(),
+    abundance: "", stage: "", phenology: "", coords: null, locating: false, locationError: "", locationText: "",
+    reporterName: "", notes: "", submitting: false, error: "", sent: false,
+  };
+};
+
+export default function ReportFormDialog({ initialSp, photos, onClose, onCreated }: {
+  /** Index into PLANTS to preselect, or -1 for none. */
+  initialSp: number;
+  photos: Record<string, string>;
+  onClose: () => void;
+  onCreated: (report: Report) => void;
+}) {
+  const [rep, setRepState] = useState<ReportForm>(() => emptyForm(initialSp));
+  const setRep = (patch: Partial<ReportForm>) => setRepState((r) => ({ ...r, ...patch }));
+  const close = () => {
+    if (rep.photoUrl) URL.revokeObjectURL(rep.photoUrl);
+    onClose();
+  };
+  const submit = async () => {
+    if (rep.sp < 0 || !rep.date || rep.submitting) return;
+    setRep({ submitting: true, error: "", list: false });
+    try {
+      const saved = await createReport({
+        species_id: PLANTS[rep.sp].id,
+        // The form's date is local wall-clock time; send it with the viewer's timezone.
+        observed_at: new Date(rep.date).toISOString(),
+        abundance: rep.abundance || undefined,
+        stage: rep.stage || undefined,
+        phenology: rep.phenology || undefined,
+        latitude: rep.coords?.lat,
+        longitude: rep.coords?.lng,
+        location_text: rep.locationText.trim() || undefined,
+        reporter_name: rep.reporterName.trim() || undefined,
+        notes: rep.notes.trim() || undefined,
+        photo: rep.photo ?? undefined,
+      });
+      onCreated(saved);
+      setRep({ submitting: false, sent: true });
+    } catch (e) {
+      setRep({ submitting: false, error: (e as Error).message });
+    }
+  };
+
+  const q = rep.query.trim().toLowerCase();
+  const cur = rep.sp >= 0 ? PLANTS[rep.sp].common : "";
+  const options = PLANTS.map((p, i) => ({ p, i })).filter(({ p }) => !q || q === cur.toLowerCase() || (p.common + " " + p.latin + " " + p.pt).toLowerCase().includes(q));
+  const groups = [
+    { key: "abundance", label: "Abundance", opts: ABUNDANCE },
+    { key: "stage", label: "State", opts: STAGE },
+    { key: "phenology", label: "Flower or fruit", opts: PHENOLOGY },
+  ] as const;
+  const onPhoto = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      setRep({ error: "That photo is larger than 10 MB. Please choose a smaller one." });
+      return;
+    }
+    if (rep.photoUrl) URL.revokeObjectURL(rep.photoUrl);
+    setRep({ photo: file, photoUrl: URL.createObjectURL(file), error: "" });
+  };
+  const locate = () => {
+    if (!("geolocation" in navigator)) {
+      setRep({ locationError: "This browser can’t share its location." });
+      return;
+    }
+    setRep({ locating: true, locationError: "" });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setRep({ locating: false, coords: { lat: pos.coords.latitude, lng: pos.coords.longitude } }),
+      (err) => setRep({ locating: false, locationError: err.code === err.PERMISSION_DENIED ? "Location permission was denied." : "Couldn’t get your location. Try again." }),
+      { enableHighAccuracy: true, timeout: 15000 },
+    );
+  };
+
+  return (
+    <div className="dialog-backdrop" onClick={close} style={{ zIndex: 50 }}>
+      <div className="dialog" onClick={stop} role="dialog" aria-modal="true" aria-label="Report an occurrence" style={{ width: "min(580px,100%)", maxHeight: "calc(100vh - 48px)", overflowY: "auto", padding: "var(--space-8)", gap: "var(--space-6)", scrollbarWidth: "thin", scrollbarColor: "var(--color-neutral-400) transparent" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "var(--space-4)" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <span className="dialog-title" style={{ fontSize: 28 }}>Report an occurrence</span>
+            <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>Rio Leça · Porto</span>
+          </div>
+          <button className="btn btn-ghost btn-icon" onClick={close} aria-label="Close"><Icon name="x" /></button>
+        </div>
+
+        {!rep.sent && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+            <Field label="Species" htmlFor="rep-species" style={{ position: "relative" }}>
+              <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                <Icon name="search" size={16} color="var(--color-neutral-700)" style={{ position: "absolute", left: 14, pointerEvents: "none" }} />
+                <input
+                  id="rep-species"
+                  className="input"
+                  value={rep.query}
+                  onChange={(e) => setRep({ query: e.target.value, list: true, sp: -1 })}
+                  onFocus={(e) => { e.target.select(); setRep({ list: true }); }}
+                  placeholder="Search invasive species"
+                  autoComplete="off"
+                  style={{ paddingLeft: 38, paddingRight: 40, minHeight: 44, fontSize: 15 }}
+                />
+                <button onClick={() => setRep({ list: !rep.list })} aria-label="Show list" style={{ position: "absolute", right: 6, width: 32, height: 32, border: "none", background: "transparent", borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-text)" }}>
+                  <Icon name="chevronDown" size={16} />
+                </button>
+              </div>
+              {rep.list && (
+                <div role="listbox" style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, right: 0, zIndex: 5, background: "var(--color-bg)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", padding: "var(--space-2)", maxHeight: 260, overflowY: "auto", display: "flex", flexDirection: "column", gap: 2 }}>
+                  {options.map(({ p, i }) => (
+                    <button key={p.id} role="option" aria-selected={i === rep.sp} className="species-opt" onClick={() => setRep({ sp: i, query: p.common, list: false })}>
+                      <span style={{ width: 32, height: 32, flex: "none", borderRadius: "50%", overflow: "hidden", background: "var(--color-surface)" }}>
+                        <Photo src={photos[p.latin]} />
+                      </span>
+                      <span style={{ display: "flex", flexDirection: "column" }}>
+                        <span style={{ fontSize: 15 }}>{p.common}</span>
+                        <span style={{ fontSize: 13, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{p.latin}</span>
+                      </span>
+                    </button>
+                  ))}
+                  {options.length === 0 && <span style={{ padding: 10, fontSize: 14, color: "var(--color-neutral-700)" }}>No species match “{rep.query}”</span>}
+                </div>
+              )}
+            </Field>
+
+            <Field label="Photo">
+              <label className="photo-drop">
+                <input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" onChange={onPhoto} style={{ position: "absolute", opacity: 0, width: 0, height: 0 }} />
+                <span style={{ width: 64, height: 64, flex: "none", borderRadius: "50%", overflow: "hidden", background: "var(--color-accent-2-200)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {rep.photoUrl ? <Photo src={rep.photoUrl} washed={false} /> : <Icon name="camera" size={24} color="var(--color-accent-2-800)" />}
+                </span>
+                <span style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
+                  <span style={{ fontFamily: "var(--font-heading)", fontSize: 16 }}>{rep.photo ? "Change photo" : "Add a photo"}</span>
+                  <span style={{ fontSize: 13, color: "var(--color-neutral-700)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{rep.photo?.name || "JPEG, PNG, WebP or HEIC, up to 10 MB"}</span>
+                </span>
+              </label>
+            </Field>
+
+            <Field label="Date and time" htmlFor="rep-date">
+              <input id="rep-date" className="input" type="datetime-local" value={rep.date} max={nowLocalInput()} onChange={(e) => setRep({ date: e.target.value })} style={{ minHeight: 44, fontSize: 15 }} />
+            </Field>
+
+            <Field label="Location" htmlFor="rep-location">
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap" }}>
+                  <button className="btn btn-secondary" onClick={locate} disabled={rep.locating} style={{ gap: 8, padding: "10px 18px" }}>
+                    <Icon name="pin" size={16} />
+                    {rep.locating ? "Finding you…" : rep.coords ? "Update my location" : "Use my location"}
+                  </button>
+                  {rep.coords && (
+                    <span style={{ fontSize: 14, display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                      {fmtCoords(rep.coords.lat, rep.coords.lng)}
+                      <button className="btn btn-ghost" onClick={() => setRep({ coords: null })} style={{ padding: "4px 8px", fontSize: 13 }}>Remove</button>
+                    </span>
+                  )}
+                  {rep.locationError && <span style={{ fontSize: 13, color: "var(--color-accent-700)" }}>{rep.locationError}</span>}
+                </div>
+                <input id="rep-location" className="input" value={rep.locationText} maxLength={200} onChange={(e) => setRep({ locationText: e.target.value })} placeholder="Describe the spot (optional), e.g. right bank near the footbridge" style={{ minHeight: 44, fontSize: 15 }} />
+              </div>
+            </Field>
+
+            {groups.map((g) => (
+              <Field key={g.key} label={g.label}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}>
+                  {g.opts.map((o) => {
+                    const on = rep[g.key] === o.value;
+                    return <button key={o.value} className="chip" aria-pressed={on} onClick={() => setRep({ [g.key]: on ? "" : o.value })}>{o.label}</button>;
+                  })}
+                </div>
+              </Field>
+            ))}
+
+            <Field label="Your name (optional)" htmlFor="rep-name">
+              <input id="rep-name" className="input" value={rep.reporterName} maxLength={100} onChange={(e) => setRep({ reporterName: e.target.value })} autoComplete="name" style={{ minHeight: 44, fontSize: 15 }} />
+            </Field>
+
+            <Field label="Notes (optional)" htmlFor="rep-notes">
+              <textarea id="rep-notes" className="input" value={rep.notes} maxLength={2000} onChange={(e) => setRep({ notes: e.target.value })} placeholder="Anything that helps: how it’s spreading, access, nearby landmarks…" style={{ fontSize: 15, borderRadius: "var(--radius-md)", paddingBlock: 10 }} />
+            </Field>
+
+            {rep.error && (
+              <div role="alert" style={{ background: "var(--color-accent-100)", color: "var(--color-accent-800)", borderRadius: "var(--radius-md)", padding: "var(--space-3) var(--space-4)", fontSize: 14, display: "flex", gap: "var(--space-2)", alignItems: "center" }}>
+                <Icon name="alert" size={16} style={{ flex: "none" }} />
+                {rep.error}
+              </div>
+            )}
+
+            <div className="dialog-actions" style={{ marginTop: 0 }}>
+              <button className="btn btn-ghost" onClick={close}>Cancel</button>
+              <button className="btn btn-primary" onClick={submit} disabled={rep.sp < 0 || !rep.date || rep.submitting}>{rep.submitting ? "Sending…" : "Submit report"}</button>
+            </div>
+          </div>
+        )}
+
+        {rep.sent && (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "var(--space-4)", padding: "var(--space-4) 0" }}>
+            <span style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--color-accent-2-600)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Icon name="check" size={28} color="var(--color-accent-2-100)" />
+            </span>
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: 24 }}>Thank you</span>
+            <p style={{ margin: 0, fontSize: 15, textWrap: "pretty" }}>Your report of {cur} has been recorded.</p>
+            <button className="btn btn-primary" onClick={close}>Done</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
