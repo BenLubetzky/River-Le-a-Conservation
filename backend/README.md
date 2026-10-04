@@ -1,13 +1,13 @@
 # Backend
 
-A [FastAPI](https://fastapi.tiangolo.com) app that stores sighting reports in [Supabase](https://supabase.com): its Postgres database through SQLAlchemy, and report photos in Supabase Storage. The schema is managed with Alembic.
+A [FastAPI](https://fastapi.tiangolo.com) app that stores sighting reports in [Supabase](https://supabase.com): its Postgres database through SQLAlchemy, and report photos in a private Supabase Storage bucket, served through signed URLs that expire after an hour. The schema is managed with Alembic.
 
 ```
 app/
   main.py         creates the FastAPI app
   core/           settings, read from .env
   database/       SQLAlchemy base class and connection/session
-  models/         database tables (species, reports) and enums
+  models/         database tables (species and their content, native plants, reports) and enums
   schemas/        API request/response shapes (Pydantic)
   api/routes/     endpoints: health, species, reports
   services/       Supabase Storage (report photos)
@@ -33,7 +33,7 @@ On Windows, call Alembic and Uvicorn through `python -m` as above. Smart App Con
 | --- | --- | --- |
 | GET | `/reports` | All reports, newest first |
 | POST | `/reports` | Submit a report (multipart form, optional `photo` file) |
-| GET | `/species` | The invasive species reports can refer to |
+| GET | `/species` | The invasive species with all their field-guide content (details, characteristics, removal steps, native look-alikes, photo URLs) |
 | GET | `/health` | Liveness check |
 
 ## Access

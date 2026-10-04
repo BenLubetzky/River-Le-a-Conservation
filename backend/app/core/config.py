@@ -21,6 +21,8 @@ class Settings(BaseSettings):
 
     photo_bucket: str = "report-photos"
     max_photo_bytes: int = 10 * 1024 * 1024
+    # How long a signed photo URL handed to the website stays valid.
+    signed_url_ttl_seconds: int = 60 * 60
     # Websites allowed to call the API from a browser.
     cors_origins: list[str] = ["http://localhost:3000"]
 
@@ -35,8 +37,9 @@ class Settings(BaseSettings):
 
     @field_validator("supabase_url")
     @classmethod
-    def strip_trailing_slash(cls, v: str) -> str:
-        return v.rstrip("/")
+    def project_root_url(cls, v: str) -> str:
+        # Accept the "API URL" Supabase also shows (…supabase.co/rest/v1/); we need the bare project URL.
+        return v.rstrip("/").removesuffix("/rest/v1").rstrip("/")
 
 
 @lru_cache

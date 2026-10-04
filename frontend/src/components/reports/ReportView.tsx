@@ -1,14 +1,14 @@
 import type { ReactNode } from "react";
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
-import { plantById } from "@/data/plants";
 import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
 import { stop } from "@/lib/events";
 import { fmtCoords, fmtDate, labelOf } from "@/lib/format";
 import type { Report } from "@/types/report";
 
-export default function ReportView({ r, src, onClose }: { r: Report; src: string; onClose: () => void }) {
-  const p = plantById(r.species_id);
+export default function ReportView({ r, names: p, src, onClose }: {
+  r: Report; names: { common: string; latin: string }; src: string; onClose: () => void;
+}) {
   const hasCoords = r.latitude != null && r.longitude != null;
   const fields: [string, ReactNode][] = [
     ["Date and time", fmtDate(r.observed_at)],

@@ -21,10 +21,20 @@ def clean(s: str | None) -> str | None:
     return s or None
 
 
+def sign_photos(paths: list[str | None]) -> dict[str, str]:
+    """Signed URLs by photo path. If signing fails, reports are still returned, just without photos."""
+    try:
+        return storage.signed_urls([p for p in paths if p])
+    except Exception:
+        log.exception("Could not sign photo URLs")
+        return {}
+
+
 @router.get("")
 def list_reports(db: DB) -> list[ReportOut]:
-    rows = db.scalars(select(Report).order_by(Report.observed_at.desc()))
-    return [ReportOut.from_model(r) for r in rows]
+    rows = db.scalars(select(Report).order_by(Report.observed_at.desc())).all()
+    urls = sign_photos([r.photo_path for r in rows])
+    return [ReportOut.from_model(r, urls.get(r.photo_path or "")) for r in rows]
 
 
 @router.post("", status_code=201)
@@ -75,4 +85,5 @@ def create_report(
     db.add(report)
     db.commit()
     db.refresh(report)
-    return ReportOut.from_model(report)
+    urls = sign_photos([report.photo_path] if report.photo_path else [])
+    return ReportOut.from_model(report, urls.get(report.photo_path or ""))

@@ -3,10 +3,10 @@ import { createReport } from "@/api/reports";
 import Field from "@/components/ui/Field";
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
-import { PLANTS } from "@/data/plants";
 import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
 import { stop } from "@/lib/events";
 import { fmtCoords, nowLocalInput } from "@/lib/format";
+import type { Species } from "@/types/plant";
 import type { Abundance, Phenology, Report, Stage } from "@/types/report";
 
 type ReportForm = {
@@ -30,23 +30,23 @@ type ReportForm = {
   sent: boolean;
 };
 
-const emptyForm = (sp: number): ReportForm => {
-  const p = PLANTS[sp];
+const emptyForm = (species: Species[], sp: number): ReportForm => {
+  const p = species[sp];
   return {
-    sp: p ? sp : -1, query: p ? p.common : "", list: false, photo: null, photoUrl: "", date: nowLocalInput(),
+    sp: p ? sp : -1, query: p ? p.common_name : "", list: false, photo: null, photoUrl: "", date: nowLocalInput(),
     abundance: "", stage: "", phenology: "", coords: null, locating: false, locationError: "", locationText: "",
     reporterName: "", notes: "", submitting: false, error: "", sent: false,
   };
 };
 
-export default function ReportFormDialog({ initialSp, photos, onClose, onCreated }: {
-  /** Index into PLANTS to preselect, or -1 for none. */
+export default function ReportFormDialog({ species, initialSp, onClose, onCreated }: {
+  species: Species[];
+  /** Index into `species` to preselect, or -1 for none. */
   initialSp: number;
-  photos: Record<string, string>;
   onClose: () => void;
   onCreated: (report: Report) => void;
 }) {
-  const [rep, setRepState] = useState<ReportForm>(() => emptyForm(initialSp));
+  const [rep, setRepState] = useState<ReportForm>(() => emptyForm(species, initialSp));
   const setRep = (patch: Partial<ReportForm>) => setRepState((r) => ({ ...r, ...patch }));
   const close = () => {
     if (rep.photoUrl) URL.revokeObjectURL(rep.photoUrl);
@@ -57,7 +57,7 @@ export default function ReportFormDialog({ initialSp, photos, onClose, onCreated
     setRep({ submitting: true, error: "", list: false });
     try {
       const saved = await createReport({
-        species_id: PLANTS[rep.sp].id,
+        species_id: species[rep.sp].id,
         // The form's date is local wall-clock time; send it with the viewer's timezone.
         observed_at: new Date(rep.date).toISOString(),
         abundance: rep.abundance || undefined,
@@ -78,8 +78,8 @@ export default function ReportFormDialog({ initialSp, photos, onClose, onCreated
   };
 
   const q = rep.query.trim().toLowerCase();
-  const cur = rep.sp >= 0 ? PLANTS[rep.sp].common : "";
-  const options = PLANTS.map((p, i) => ({ p, i })).filter(({ p }) => !q || q === cur.toLowerCase() || (p.common + " " + p.latin + " " + p.pt).toLowerCase().includes(q));
+  const cur = rep.sp >= 0 ? species[rep.sp].common_name : "";
+  const options = species.map((p, i) => ({ p, i })).filter(({ p }) => !q || q === cur.toLowerCase() || (p.common_name + " " + p.latin_name + " " + p.local_name).toLowerCase().includes(q));
   const groups = [
     { key: "abundance", label: "Abundance", opts: ABUNDANCE },
     { key: "stage", label: "State", opts: STAGE },
@@ -141,13 +141,13 @@ export default function ReportFormDialog({ initialSp, photos, onClose, onCreated
               {rep.list && (
                 <div role="listbox" style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, right: 0, zIndex: 5, background: "var(--color-bg)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", padding: "var(--space-2)", maxHeight: 260, overflowY: "auto", display: "flex", flexDirection: "column", gap: 2 }}>
                   {options.map(({ p, i }) => (
-                    <button key={p.id} role="option" aria-selected={i === rep.sp} className="species-opt" onClick={() => setRep({ sp: i, query: p.common, list: false })}>
+                    <button key={p.id} role="option" aria-selected={i === rep.sp} className="species-opt" onClick={() => setRep({ sp: i, query: p.common_name, list: false })}>
                       <span style={{ width: 32, height: 32, flex: "none", borderRadius: "50%", overflow: "hidden", background: "var(--color-surface)" }}>
-                        <Photo src={photos[p.latin]} />
+                        <Photo src={p.photos[0]} />
                       </span>
                       <span style={{ display: "flex", flexDirection: "column" }}>
-                        <span style={{ fontSize: 15 }}>{p.common}</span>
-                        <span style={{ fontSize: 13, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{p.latin}</span>
+                        <span style={{ fontSize: 15 }}>{p.common_name}</span>
+                        <span style={{ fontSize: 13, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{p.latin_name}</span>
                       </span>
                     </button>
                   ))}

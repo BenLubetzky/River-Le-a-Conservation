@@ -9,20 +9,19 @@ import ReportsPage, { NO_FILTERS, type Filters } from "@/components/reports/Repo
 import Lightbox from "@/components/species/Lightbox";
 import PlantDetail from "@/components/species/PlantDetail";
 import SpeciesGrid from "@/components/species/SpeciesGrid";
-import { PLANTS, plantById } from "@/data/plants";
 import { useReports } from "@/hooks/useReports";
-import { useWikiPhotos } from "@/hooks/useWikiPhotos";
-import { photoSet } from "@/lib/photos";
+import { useSpecies } from "@/hooks/useSpecies";
+import { speciesNames } from "@/lib/species";
 import type { LookAlike } from "@/types/plant";
 import type { Report } from "@/types/report";
 
 /** The whole site: navigation between pages, and the dialogs that open over them. */
 export default function RioLeca() {
-  const { photos, media, loadSummary, loadMedia } = useWikiPhotos();
+  const { species, error: speciesError, reload: reloadSpecies } = useSpecies();
   const { reports, error: reportsError, reload: reloadReports, add: addReport } = useReports();
 
   const [page, setPage] = useState<Page>("main");
-  const [sel, setSel] = useState(-1); // plant open on the main page, as an index into PLANTS
+  const [sel, setSel] = useState(-1); // plant open on the main page, as an index into `species`
   const [gi, setGi] = useState(0); // photo shown in that plant's gallery
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
   const [view, setView] = useState<number | null>(null); // id of the report open in the viewer
@@ -35,42 +34,50 @@ export default function RioLeca() {
     window.scrollTo({ top: 0 });
   };
   const openPlant = (i: number) => {
-    const p = PLANTS[i];
-    p.look.forEach((l) => loadSummary(l.latin));
-    loadMedia(p.latin);
     setSel(i);
     setGi(0);
     window.scrollTo({ top: 0 });
   };
-  const openLookAlike = (look: LookAlike) => {
-    loadMedia(look.latin);
-    setLb({ look, i: 0 });
-  };
 
-  const srcOf = (r: Report) => r.photo_url || photos[plantById(r.species_id).latin] || "";
+  const plant = species && sel >= 0 ? species[sel] : undefined;
+  // Reports without an uploaded photo show the species' main photo instead.
+  const srcOf = (r: Report) => r.photo_url || species?.find((s) => s.id === r.species_id)?.photos[0] || "";
   const viewed = view != null ? reports?.find((r) => r.id === view) : undefined;
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-bg)", color: "var(--color-text)", fontFamily: "var(--font-body)" }}>
       <SiteHeader page={page} onNavigate={navigate} />
 
-      {page === "main" && sel < 0 && <SpeciesGrid photos={photos} onOpen={openPlant} />}
-      {page === "main" && sel >= 0 && (
-        <PlantDetail sel={sel} gi={gi} setGi={setGi} photos={photos} media={media} onBack={() => navigate("main")} onLookGallery={openLookAlike} />
+      {page === "main" && !species && (
+        <main className="page-main" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", paddingTop: 120, textAlign: "center" }}>
+          {speciesError ? (
+            <>
+              <span style={{ fontFamily: "var(--font-heading)", fontSize: 22 }}>Couldn’t load the plants</span>
+              <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{speciesError}</span>
+              <button className="btn btn-secondary" onClick={reloadSpecies}>Try again</button>
+            </>
+          ) : (
+            <span style={{ fontSize: 15, color: "var(--color-neutral-700)" }}>Loading plants…</span>
+          )}
+        </main>
+      )}
+      {page === "main" && species && !plant && <SpeciesGrid species={species} onOpen={openPlant} />}
+      {page === "main" && plant && (
+        <PlantDetail plant={plant} gi={gi} setGi={setGi} onBack={() => navigate("main")} onLookGallery={(look) => setLb({ look, i: 0 })} />
       )}
       {page === "reports" && (
-        <ReportsPage reports={reports} error={reportsError} onRetry={reloadReports} f={filters} setFilters={setFilters} srcOf={srcOf} onView={setView} />
+        <ReportsPage reports={reports} species={species} error={reportsError} onRetry={reloadReports} f={filters} setFilters={setFilters} srcOf={srcOf} onView={setView} />
       )}
 
-      {viewed && <ReportView r={viewed} src={srcOf(viewed)} onClose={() => setView(null)} />}
+      {viewed && <ReportView r={viewed} names={speciesNames(species, viewed.species_id)} src={srcOf(viewed)} onClose={() => setView(null)} />}
 
       <ReportButton onClick={() => setReporting(true)} />
 
       {lb && (
         <Lightbox
-          title={lb.look.common}
-          subtitle={lb.look.latin}
-          images={photoSet(photos, media, lb.look.latin, 10)}
+          title={lb.look.common_name}
+          subtitle={lb.look.latin_name}
+          images={lb.look.photos}
           index={lb.i}
           onIndex={(i) => setLb((l) => (l ? { ...l, i } : l))}
           onClose={() => setLb(null)}
@@ -78,7 +85,7 @@ export default function RioLeca() {
       )}
 
       {reporting && (
-        <ReportFormDialog initialSp={page === "main" ? sel : -1} photos={photos} onClose={() => setReporting(false)} onCreated={addReport} />
+        <ReportFormDialog species={species ?? []} initialSp={page === "main" ? sel : -1} onClose={() => setReporting(false)} onCreated={addReport} />
       )}
     </div>
   );

@@ -1,24 +1,20 @@
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
-import { PLANTS } from "@/data/plants";
-import { photoSet } from "@/lib/photos";
-import type { LookAlike } from "@/types/plant";
+import type { LookAlike, Species } from "@/types/plant";
 
-export default function PlantDetail({ sel, gi, setGi, photos, media, onBack, onLookGallery }: {
-  sel: number; gi: number; setGi: (i: number) => void;
-  photos: Record<string, string>; media: Record<string, string[]>;
+export default function PlantDetail({ plant: P, gi, setGi, onBack, onLookGallery }: {
+  plant: Species; gi: number; setGi: (i: number) => void;
   onBack: () => void; onLookGallery: (l: LookAlike) => void;
 }) {
-  const P = PLANTS[sel];
-  const srcs = photoSet(photos, media, P.latin, 6);
+  const srcs = P.photos;
   const heroSrc = srcs[gi] || srcs[0];
   const facts = [
-    ["Local name", P.pt],
+    ["Local name", P.local_name],
     ["Family", P.family],
-    ["Native to", P.native],
+    ["Native to", P.native_range],
     ["Flowering", P.flowering],
     ["Where on the Leça", P.habitat],
-    ["Status", P.status],
+    ["Status", P.legal_status],
   ];
 
   return (
@@ -32,13 +28,13 @@ export default function PlantDetail({ sel, gi, setGi, photos, media, onBack, onL
           <span className="tag tag-accent">Invasive</span>
           <span className="tag tag-neutral">{P.family}</span>
         </div>
-        <h1 className="detail-h1">{P.common}</h1>
-        <span style={{ fontSize: 22, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{P.latin}</span>
+        <h1 className="detail-h1">{P.common_name}</h1>
+        <span style={{ fontSize: 22, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{P.latin_name}</span>
       </div>
 
       <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
         <div style={{ width: "100%", height: "min(62vw,600px)", borderRadius: "var(--radius-lg)", overflow: "hidden", background: "var(--color-surface)" }}>
-          <Photo src={heroSrc} alt={P.common} />
+          <Photo src={heroSrc} alt={P.common_name} />
         </div>
         <div style={{ display: "flex", gap: "var(--space-4)", flexWrap: "wrap", alignItems: "center" }}>
           {srcs.map((src, k) => (
@@ -55,7 +51,7 @@ export default function PlantDetail({ sel, gi, setGi, photos, media, onBack, onL
           <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
             <h2 style={{ fontSize: 36, margin: 0 }}>Characteristics</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-              {P.chars.map(([label, text]) => (
+              {P.characteristics.map(({ label, text }) => (
                 <div key={label} className="char-row">
                   <span style={{ fontFamily: "var(--font-heading)", fontSize: 17, color: "var(--color-accent-2-700)" }}>{label}</span>
                   <p style={{ margin: 0, fontSize: 16, textWrap: "pretty" }}>{text}</p>
@@ -67,18 +63,18 @@ export default function PlantDetail({ sel, gi, setGi, photos, media, onBack, onL
           <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
               <h2 style={{ fontSize: 36, margin: 0 }}>Native look-alikes</h2>
-              <p style={{ margin: 0, fontSize: 16, color: "var(--color-neutral-700)", maxWidth: 560 }}>Native plants that can be mistaken for {P.common}. Check these differences before removing anything.</p>
+              <p style={{ margin: 0, fontSize: 16, color: "var(--color-neutral-700)", maxWidth: 560 }}>Native plants that can be mistaken for {P.common_name}. Check these differences before removing anything.</p>
             </div>
-            {P.look.map((l) => (
-              <div key={l.latin} style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "var(--space-8)", display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+            {P.look_alikes.map((l) => (
+              <div key={l.id} style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "var(--space-8)", display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
                 <div className="look-head">
                   <div style={{ width: 128, height: 128, flex: "none", borderRadius: "50%", overflow: "hidden", background: "var(--color-neutral-300)" }}>
-                    <Photo src={photos[l.latin]} alt={l.common} />
+                    <Photo src={l.photos[0]} alt={l.common_name} />
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                     <span className="tag tag-accent-2" style={{ alignSelf: "flex-start" }}>Native</span>
-                    <span style={{ fontFamily: "var(--font-heading)", fontSize: 26, lineHeight: 1.1 }}>{l.common}</span>
-                    <span style={{ fontSize: 15, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{l.latin}</span>
+                    <span style={{ fontFamily: "var(--font-heading)", fontSize: 26, lineHeight: 1.1 }}>{l.common_name}</span>
+                    <span style={{ fontSize: 15, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{l.latin_name}</span>
                   </div>
                   <button className="btn btn-secondary" onClick={() => onLookGallery(l)} style={{ marginLeft: "auto", alignSelf: "center", whiteSpace: "nowrap", flexShrink: 0, gap: 10, padding: "14px 26px", fontSize: 16 }}>
                     <Icon name="image" size={20} />
@@ -89,13 +85,13 @@ export default function PlantDetail({ sel, gi, setGi, photos, media, onBack, onL
                   <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
                     <h6 style={{ margin: 0, color: "var(--color-neutral-700)" }}>Looks similar</h6>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}>
-                      {l.shared.map((t) => <span key={t} className="tag tag-outline" style={{ whiteSpace: "nowrap" }}>{t}</span>)}
+                      {l.shared_traits.map((t) => <span key={t} className="tag tag-outline" style={{ whiteSpace: "nowrap" }}>{t}</span>)}
                     </div>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
                     <h6 style={{ margin: 0, color: "var(--color-neutral-700)" }}>How to tell them apart</h6>
                     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-                      {l.diffs.map((d) => (
+                      {l.differences.map((d) => (
                         <div key={d} style={{ display: "flex", gap: "var(--space-3)", alignItems: "baseline" }}>
                           <span style={{ width: 8, height: 8, flex: "none", borderRadius: "50%", background: "var(--color-accent)", transform: "translateY(-2px)" }} />
                           <span style={{ fontSize: 15, textWrap: "pretty" }}>{d}</span>
@@ -115,7 +111,7 @@ export default function PlantDetail({ sel, gi, setGi, photos, media, onBack, onL
               <span style={{ fontSize: 15, color: "var(--color-accent-800)" }}>{P.caution}</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-              {P.steps.map(([title, text], k) => (
+              {P.removal_steps.map(({ title, text }, k) => (
                 <div key={title} style={{ display: "flex", gap: "var(--space-6)", alignItems: "flex-start" }}>
                   <span style={{ width: 44, height: 44, flex: "none", borderRadius: "50%", background: "var(--color-accent-2-600)", color: "var(--color-accent-2-100)", fontFamily: "var(--font-heading)", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center" }}>{k + 1}</span>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingTop: 8 }}>

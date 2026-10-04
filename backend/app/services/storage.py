@@ -1,4 +1,7 @@
-"""Report photos, kept in a public Supabase Storage bucket and accessed with the secret key."""
+"""Report photos, kept in a private Supabase Storage bucket and accessed with the secret key.
+
+Photos are only viewable through signed URLs, which this API hands out and which expire.
+"""
 
 import uuid
 
@@ -25,18 +28,15 @@ def _client() -> httpx.Client:
 
 
 def ensure_bucket() -> None:
-    """Create the photo bucket if it doesn't exist yet. Safe to call on every startup."""
+    """Create the photo bucket, or bring an existing one in line (private, size and type limits).
+    Safe to call on every startup."""
     s = get_settings()
+    settings = {"public": False, "file_size_limit": s.max_photo_bytes, "allowed_mime_types": list(ALLOWED_TYPES)}
     with _client() as c:
         if c.get(f"/bucket/{s.photo_bucket}").status_code == 200:
-            return
-        r = c.post("/bucket", json={
-            "id": s.photo_bucket,
-            "name": s.photo_bucket,
-            "public": True,
-            "file_size_limit": s.max_photo_bytes,
-            "allowed_mime_types": list(ALLOWED_TYPES),
-        })
+            r = c.put(f"/bucket/{s.photo_bucket}", json={"id": s.photo_bucket, **settings})
+        else:
+            r = c.post("/bucket", json={"id": s.photo_bucket, "name": s.photo_bucket, **settings})
         r.raise_for_status()
 
 
@@ -50,6 +50,19 @@ def upload_photo(data: bytes, content_type: str) -> str:
     return path
 
 
-def public_url(path: str) -> str:
+def signed_urls(paths: list[str]) -> dict[str, str]:
+    """Temporary viewing URLs for photos in the bucket, by path. Paths that can't be signed are left out."""
     s = get_settings()
-    return f"{s.supabase_url}/storage/v1/object/public/{s.photo_bucket}/{path}"
+    paths = list(dict.fromkeys(p for p in paths if p))
+    if not paths:
+        return {}
+    with _client() as c:
+        r = c.post(f"/object/sign/{s.photo_bucket}", json={"expiresIn": s.signed_url_ttl_seconds, "paths": paths})
+        r.raise_for_status()
+    urls = {}
+    for item in r.json():
+        url = item.get("signedURL")
+        if url and not item.get("error"):
+            # Supabase returns the URL relative to the storage API.
+            urls[item["path"]] = url if url.startswith("http") else f"{s.supabase_url}/storage/v1{url}"
+    return urls

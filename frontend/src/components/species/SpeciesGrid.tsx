@@ -1,7 +1,7 @@
 import Photo from "@/components/ui/Photo";
-import { PLANTS } from "@/data/plants";
+import type { Species } from "@/types/plant";
 
-export default function SpeciesGrid({ photos, onOpen }: { photos: Record<string, string>; onOpen: (i: number) => void }) {
+export default function SpeciesGrid({ species, onOpen }: { species: Species[]; onOpen: (i: number) => void }) {
   return (
     <main className="page-main">
       <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)", maxWidth: 640, padding: "48px 0 64px" }}>
@@ -11,14 +11,14 @@ export default function SpeciesGrid({ photos, onOpen }: { photos: Record<string,
       </section>
 
       <section className="species-grid">
-        {PLANTS.map((p, i) => (
+        {species.map((p, i) => (
           <button key={p.id} className="species-card" onClick={() => onOpen(i)}>
             <div className="species-circle">
-              <Photo src={photos[p.latin]} alt={p.common} />
+              <Photo src={p.photos[0]} alt={p.common_name} />
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 2, padding: "0 var(--space-2)" }}>
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: 21, lineHeight: 1.15 }}>{p.common}</span>
-              <span style={{ fontSize: 14, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{p.latin}</span>
+              <span style={{ fontFamily: "var(--font-heading)", fontSize: 21, lineHeight: 1.15 }}>{p.common_name}</span>
+              <span style={{ fontSize: 14, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{p.latin_name}</span>
             </div>
           </button>
         ))}

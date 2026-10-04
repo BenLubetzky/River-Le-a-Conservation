@@ -1,16 +1,17 @@
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
-import { PLANTS, plantById } from "@/data/plants";
 import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
 import { stop } from "@/lib/events";
 import { fmtDate, fmtLocation, labelOf } from "@/lib/format";
+import { speciesNames } from "@/lib/species";
+import type { Species } from "@/types/plant";
 import type { Option, Report } from "@/types/report";
 
 export type Filters = { q: string; sp: string; ab: string; st: string; ph: string; sort: "new" | "old" };
 export const NO_FILTERS: Filters = { q: "", sp: "all", ab: "all", st: "all", ph: "all", sort: "new" };
 
-export default function ReportsPage({ reports, error, onRetry, f, setFilters, srcOf, onView }: {
-  reports: Report[] | null; error: string; onRetry: () => void;
+export default function ReportsPage({ reports, species, error, onRetry, f, setFilters, srcOf, onView }: {
+  reports: Report[] | null; species: Species[] | null; error: string; onRetry: () => void;
   f: Filters; setFilters: (fn: (f: Filters) => Filters) => void;
   srcOf: (r: Report) => string; onView: (id: number) => void;
 }) {
@@ -19,7 +20,7 @@ export default function ReportsPage({ reports, error, onRetry, f, setFilters, sr
   const q = f.q.trim().toLowerCase();
   const list = all
     .filter((r) => {
-      const p = plantById(r.species_id);
+      const p = speciesNames(species, r.species_id);
       if (f.sp !== "all" && r.species_id !== f.sp) return false;
       if (f.ab !== "all" && r.abundance !== f.ab) return false;
       if (f.st !== "all" && r.stage !== f.st) return false;
@@ -35,7 +36,7 @@ export default function ReportsPage({ reports, error, onRetry, f, setFilters, sr
   const clearFilters = () => setFilters((s) => ({ ...NO_FILTERS, sort: s.sort }));
   const opt = (any: string, options: Option<string>[]) => [{ value: "all", label: any }, ...options];
   const selects: { key: "sp" | "ab" | "st" | "ph"; label: string; options: { value: string; label: string }[] }[] = [
-    { key: "sp", label: "Species", options: [{ value: "all", label: "All species" }, ...PLANTS.map((p) => ({ value: p.id, label: p.common }))] },
+    { key: "sp", label: "Species", options: [{ value: "all", label: "All species" }, ...(species ?? []).map((p) => ({ value: p.id, label: p.common_name }))] },
     { key: "ab", label: "Abundance", options: opt("Any abundance", ABUNDANCE) },
     { key: "st", label: "State", options: opt("Any state", STAGE) },
     { key: "ph", label: "Flower or fruit", options: opt("Any flower/fruit", PHENOLOGY) },
@@ -88,7 +89,7 @@ export default function ReportsPage({ reports, error, onRetry, f, setFilters, sr
           </thead>
           <tbody>
             {list.map((r) => {
-              const p = plantById(r.species_id);
+              const p = speciesNames(species, r.species_id);
               return (
                 <tr key={r.id} className="report-row" onClick={() => onView(r.id)}>
                   <td>
