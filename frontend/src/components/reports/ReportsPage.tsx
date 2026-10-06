@@ -87,10 +87,10 @@ export default function ReportsPage({ reports, species, userId, error, onRetry, 
       </section>
 
       <section style={{ overflowX: "auto", background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "var(--space-2) var(--space-4)" }}>
-        <table className="table" style={{ width: "100%", minWidth: 860 }}>
+        <table className="table" style={{ width: "100%", minWidth: 980 }}>
           <thead>
             <tr>
-              <th>Species</th><th>Date</th><th>Location</th><th>Abundance</th><th>State</th><th>Flower or fruit</th><th style={{ textAlign: "right" }}><span className="sr-only">Open</span></th>
+              <th>Species</th><th>Date</th><th>Location</th><th>Reported by</th><th>Abundance</th><th>State</th><th>Flower or fruit</th><th style={{ textAlign: "right" }}><span className="sr-only">Open</span></th>
             </tr>
           </thead>
           <tbody>
@@ -111,6 +111,10 @@ export default function ReportsPage({ reports, species, userId, error, onRetry, 
                   </td>
                   <td style={{ whiteSpace: "nowrap" }}>{fmtDate(r.observed_at)}</td>
                   <td>{fmtLocation(r)}</td>
+                  <td style={{ whiteSpace: "nowrap" }}>
+                    {r.reporter_name || "Anonymous"}
+                    {r.user_id === userId && <span style={{ color: "var(--color-neutral-700)" }}> (you)</span>}
+                  </td>
                   <td><span className="tag tag-neutral" style={{ whiteSpace: "nowrap" }}>{labelOf(ABUNDANCE, r.abundance)}</span></td>
                   <td><span className="tag tag-outline" style={{ whiteSpace: "nowrap" }}>{labelOf(STAGE, r.stage)}</span></td>
                   <td><span className="tag tag-accent-2" style={{ whiteSpace: "nowrap" }}>{labelOf(PHENOLOGY, r.phenology)}</span></td>
