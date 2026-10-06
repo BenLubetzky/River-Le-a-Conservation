@@ -7,7 +7,7 @@ app/
   main.py         creates the FastAPI app
   core/           settings, read from .env
   database/       SQLAlchemy base class and connection/session
-  models/         database tables (species and their content, native plants, reports) and enums
+  models/         database tables (species and their content, native plants, reports, users) and enums
   schemas/        API request/response shapes (Pydantic)
   api/routes/     endpoints: health, species, reports
   services/       Supabase Storage (report photos)
@@ -39,6 +39,8 @@ On Windows, call Alembic and Uvicorn through `python -m` as above. Smart App Con
 ## Access
 
 The API connects as the database owner. Supabase's own public Data API is locked out of these tables: row-level security is on with no policies, and the `anon`/`authenticated` grants are revoked. The only way in is this API. There's no editing or deleting of reports yet; that comes with logins.
+
+Users have only a username (case-sensitive) and a password hash. Each report can be linked to the user who made it through `reports.user_id`. If that user is deleted, the link is set to NULL and the report stays.
 
 ## Changing the schema
 

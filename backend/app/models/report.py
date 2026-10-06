@@ -6,6 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base
 from app.models.enums import Abundance, GrowthStage, Phenology, pg_enum
 from app.models.species import Species
+from app.models.user import User
 
 
 class Report(Base):
@@ -27,6 +28,8 @@ class Report(Base):
     latitude: Mapped[float | None]
     longitude: Mapped[float | None]
     location_text: Mapped[str | None] = mapped_column(String(200))
+    # The user who submitted it. NULL for reports made before accounts existed, or whose user was deleted.
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True)
     reporter_name: Mapped[str | None] = mapped_column(String(100))
     notes: Mapped[str | None] = mapped_column(String(2000))
     # Path of the photo inside the Supabase Storage bucket.
@@ -34,3 +37,4 @@ class Report(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     species: Mapped[Species] = relationship()
+    user: Mapped[User | None] = relationship()
