@@ -5,7 +5,8 @@ A field guide for recognising and reporting invasive plants along the Rio Leça 
 - **Species guide:** nine invasive plants with photos, key characteristics, local names and legal status.
 - **Native look-alikes:** how to tell each invasive plant apart from the native plants it resembles, so nothing is removed by mistake.
 - **Removal procedures:** step-by-step guidance and warnings for each species.
-- **Sighting reports:** log an occurrence with a photo, date, abundance, growth stage and flowering or fruiting. Search, filter, edit and delete reports.
+- **Sighting reports:** log an occurrence with a photo, date, abundance, growth stage and flowering or fruiting. Search and filter reports, and edit your own.
+- **Map:** reports with a location along the Rio Leça shown as markers on an OpenStreetMap; select one to open the report. The area is a rectangle around the river, set in `frontend/src/lib/riverArea.ts`.
 
 The site opens on a login page; everything else needs an account. Reports are stored in a database and linked to the user who made them. People can edit their own reports; only the admin page can delete them.
 

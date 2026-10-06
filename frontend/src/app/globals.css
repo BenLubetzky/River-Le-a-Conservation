@@ -380,8 +380,10 @@ a:hover { color: var(--color-accent-800); }
 }
 @media (max-width: 640px) {
   .page-main { padding-inline: 16px; }
-  .site-nav { padding-inline: 16px !important; gap: var(--space-4) !important; }
-  .brand-name, .header-user { display: none; }
+  .site-nav { padding-inline: 16px !important; gap: var(--space-2) !important; }
+  .brand-name, .header-user, .logout-label { display: none; }
+  .nav-links { gap: 0 !important; }
+  .nav-pill { padding: 8px 12px; }
   .species-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; }
   .page-h1 { font-size: 38px; }
   .detail-h1 { font-size: 44px; }
@@ -390,6 +392,13 @@ a:hover { color: var(--color-accent-800); }
   .filters { grid-template-columns: minmax(0, 1fr); }
   .view-fields { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Map: clicking places a report, so the cursor says so. */
+.report-map.leaflet-container { cursor: crosshair; font-family: var(--font-body); background: var(--color-surface); }
+.report-map .leaflet-interactive { cursor: pointer; }
+.report-map .leaflet-popup-content-wrapper { background: var(--color-bg); border-radius: var(--radius-md); box-shadow: var(--shadow-md); }
+.report-map .leaflet-popup-tip { background: var(--color-bg); }
+.map-pick { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); font-size: 13px; color: var(--color-neutral-700); }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;

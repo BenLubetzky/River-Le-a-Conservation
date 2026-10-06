@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ReportButton from "@/components/layout/ReportButton";
 import SiteHeader, { type Page } from "@/components/layout/SiteHeader";
+import MapPage from "@/components/map/MapPage";
 import ReportFormDialog from "@/components/reports/ReportFormDialog";
 import ReportView from "@/components/reports/ReportView";
 import ReportsPage, { NO_FILTERS, type Filters } from "@/components/reports/ReportsPage";
@@ -27,6 +28,7 @@ export default function RioLeca({ user }: { user: User }) {
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
   const [view, setView] = useState<number | null>(null); // id of the report open in the viewer
   const [reporting, setReporting] = useState(false);
+  const [reportAt, setReportAt] = useState<{ lat: number; lng: number } | undefined>(); // spot picked on the map
   const [editing, setEditing] = useState<Report | null>(null); // own report open in the form
   const [lb, setLb] = useState<{ look: LookAlike; i: number } | null>(null);
 
@@ -40,6 +42,11 @@ export default function RioLeca({ user }: { user: User }) {
     setGi(0);
     window.scrollTo({ top: 0 });
   };
+
+  const reportHere = useCallback((lat: number, lng: number) => {
+    setReportAt({ lat, lng });
+    setReporting(true);
+  }, []);
 
   const plant = species && sel >= 0 ? species[sel] : undefined;
   // Reports without an uploaded photo show the species' main photo instead.
@@ -70,6 +77,9 @@ export default function RioLeca({ user }: { user: User }) {
       {page === "reports" && (
         <ReportsPage reports={reports} species={species} userId={user.id} error={reportsError} onRetry={reloadReports} f={filters} setFilters={setFilters} srcOf={srcOf} onView={setView} />
       )}
+      {page === "map" && (
+        <MapPage reports={reports} species={species} userId={user.id} error={reportsError} onRetry={reloadReports} onView={setView} onReportAt={reportHere} />
+      )}
 
       {viewed && (
         <ReportView
@@ -99,7 +109,7 @@ export default function RioLeca({ user }: { user: User }) {
       )}
 
       {reporting && (
-        <ReportFormDialog species={species ?? []} username={user.username} initialSp={page === "main" ? sel : -1} onClose={() => setReporting(false)} onSaved={addReport} />
+        <ReportFormDialog species={species ?? []} username={user.username} initialSp={page === "main" ? sel : -1} initialCoords={reportAt} onClose={() => { setReporting(false); setReportAt(undefined); }} onSaved={addReport} />
       )}
     </div>
   );

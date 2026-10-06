@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { logout } from "@/api/auth";
 import Icon from "@/components/ui/Icon";
 
-export type Page = "main" | "reports";
+export type Page = "main" | "reports" | "map";
 
 export default function SiteHeader({ page, onNavigate, username }: { page: Page; onNavigate: (page: Page) => void; username: string }) {
   const router = useRouter();
@@ -33,15 +33,16 @@ export default function SiteHeader({ page, onNavigate, username }: { page: Page;
           </span>
           <span className="brand-name" style={{ fontFamily: "var(--font-heading)", fontSize: 19 }}>Guardiões do Leça</span>
         </div>
-        <div style={{ display: "flex", gap: "var(--space-2)" }}>
+        <div className="nav-links" style={{ display: "flex", gap: "var(--space-2)" }}>
           <a {...link("main")}>Main</a>
           <a {...link("reports")}>View reports</a>
+          <a {...link("map")}>Map</a>
         </div>
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
           <span className="header-user" style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{username}</span>
-          <button className="nav-pill" onClick={logOut} disabled={leaving} style={{ border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
+          <button className="nav-pill" onClick={logOut} disabled={leaving} aria-label="Log out" title="Log out" style={{ border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
             <Icon name="logOut" size={15} />
-            Log out
+            <span className="logout-label">Log out</span>
           </button>
         </div>
       </nav>

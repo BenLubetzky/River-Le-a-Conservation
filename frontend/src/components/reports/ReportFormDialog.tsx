@@ -56,18 +56,20 @@ const releasePreview = (url: string) => {
   if (url.startsWith("blob:")) URL.revokeObjectURL(url);
 };
 
-export default function ReportFormDialog({ species, username, initialSp, editing, onClose, onSaved }: {
+export default function ReportFormDialog({ species, username, initialSp, initialCoords, editing, onClose, onSaved }: {
   species: Species[];
   /** The logged-in user, who the report is saved under. */
   username: string;
   /** Index into `species` to preselect, or -1 for none. */
   initialSp: number;
+  /** A location to start with, e.g. the spot picked on the map. */
+  initialCoords?: { lat: number; lng: number };
   /** The report to edit. Without it, the form makes a new one. */
   editing?: Report;
   onClose: () => void;
   onSaved: (report: Report) => void;
 }) {
-  const [rep, setRepState] = useState<ReportForm>(() => (editing ? formFrom(species, editing) : emptyForm(species, initialSp)));
+  const [rep, setRepState] = useState<ReportForm>(() => (editing ? formFrom(species, editing) : { ...emptyForm(species, initialSp), coords: initialCoords ?? null }));
   const setRep = (patch: Partial<ReportForm>) => setRepState((r) => ({ ...r, ...patch }));
   const close = () => {
     releasePreview(rep.photoUrl);
