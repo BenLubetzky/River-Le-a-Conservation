@@ -7,11 +7,12 @@ import { speciesNames } from "@/lib/species";
 import type { Species } from "@/types/plant";
 import type { Option, Report } from "@/types/report";
 
-export type Filters = { q: string; sp: string; ab: string; st: string; ph: string; sort: "new" | "old" };
-export const NO_FILTERS: Filters = { q: "", sp: "all", ab: "all", st: "all", ph: "all", sort: "new" };
+// `mine`: only the logged-in user's reports.
+export type Filters = { q: string; sp: string; ab: string; st: string; ph: string; mine: boolean; sort: "new" | "old" };
+export const NO_FILTERS: Filters = { q: "", sp: "all", ab: "all", st: "all", ph: "all", mine: false, sort: "new" };
 
-export default function ReportsPage({ reports, species, error, onRetry, f, setFilters, srcOf, onView }: {
-  reports: Report[] | null; species: Species[] | null; error: string; onRetry: () => void;
+export default function ReportsPage({ reports, species, userId, error, onRetry, f, setFilters, srcOf, onView }: {
+  reports: Report[] | null; species: Species[] | null; userId: number; error: string; onRetry: () => void;
   f: Filters; setFilters: (fn: (f: Filters) => Filters) => void;
   srcOf: (r: Report) => string; onView: (id: number) => void;
 }) {
@@ -21,6 +22,7 @@ export default function ReportsPage({ reports, species, error, onRetry, f, setFi
   const list = all
     .filter((r) => {
       const p = speciesNames(species, r.species_id);
+      if (f.mine && r.user_id !== userId) return false;
       if (f.sp !== "all" && r.species_id !== f.sp) return false;
       if (f.ab !== "all" && r.abundance !== f.ab) return false;
       if (f.st !== "all" && r.stage !== f.st) return false;
@@ -64,6 +66,10 @@ export default function ReportsPage({ reports, species, error, onRetry, f, setFi
           ))}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)", flexWrap: "wrap" }}>
+          <button className="chip" aria-pressed={f.mine} onClick={() => setF({ mine: !f.mine })} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            {f.mine && <Icon name="check" size={15} />}
+            My reports
+          </button>
           <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{reports ? count : error ? "" : "Loading reports…"}</span>
           {hasFilters && <button className="btn btn-ghost" onClick={clearFilters} style={{ padding: "6px 12px", fontSize: 14 }}>Clear filters</button>}
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
@@ -131,7 +137,12 @@ export default function ReportsPage({ reports, species, error, onRetry, f, setFi
             <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>Seen an invasive plant along the Leça? Be the first to report it.</span>
           </div>
         )}
-        {reports && all.length > 0 && list.length === 0 && (
+        {reports && all.length > 0 && list.length === 0 && f.mine && !all.some((r) => r.user_id === userId) ? (
+          <div style={{ padding: "48px var(--space-4)", display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", textAlign: "center" }}>
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: 20 }}>You haven’t made any reports yet</span>
+            <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>Seen an invasive plant along the Leça? Use the report button to log it.</span>
+          </div>
+        ) : reports && all.length > 0 && list.length === 0 && (
           <div style={{ padding: "48px var(--space-4)", display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", textAlign: "center" }}>
             <span style={{ fontFamily: "var(--font-heading)", fontSize: 20 }}>No reports match these filters</span>
             <button className="btn btn-secondary" onClick={clearFilters}>Clear filters</button>

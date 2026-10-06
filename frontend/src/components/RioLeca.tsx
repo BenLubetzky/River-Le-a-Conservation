@@ -68,7 +68,7 @@ export default function RioLeca({ user }: { user: User }) {
         <PlantDetail plant={plant} gi={gi} setGi={setGi} onBack={() => navigate("main")} onLookGallery={(look) => setLb({ look, i: 0 })} />
       )}
       {page === "reports" && (
-        <ReportsPage reports={reports} species={species} error={reportsError} onRetry={reloadReports} f={filters} setFilters={setFilters} srcOf={srcOf} onView={setView} />
+        <ReportsPage reports={reports} species={species} userId={user.id} error={reportsError} onRetry={reloadReports} f={filters} setFilters={setFilters} srcOf={srcOf} onView={setView} />
       )}
 
       {viewed && (
