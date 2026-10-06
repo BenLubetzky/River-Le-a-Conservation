@@ -1,4 +1,4 @@
-"""Admin page for Guardiões do Leça: add, delete and reset the passwords of the accounts people use to log in to the website.
+"""Admin page for Guardiões do Leça: manage the accounts people use to log in to the website, and delete reports.
 
 Run from the backend folder with `uv run python -m streamlit run admin.py` (or `npm run admin` from
 the project root). It talks to the database directly with the backend's own models, so it needs the
@@ -10,14 +10,16 @@ from sqlalchemy.exc import IntegrityError
 
 from app.core.security import hash_password
 from app.database.session import SessionLocal
-from app.models import Report, User, UserSession
+from app.models import Report, Species, User, UserSession
+from app.services import storage
 
 MIN_PASSWORD = 8
 MAX_PASSWORD = 200  # matches the API's login form
+REPORTS_SHOWN = 50
 
 st.set_page_config(page_title="Guardiões do Leça · Admin", page_icon="🌿")
 st.title("Guardiões do Leça")
-st.caption("Admin · user accounts")
+st.caption("Admin · users and reports")
 
 
 def validate_password(password: str, confirm: str) -> str | None:
@@ -142,3 +144,62 @@ if users:
             st.button("Delete user", key=f"delete_{u.id}", type="primary", on_click=delete_user, args=(u.username,))
 else:
     st.info("No users yet.")
+
+
+def delete_report(report_id: int) -> None:
+    with SessionLocal() as db:
+        photo = db.scalar(select(Report.photo_path).where(Report.id == report_id))
+        deleted = db.execute(delete(Report).where(Report.id == report_id)).rowcount
+        db.commit()
+    if not deleted:
+        st.session_state.reports_result = ("error", f"Report #{report_id} no longer exists.")
+        return
+    if photo:
+        storage.delete_photos_quietly([photo])
+    st.session_state.reports_result = ("success", f"Deleted report #{report_id}.")
+
+
+st.subheader("Reports")
+st.caption("Reports can only be deleted here. On the website, people can edit their own reports but not delete them.")
+search = st.text_input("Search", placeholder="Report number, species, reporter or place", label_visibility="collapsed")
+with SessionLocal() as db:
+    query = (
+        select(Report.id, Report.observed_at, Report.reporter_name, Report.location_text, Report.photo_path, Species.common_name)
+        .join(Species)
+        .order_by(Report.observed_at.desc())
+    )
+    if term := search.strip().lstrip("#"):
+        like = f"%{term}%"
+        matches = Species.common_name.ilike(like) | Species.latin_name.ilike(like) | Report.reporter_name.ilike(like) | Report.location_text.ilike(like)
+        if term.isdigit():
+            matches |= Report.id == int(term)
+        query = query.where(matches)
+    reports = db.execute(query.limit(REPORTS_SHOWN + 1)).all()
+
+if result := st.session_state.pop("reports_result", None):
+    kind, message = result
+    (st.success if kind == "success" else st.error)(message)
+
+if reports:
+    if len(reports) > REPORTS_SHOWN:
+        st.caption(f"Showing the {REPORTS_SHOWN} most recent. Search to find older ones.")
+        reports = reports[:REPORTS_SHOWN]
+    widths = [0.7, 2, 2, 1.6, 2, 1.1]
+    for col, label in zip(st.columns(widths), ["#", "Species", "Observed", "Reported by", "Place", ""]):
+        col.caption(label)
+    for r in reports:
+        num, sp, observed, reporter, place, remove = st.columns(widths, vertical_alignment="center")
+        num.text(str(r.id))
+        sp.text(r.common_name)
+        local = r.observed_at.astimezone()
+        observed.text(f"{local.day} {local:%b %Y, %H:%M}")
+        reporter.text(r.reporter_name or "Anonymous")
+        place.text(r.location_text or "—")
+        with remove.popover("Delete", width="stretch"):
+            st.markdown(f"Delete report **#{r.id}** ({r.common_name})?")
+            st.caption(("Its photo will be deleted too. " if r.photo_path else "") + "This can't be undone.")
+            st.button("Delete report", key=f"delete_report_{r.id}", type="primary", on_click=delete_report, args=(r.id,))
+elif search.strip():
+    st.info("No reports match that search.")
+else:
+    st.info("No reports yet.")

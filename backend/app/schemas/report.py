@@ -17,6 +17,7 @@ class ReportOut(BaseModel):
     longitude: float | None
     location_text: str | None
     reporter_name: str | None
+    user_id: int | None  # who made it, and so who can edit it; None once that user is deleted
     notes: str | None
     photo_url: str | None  # signed URL, valid for a limited time
     created_at: datetime
@@ -27,7 +28,7 @@ class ReportOut(BaseModel):
             id=r.id, species_id=r.species_id, observed_at=r.observed_at,
             abundance=r.abundance, stage=r.stage, phenology=r.phenology,
             latitude=r.latitude, longitude=r.longitude, location_text=r.location_text,
-            reporter_name=r.reporter_name, notes=r.notes,
+            reporter_name=r.reporter_name, user_id=r.user_id, notes=r.notes,
             photo_url=photo_url,
             created_at=r.created_at,
         )

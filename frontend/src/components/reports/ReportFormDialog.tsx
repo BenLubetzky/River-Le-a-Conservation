@@ -1,11 +1,11 @@
 import { useState, type ChangeEvent } from "react";
-import { createReport } from "@/api/reports";
+import { createReport, updateReport } from "@/api/reports";
 import Field from "@/components/ui/Field";
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
 import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
 import { stop } from "@/lib/events";
-import { fmtCoords, nowLocalInput } from "@/lib/format";
+import { fmtCoords, nowLocalInput, toLocalInput } from "@/lib/format";
 import type { Species } from "@/types/plant";
 import type { Abundance, Phenology, Report, Stage } from "@/types/report";
 
@@ -15,6 +15,8 @@ type ReportForm = {
   list: boolean;
   photo: File | null;
   photoUrl: string;
+  /** Editing: take the report's current photo off. */
+  removePhoto: boolean;
   date: string;
   abundance: Abundance | "";
   stage: Stage | "";
@@ -32,32 +34,50 @@ type ReportForm = {
 const emptyForm = (species: Species[], sp: number): ReportForm => {
   const p = species[sp];
   return {
-    sp: p ? sp : -1, query: p ? p.common_name : "", list: false, photo: null, photoUrl: "", date: nowLocalInput(),
+    sp: p ? sp : -1, query: p ? p.common_name : "", list: false, photo: null, photoUrl: "", removePhoto: false, date: nowLocalInput(),
     abundance: "", stage: "", phenology: "", coords: null, locating: false, locationError: "", locationText: "",
     notes: "", submitting: false, error: "", sent: false,
   };
 };
 
-export default function ReportFormDialog({ species, username, initialSp, onClose, onCreated }: {
+// The form filled in with an existing report, for editing it.
+const formFrom = (species: Species[], r: Report): ReportForm => ({
+  ...emptyForm(species, species.findIndex((p) => p.id === r.species_id)),
+  photoUrl: r.photo_url ?? "",
+  date: toLocalInput(new Date(r.observed_at)),
+  abundance: r.abundance ?? "", stage: r.stage ?? "", phenology: r.phenology ?? "",
+  coords: r.latitude != null && r.longitude != null ? { lat: r.latitude, lng: r.longitude } : null,
+  locationText: r.location_text ?? "",
+  notes: r.notes ?? "",
+});
+
+// Photos picked in this form are previewed through blob: URLs, which need releasing.
+const releasePreview = (url: string) => {
+  if (url.startsWith("blob:")) URL.revokeObjectURL(url);
+};
+
+export default function ReportFormDialog({ species, username, initialSp, editing, onClose, onSaved }: {
   species: Species[];
   /** The logged-in user, who the report is saved under. */
   username: string;
   /** Index into `species` to preselect, or -1 for none. */
   initialSp: number;
+  /** The report to edit. Without it, the form makes a new one. */
+  editing?: Report;
   onClose: () => void;
-  onCreated: (report: Report) => void;
+  onSaved: (report: Report) => void;
 }) {
-  const [rep, setRepState] = useState<ReportForm>(() => emptyForm(species, initialSp));
+  const [rep, setRepState] = useState<ReportForm>(() => (editing ? formFrom(species, editing) : emptyForm(species, initialSp)));
   const setRep = (patch: Partial<ReportForm>) => setRepState((r) => ({ ...r, ...patch }));
   const close = () => {
-    if (rep.photoUrl) URL.revokeObjectURL(rep.photoUrl);
+    releasePreview(rep.photoUrl);
     onClose();
   };
   const submit = async () => {
     if (rep.sp < 0 || !rep.date || rep.submitting) return;
     setRep({ submitting: true, error: "", list: false });
     try {
-      const saved = await createReport({
+      const fields = {
         species_id: species[rep.sp].id,
         // The form's date is local wall-clock time; send it with the viewer's timezone.
         observed_at: new Date(rep.date).toISOString(),
@@ -69,8 +89,13 @@ export default function ReportFormDialog({ species, username, initialSp, onClose
         location_text: rep.locationText.trim() || undefined,
         notes: rep.notes.trim() || undefined,
         photo: rep.photo ?? undefined,
-      });
-      onCreated(saved);
+      };
+      if (editing) {
+        onSaved(await updateReport(editing.id, { ...fields, remove_photo: rep.removePhoto }));
+        close();
+        return;
+      }
+      onSaved(await createReport(fields));
       setRep({ submitting: false, sent: true });
     } catch (e) {
       setRep({ submitting: false, error: (e as Error).message });
@@ -92,8 +117,12 @@ export default function ReportFormDialog({ species, username, initialSp, onClose
       setRep({ error: "That photo is larger than 10 MB. Please choose a smaller one." });
       return;
     }
-    if (rep.photoUrl) URL.revokeObjectURL(rep.photoUrl);
+    releasePreview(rep.photoUrl);
     setRep({ photo: file, photoUrl: URL.createObjectURL(file), error: "" });
+  };
+  const removePhoto = () => {
+    releasePreview(rep.photoUrl);
+    setRep({ photo: null, photoUrl: "", removePhoto: true });
   };
   const locate = () => {
     if (!("geolocation" in navigator)) {
@@ -108,12 +137,14 @@ export default function ReportFormDialog({ species, username, initialSp, onClose
     );
   };
 
+  const title = editing ? `Edit report #${editing.id}` : "Report an occurrence";
+
   return (
     <div className="dialog-backdrop" onClick={close} style={{ zIndex: 50 }}>
-      <div className="dialog" onClick={stop} role="dialog" aria-modal="true" aria-label="Report an occurrence" style={{ width: "min(580px,100%)", maxHeight: "calc(100vh - 48px)", overflowY: "auto", padding: "var(--space-8)", gap: "var(--space-6)", scrollbarWidth: "thin", scrollbarColor: "var(--color-neutral-400) transparent" }}>
+      <div className="dialog" onClick={stop} role="dialog" aria-modal="true" aria-label={title} style={{ width: "min(580px,100%)", maxHeight: "calc(100vh - 48px)", overflowY: "auto", padding: "var(--space-8)", gap: "var(--space-6)", scrollbarWidth: "thin", scrollbarColor: "var(--color-neutral-400) transparent" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "var(--space-4)" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <span className="dialog-title" style={{ fontSize: 28 }}>Report an occurrence</span>
+            <span className="dialog-title" style={{ fontSize: 28 }}>{title}</span>
             <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>Rio Leça · Porto</span>
           </div>
           <button className="btn btn-ghost btn-icon" onClick={close} aria-label="Close"><Icon name="x" /></button>
@@ -163,10 +194,13 @@ export default function ReportFormDialog({ species, username, initialSp, onClose
                   {rep.photoUrl ? <Photo src={rep.photoUrl} washed={false} /> : <Icon name="camera" size={24} color="var(--color-accent-2-800)" />}
                 </span>
                 <span style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
-                  <span style={{ fontFamily: "var(--font-heading)", fontSize: 16 }}>{rep.photo ? "Change photo" : "Add a photo"}</span>
+                  <span style={{ fontFamily: "var(--font-heading)", fontSize: 16 }}>{rep.photoUrl ? "Change photo" : "Add a photo"}</span>
                   <span style={{ fontSize: 13, color: "var(--color-neutral-700)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{rep.photo?.name || "JPEG, PNG, WebP or HEIC, up to 10 MB"}</span>
                 </span>
               </label>
+              {rep.photoUrl && (
+                <button className="btn btn-ghost" onClick={removePhoto} style={{ padding: "4px 8px", fontSize: 13, marginTop: "var(--space-1)" }}>Remove photo</button>
+              )}
             </Field>
 
             <Field label="Date and time" htmlFor="rep-date">
@@ -221,7 +255,7 @@ export default function ReportFormDialog({ species, username, initialSp, onClose
 
             <div className="dialog-actions" style={{ marginTop: 0 }}>
               <button className="btn btn-ghost" onClick={close}>Cancel</button>
-              <button className="btn btn-primary" onClick={submit} disabled={rep.sp < 0 || !rep.date || rep.submitting}>{rep.submitting ? "Sending…" : "Submit report"}</button>
+              <button className="btn btn-primary" onClick={submit} disabled={rep.sp < 0 || !rep.date || rep.submitting}>{editing ? (rep.submitting ? "Saving…" : "Save changes") : rep.submitting ? "Sending…" : "Submit report"}</button>
             </div>
           </div>
         )}

@@ -18,6 +18,8 @@ export function useReports() {
   };
   // Show a newly submitted report without refetching everything.
   const add = (r: Report) => setReports((rs) => (rs ? [r, ...rs] : rs));
+  // Show an edited report in place.
+  const replace = (r: Report) => setReports((rs) => rs?.map((x) => (x.id === r.id ? r : x)) ?? rs);
 
-  return { reports, error, reload, add };
+  return { reports, error, reload, add, replace };
 }

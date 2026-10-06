@@ -16,9 +16,10 @@ export const fmtCoords = (lat: number, lng: number) =>
 export const fmtLocation = (r: Report) =>
   r.location_text || (r.latitude != null && r.longitude != null ? fmtCoords(r.latitude, r.longitude) : "Not specified");
 
-// Current local time in the format a datetime-local input expects ("YYYY-MM-DDTHH:mm").
-export const nowLocalInput = () => {
-  const d = new Date();
+// A time in the viewer's timezone, in the format a datetime-local input expects ("YYYY-MM-DDTHH:mm").
+export const toLocalInput = (date: Date) => {
+  const d = new Date(date);
   d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
   return d.toISOString().slice(0, 16);
 };
+export const nowLocalInput = () => toLocalInput(new Date());

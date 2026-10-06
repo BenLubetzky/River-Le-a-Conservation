@@ -3,6 +3,7 @@
 Photos are only viewable through signed URLs, which this API hands out and which expire.
 """
 
+import logging
 import uuid
 
 import httpx
@@ -48,6 +49,26 @@ def upload_photo(data: bytes, content_type: str) -> str:
         r = c.post(f"/object/{s.photo_bucket}/{path}", content=data, headers={"Content-Type": content_type})
         r.raise_for_status()
     return path
+
+
+def delete_photos(paths: list[str]) -> None:
+    """Remove photos from the bucket. Paths that don't exist are ignored."""
+    s = get_settings()
+    paths = [p for p in paths if p]
+    if not paths:
+        return
+    with _client() as c:
+        r = c.request("DELETE", f"/object/{s.photo_bucket}", json={"prefixes": paths})
+        r.raise_for_status()
+
+
+def delete_photos_quietly(paths: list[str]) -> None:
+    """delete_photos, for when the database change has already been made: a failure only leaves
+    an unused file behind, so it's logged rather than raised."""
+    try:
+        delete_photos(paths)
+    except Exception:
+        logging.getLogger("uvicorn.error").exception("Could not delete photos %s", paths)
 
 
 def signed_urls(paths: list[str]) -> dict[str, str]:

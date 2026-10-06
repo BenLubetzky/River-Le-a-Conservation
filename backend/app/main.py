@@ -26,7 +26,7 @@ app.add_middleware(
     allow_origins=get_settings().cors_origins,
     # The website sends the session cookie with every request.
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PUT"],
     allow_headers=["*"],
 )
 app.include_router(api_router)

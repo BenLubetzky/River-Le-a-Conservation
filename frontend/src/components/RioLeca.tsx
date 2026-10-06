@@ -19,7 +19,7 @@ import type { User } from "@/types/user";
 /** The whole site: navigation between pages, and the dialogs that open over them. */
 export default function RioLeca({ user }: { user: User }) {
   const { species, error: speciesError, reload: reloadSpecies } = useSpecies();
-  const { reports, error: reportsError, reload: reloadReports, add: addReport } = useReports();
+  const { reports, error: reportsError, reload: reloadReports, add: addReport, replace: replaceReport } = useReports();
 
   const [page, setPage] = useState<Page>("main");
   const [sel, setSel] = useState(-1); // plant open on the main page, as an index into `species`
@@ -27,6 +27,7 @@ export default function RioLeca({ user }: { user: User }) {
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
   const [view, setView] = useState<number | null>(null); // id of the report open in the viewer
   const [reporting, setReporting] = useState(false);
+  const [editing, setEditing] = useState<Report | null>(null); // own report open in the form
   const [lb, setLb] = useState<{ look: LookAlike; i: number } | null>(null);
 
   const navigate = (p: Page) => {
@@ -70,7 +71,15 @@ export default function RioLeca({ user }: { user: User }) {
         <ReportsPage reports={reports} species={species} error={reportsError} onRetry={reloadReports} f={filters} setFilters={setFilters} srcOf={srcOf} onView={setView} />
       )}
 
-      {viewed && <ReportView r={viewed} names={speciesNames(species, viewed.species_id)} src={srcOf(viewed)} onClose={() => setView(null)} />}
+      {viewed && (
+        <ReportView
+          r={viewed}
+          names={speciesNames(species, viewed.species_id)}
+          src={srcOf(viewed)}
+          onClose={() => setView(null)}
+          onEdit={viewed.user_id === user.id && species ? () => setEditing(viewed) : undefined}
+        />
+      )}
 
       <ReportButton onClick={() => setReporting(true)} />
 
@@ -85,8 +94,12 @@ export default function RioLeca({ user }: { user: User }) {
         />
       )}
 
+      {editing && (
+        <ReportFormDialog species={species ?? []} username={user.username} initialSp={-1} editing={editing} onClose={() => setEditing(null)} onSaved={replaceReport} />
+      )}
+
       {reporting && (
-        <ReportFormDialog species={species ?? []} username={user.username} initialSp={page === "main" ? sel : -1} onClose={() => setReporting(false)} onCreated={addReport} />
+        <ReportFormDialog species={species ?? []} username={user.username} initialSp={page === "main" ? sel : -1} onClose={() => setReporting(false)} onSaved={addReport} />
       )}
     </div>
   );

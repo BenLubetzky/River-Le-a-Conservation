@@ -7,7 +7,7 @@ A field guide for recognising and reporting invasive plants along the Rio Leça 
 - **Removal procedures:** step-by-step guidance and warnings for each species.
 - **Sighting reports:** log an occurrence with a photo, date, abundance, growth stage and flowering or fruiting. Search, filter, edit and delete reports.
 
-The site opens on a login page; everything else needs an account. Reports are stored in a database and linked to the user who made them. Editing and deleting reports are still to come.
+The site opens on a login page; everything else needs an account. Reports are stored in a database and linked to the user who made them. People can edit their own reports; only the admin page can delete them.
 
 ## Project structure
 
@@ -43,7 +43,7 @@ npm run dev
 
 Then open http://localhost:3000 and log in.
 
-Accounts are created on the admin page, a small [Streamlit](https://streamlit.io) app that runs on your own computer:
+Accounts are created, and reports deleted, on the admin page, a small [Streamlit](https://streamlit.io) app that runs on your own computer:
 
 ```bash
 npm run admin

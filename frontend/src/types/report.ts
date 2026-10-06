@@ -17,6 +17,8 @@ export type Report = {
   longitude: number | null;
   location_text: string | null;
   reporter_name: string | null;
+  /** Who made it, and so who can edit it. Null for older reports and deleted users. */
+  user_id: number | null;
   notes: string | null;
   photo_url: string | null;
   created_at: string;

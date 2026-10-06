@@ -6,8 +6,10 @@ import { stop } from "@/lib/events";
 import { fmtCoords, fmtDate, labelOf } from "@/lib/format";
 import type { Report } from "@/types/report";
 
-export default function ReportView({ r, names: p, src, onClose }: {
+export default function ReportView({ r, names: p, src, onClose, onEdit }: {
   r: Report; names: { common: string; latin: string }; src: string; onClose: () => void;
+  /** Only given for the logged-in user's own reports. */
+  onEdit?: () => void;
 }) {
   const hasCoords = r.latitude != null && r.longitude != null;
   const fields: [string, ReactNode][] = [
@@ -57,6 +59,14 @@ export default function ReportView({ r, names: p, src, onClose }: {
             </div>
           )}
         </div>
+        {onEdit && (
+          <div className="view-actions" style={{ gridTemplateColumns: "minmax(0, 1fr)" }}>
+            <button className="view-btn view-btn-edit" onClick={onEdit}>
+              <Icon name="pencil" size={18} />
+              Edit report
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
