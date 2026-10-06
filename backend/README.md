@@ -12,6 +12,8 @@ app/
   api/routes/     endpoints: health, auth, species, reports
   services/       Supabase Storage (report photos)
 alembic/          migrations
+admin.py          the admin page (Streamlit): add users
+.streamlit/       the admin page's settings and theme
 ```
 
 ## Setup
@@ -46,6 +48,10 @@ Everything except `/health` and `/auth/login` needs a logged-in user, and answer
 The API connects as the database owner. Supabase's own public Data API is locked out of these tables: row-level security is on with no policies, and the `anon`/`authenticated` grants are revoked. The only way in is this API. There's no editing or deleting of reports yet; that comes with logins.
 
 Users have only a username (case-sensitive) and a password hash (Argon2). Logging in creates a row in `sessions` and sets an httpOnly `session` cookie holding a random token; the table stores only the token's SHA-256. Sessions last `SESSION_TTL_DAYS` (30 by default). Set `COOKIE_SECURE=true` wherever the API is served over HTTPS. Each report can be linked to the user who made it through `reports.user_id`. If that user is deleted, the link is set to NULL and the report stays.
+
+## Admin page
+
+`uv run python -m streamlit run admin.py` (or `npm run admin` from the project root) opens a page on http://localhost:8502 for adding users and listing the existing ones. It uses the backend's models and `.env` to write to the database directly, so the API doesn't need to be running. It has no login of its own, so it only listens on localhost. Run it only on a computer you trust with the database password.
 
 ## Changing the schema
 

@@ -1,0 +1,25 @@
+# The admin page (admin.py). Colours and fonts from the website's design system.
+
+[server]
+# Only reachable from this computer: the page has no login of its own.
+address = "localhost"
+port = 8502
+headless = true
+
+[client]
+# No "Deploy" button or developer menu.
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#728157"
+backgroundColor = "#f5ead8"
+secondaryBackgroundColor = "#ebddc5"
+textColor = "#201e1d"
+borderColor = "#d6cab6"
+font = "Figtree:https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&display=swap"
+headingFont = "Caprasimo:https://fonts.googleapis.com/css2?family=Caprasimo&display=swap"
+baseRadius = "full"

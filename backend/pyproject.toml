@@ -18,3 +18,10 @@ package = false
 # Use the installed (signed) Python rather than a uv-downloaded one: Windows Smart App Control
 # blocks the downloaded build's unsigned DLLs, including SSL, which the database connection needs.
 python-preference = "only-system"
+# Installed by `uv sync` too, so the admin page is ready to run.
+default-groups = ["admin"]
+
+[dependency-groups]
+admin = [
+    "streamlit>=1.65.0",
+]

@@ -41,4 +41,12 @@ npm run dev:backend
 npm run dev
 ```
 
-Then open http://localhost:3000 and log in. The API runs on http://localhost:8000.
+Then open http://localhost:3000 and log in.
+
+Accounts are created on the admin page, a small [Streamlit](https://streamlit.io) app that runs on your own computer:
+
+```bash
+npm run admin
+```
+
+It opens on http://localhost:8502. The API runs on http://localhost:8000.
