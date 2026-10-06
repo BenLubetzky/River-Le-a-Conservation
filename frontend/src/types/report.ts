@@ -32,7 +32,6 @@ export type NewReport = {
   latitude?: number;
   longitude?: number;
   location_text?: string;
-  reporter_name?: string;
   notes?: string;
   photo?: File;
 };

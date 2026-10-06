@@ -49,7 +49,6 @@ def create_report(
     latitude: Annotated[float | None, Form(ge=-90, le=90)] = None,
     longitude: Annotated[float | None, Form(ge=-180, le=180)] = None,
     location_text: Annotated[str | None, Form(max_length=200)] = None,
-    reporter_name: Annotated[str | None, Form(max_length=100)] = None,
     notes: Annotated[str | None, Form(max_length=2000)] = None,
     photo: UploadFile | None = None,
 ) -> ReportOut:
@@ -80,7 +79,9 @@ def create_report(
         user_id=user.id, species_id=species_id, observed_at=observed_at,
         abundance=abundance, stage=stage, phenology=phenology,
         latitude=latitude, longitude=longitude,
-        location_text=clean(location_text), reporter_name=clean(reporter_name), notes=clean(notes),
+        location_text=clean(location_text), notes=clean(notes),
+        # Always the logged-in user's name. Kept on the report, so it still shows if the user is deleted.
+        reporter_name=user.username,
         photo_path=photo_path,
     )
     db.add(report)

@@ -86,7 +86,7 @@ export default function RioLeca({ user }: { user: User }) {
       )}
 
       {reporting && (
-        <ReportFormDialog species={species ?? []} initialSp={page === "main" ? sel : -1} onClose={() => setReporting(false)} onCreated={addReport} />
+        <ReportFormDialog species={species ?? []} username={user.username} initialSp={page === "main" ? sel : -1} onClose={() => setReporting(false)} onCreated={addReport} />
       )}
     </div>
   );

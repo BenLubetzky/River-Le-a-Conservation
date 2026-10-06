@@ -12,7 +12,7 @@ app/
   api/routes/     endpoints: health, auth, species, reports
   services/       Supabase Storage (report photos)
 alembic/          migrations
-admin.py          the admin page (Streamlit): add users
+admin.py          the admin page (Streamlit): add and delete users, change passwords
 .streamlit/       the admin page's settings and theme
 ```
 
@@ -37,7 +37,7 @@ On Windows, call Alembic and Uvicorn through `python -m` as above. Smart App Con
 | POST | `/auth/logout` | Ends the session and clears the cookie |
 | GET | `/auth/me` | The logged-in user |
 | GET | `/reports` | All reports, newest first |
-| POST | `/reports` | Submit a report as the logged-in user (multipart form, optional `photo` file) |
+| POST | `/reports` | Submit a report as the logged-in user (multipart form, optional `photo` file). `reporter_name` is always their username |
 | GET | `/species` | The invasive species with all their field-guide content (details, characteristics, removal steps, native look-alikes, photo URLs) |
 | GET | `/health` | Liveness check |
 
@@ -51,7 +51,7 @@ Users have only a username (case-sensitive) and a password hash (Argon2). Loggin
 
 ## Admin page
 
-`uv run python -m streamlit run admin.py` (or `npm run admin` from the project root) opens a page on http://localhost:8502 for adding users and listing the existing ones. It uses the backend's models and `.env` to write to the database directly, so the API doesn't need to be running. It has no login of its own, so it only listens on localhost. Run it only on a computer you trust with the database password.
+`uv run python -m streamlit run admin.py` (or `npm run admin` from the project root) opens a page on http://localhost:8502 for adding, listing and deleting users, and changing their passwords. Changing a password or deleting a user logs them out everywhere. After a delete, their reports stay, no longer linked to anyone. It uses the backend's models and `.env` to write to the database directly, so the API doesn't need to be running. It has no login of its own, so it only listens on localhost. Run it only on a computer you trust with the database password.
 
 ## Changing the schema
 

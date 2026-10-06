@@ -23,7 +23,6 @@ type ReportForm = {
   locating: boolean;
   locationError: string;
   locationText: string;
-  reporterName: string;
   notes: string;
   submitting: boolean;
   error: string;
@@ -35,12 +34,14 @@ const emptyForm = (species: Species[], sp: number): ReportForm => {
   return {
     sp: p ? sp : -1, query: p ? p.common_name : "", list: false, photo: null, photoUrl: "", date: nowLocalInput(),
     abundance: "", stage: "", phenology: "", coords: null, locating: false, locationError: "", locationText: "",
-    reporterName: "", notes: "", submitting: false, error: "", sent: false,
+    notes: "", submitting: false, error: "", sent: false,
   };
 };
 
-export default function ReportFormDialog({ species, initialSp, onClose, onCreated }: {
+export default function ReportFormDialog({ species, username, initialSp, onClose, onCreated }: {
   species: Species[];
+  /** The logged-in user, who the report is saved under. */
+  username: string;
   /** Index into `species` to preselect, or -1 for none. */
   initialSp: number;
   onClose: () => void;
@@ -66,7 +67,6 @@ export default function ReportFormDialog({ species, initialSp, onClose, onCreate
         latitude: rep.coords?.lat,
         longitude: rep.coords?.lng,
         location_text: rep.locationText.trim() || undefined,
-        reporter_name: rep.reporterName.trim() || undefined,
         notes: rep.notes.trim() || undefined,
         photo: rep.photo ?? undefined,
       });
@@ -203,8 +203,9 @@ export default function ReportFormDialog({ species, initialSp, onClose, onCreate
               </Field>
             ))}
 
-            <Field label="Your name (optional)" htmlFor="rep-name">
-              <input id="rep-name" className="input" value={rep.reporterName} maxLength={100} onChange={(e) => setRep({ reporterName: e.target.value })} autoComplete="name" style={{ minHeight: 44, fontSize: 15 }} />
+            {/* Always the logged-in user: the API saves the report under them. */}
+            <Field label="Reported by" htmlFor="rep-name">
+              <input id="rep-name" className="input" value={username} readOnly style={{ minHeight: 44, fontSize: 15, color: "var(--color-neutral-700)", cursor: "default" }} />
             </Field>
 
             <Field label="Notes (optional)" htmlFor="rep-notes">
