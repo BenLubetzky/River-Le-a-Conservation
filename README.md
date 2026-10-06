@@ -7,7 +7,7 @@ A field guide for recognising and reporting invasive plants along the Rio Leça 
 - **Removal procedures:** step-by-step guidance and warnings for each species.
 - **Sighting reports:** log an occurrence with a photo, date, abundance, growth stage and flowering or fruiting. Search, filter, edit and delete reports.
 
-Reports are stored in a database. Editing and deleting reports will come with user accounts.
+The site opens on a login page; everything else needs an account. Reports are stored in a database and linked to the user who made them. Editing and deleting reports are still to come.
 
 ## Project structure
 
@@ -41,4 +41,4 @@ npm run dev:backend
 npm run dev
 ```
 
-Then open http://localhost:3000. The API runs on http://localhost:8000.
+Then open http://localhost:3000 and log in. The API runs on http://localhost:8000.

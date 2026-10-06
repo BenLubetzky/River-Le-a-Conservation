@@ -335,6 +335,7 @@ a:hover { color: var(--color-accent-800); }
 }
 .view-btn-edit:hover { background: var(--color-accent-2-700); transform: translateY(-1px); }
 .view-btn-edit:active { background: var(--color-accent-2-800); transform: none; }
+.view-btn-edit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
 .lb-btn {
   flex: none; border-radius: 50%; border: none; cursor: pointer;
@@ -380,7 +381,7 @@ a:hover { color: var(--color-accent-800); }
 @media (max-width: 640px) {
   .page-main { padding-inline: 16px; }
   .site-nav { padding-inline: 16px !important; gap: var(--space-4) !important; }
-  .brand-name { display: none; }
+  .brand-name, .header-user { display: none; }
   .species-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; }
   .page-h1 { font-size: 38px; }
   .detail-h1 { font-size: 44px; }

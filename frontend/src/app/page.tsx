@@ -1,5 +1,5 @@
-import RioLeca from "@/components/RioLeca";
+import LoginPage from "@/components/auth/LoginPage";
 
 export default function Home() {
-  return <RioLeca />;
+  return <LoginPage />;
 }

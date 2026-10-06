@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     signed_url_ttl_seconds: int = 60 * 60
     # Websites allowed to call the API from a browser.
     cors_origins: list[str] = ["http://localhost:3000"]
+    # How long a login lasts before the user has to log in again.
+    session_ttl_days: int = 30
+    # Send the session cookie over HTTPS only. Turn on wherever the API is served over HTTPS.
+    cookie_secure: bool = False
 
     @field_validator("database_url")
     @classmethod

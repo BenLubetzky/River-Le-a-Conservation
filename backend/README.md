@@ -5,11 +5,11 @@ A [FastAPI](https://fastapi.tiangolo.com) app that stores sighting reports in [S
 ```
 app/
   main.py         creates the FastAPI app
-  core/           settings, read from .env
+  core/           settings, read from .env; password hashing and session tokens
   database/       SQLAlchemy base class and connection/session
-  models/         database tables (species and their content, native plants, reports, users) and enums
+  models/         database tables (species and their content, native plants, reports, users, sessions) and enums
   schemas/        API request/response shapes (Pydantic)
-  api/routes/     endpoints: health, species, reports
+  api/routes/     endpoints: health, auth, species, reports
   services/       Supabase Storage (report photos)
 alembic/          migrations
 ```
@@ -31,16 +31,21 @@ On Windows, call Alembic and Uvicorn through `python -m` as above. Smart App Con
 
 | Method | Path | |
 | --- | --- | --- |
+| POST | `/auth/login` | Log in with `{username, password}`; sets the session cookie |
+| POST | `/auth/logout` | Ends the session and clears the cookie |
+| GET | `/auth/me` | The logged-in user |
 | GET | `/reports` | All reports, newest first |
-| POST | `/reports` | Submit a report (multipart form, optional `photo` file) |
+| POST | `/reports` | Submit a report as the logged-in user (multipart form, optional `photo` file) |
 | GET | `/species` | The invasive species with all their field-guide content (details, characteristics, removal steps, native look-alikes, photo URLs) |
 | GET | `/health` | Liveness check |
+
+Everything except `/health` and `/auth/login` needs a logged-in user, and answers 401 otherwise.
 
 ## Access
 
 The API connects as the database owner. Supabase's own public Data API is locked out of these tables: row-level security is on with no policies, and the `anon`/`authenticated` grants are revoked. The only way in is this API. There's no editing or deleting of reports yet; that comes with logins.
 
-Users have only a username (case-sensitive) and a password hash. Each report can be linked to the user who made it through `reports.user_id`. If that user is deleted, the link is set to NULL and the report stays.
+Users have only a username (case-sensitive) and a password hash (Argon2). Logging in creates a row in `sessions` and sets an httpOnly `session` cookie holding a random token; the table stores only the token's SHA-256. Sessions last `SESSION_TTL_DAYS` (30 by default). Set `COOKIE_SECURE=true` wherever the API is served over HTTPS. Each report can be linked to the user who made it through `reports.user_id`. If that user is deleted, the link is set to NULL and the report stays.
 
 ## Changing the schema
 

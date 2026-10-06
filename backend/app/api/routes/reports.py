@@ -5,7 +5,7 @@ from typing import Annotated
 from fastapi import APIRouter, Form, HTTPException, UploadFile
 from sqlalchemy import select
 
-from app.api.deps import DB
+from app.api.deps import DB, CurrentUser
 from app.core.config import get_settings
 from app.models import Abundance, GrowthStage, Phenology, Report, Species
 from app.schemas import ReportOut
@@ -40,6 +40,7 @@ def list_reports(db: DB) -> list[ReportOut]:
 @router.post("", status_code=201)
 def create_report(
     db: DB,
+    user: CurrentUser,
     species_id: Annotated[str, Form()],
     observed_at: Annotated[datetime, Form(description="ISO 8601 with a timezone, e.g. 2026-10-03T14:30:00Z")],
     abundance: Annotated[Abundance | None, Form()] = None,
@@ -76,7 +77,7 @@ def create_report(
             raise HTTPException(502, "The photo couldn't be saved. Please try again.")
 
     report = Report(
-        species_id=species_id, observed_at=observed_at,
+        user_id=user.id, species_id=species_id, observed_at=observed_at,
         abundance=abundance, stage=stage, phenology=phenology,
         latitude=latitude, longitude=longitude,
         location_text=clean(location_text), reporter_name=clean(reporter_name), notes=clean(notes),

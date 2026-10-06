@@ -14,9 +14,10 @@ import { useSpecies } from "@/hooks/useSpecies";
 import { speciesNames } from "@/lib/species";
 import type { LookAlike } from "@/types/plant";
 import type { Report } from "@/types/report";
+import type { User } from "@/types/user";
 
 /** The whole site: navigation between pages, and the dialogs that open over them. */
-export default function RioLeca() {
+export default function RioLeca({ user }: { user: User }) {
   const { species, error: speciesError, reload: reloadSpecies } = useSpecies();
   const { reports, error: reportsError, reload: reloadReports, add: addReport } = useReports();
 
@@ -46,7 +47,7 @@ export default function RioLeca() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-bg)", color: "var(--color-text)", fontFamily: "var(--font-body)" }}>
-      <SiteHeader page={page} onNavigate={navigate} />
+      <SiteHeader page={page} onNavigate={navigate} username={user.username} />
 
       {page === "main" && !species && (
         <main className="page-main" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", paddingTop: 120, textAlign: "center" }}>

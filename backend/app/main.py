@@ -24,6 +24,8 @@ app = FastAPI(title="Guardiões do Leça API", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=get_settings().cors_origins,
+    # The website sends the session cookie with every request.
+    allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )

@@ -18,6 +18,7 @@ const ICONS = {
   chevronDown: <path d="m6 9 6 6 6-6" />,
   camera: <><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></>,
   check: <path d="M20 6 9 17l-5-5" />,
+  logOut: <><path d="m16 17 5-5-5-5" /><path d="M21 12H9" /><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /></>,
 };
 
 export type IconName = keyof typeof ICONS;
