@@ -1,7 +1,7 @@
 [project]
 name = "rio-leca-backend"
 version = "0.1.0"
-description = "API for Guardiões do Leça: sighting reports of invasive plants along the Rio Leça"
+description = "API for Monitorização Leça: sighting reports of invasive plants along the Rio Leça"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi[standard]>=0.115",

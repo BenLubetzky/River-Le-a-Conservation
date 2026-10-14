@@ -35,7 +35,7 @@ export default function SiteHeader({ page, onNavigate, username, dueCount }: {
           <span style={{ width: 30, height: 30, borderRadius: 999, background: "var(--color-accent-2-600)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Icon name="leaf" size={16} color="var(--color-accent-2-100)" />
           </span>
-          <span className="brand-name" style={{ fontFamily: "var(--font-heading)", fontSize: 19 }}>Guardiões do Leça</span>
+          <span className="brand-name" style={{ fontFamily: "var(--font-heading)", fontSize: 19 }}>Monitorização Leça</span>
         </div>
         <div className="nav-links" style={{ display: "flex", gap: "var(--space-2)" }}>
           <a {...link("main")}>Main</a>

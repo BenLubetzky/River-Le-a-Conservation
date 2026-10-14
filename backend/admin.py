@@ -1,4 +1,4 @@
-"""Admin page for Guardiões do Leça: manage the accounts people use to log in to the website, delete
+"""Admin page for Monitorização Leça: manage the accounts people use to log in to the website, delete
 reports, and set how long until each species' reports are checked again.
 
 Run from the backend folder with `uv run python -m streamlit run admin.py` (or `npm run admin` from
@@ -18,7 +18,7 @@ MIN_PASSWORD = 8
 MAX_PASSWORD = 200  # matches the API's login form
 REPORTS_SHOWN = 50
 
-st.set_page_config(page_title="Guardiões do Leça · Admin", page_icon="🌿", layout="wide")
+st.set_page_config(page_title="Monitorização Leça · Admin", page_icon="🌿", layout="wide")
 # Wide layout, capped at a readable width, so the rows have room for their buttons; and button
 # labels never wrap or get cut off.
 st.html("""<style>
@@ -37,7 +37,7 @@ def fmt_time(dt) -> str:
     local = dt.astimezone()
     return f"{local.day} {local:%b %Y, %H:%M}"
 
-st.title("Guardiões do Leça")
+st.title("Monitorização Leça")
 st.caption("Admin · users, reports and checkups")
 
 

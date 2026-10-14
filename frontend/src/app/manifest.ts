@@ -5,7 +5,7 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Rio Leça Conservação",
+    name: "Monitorização Leça",
     short_name: "Rio Leça",
     description: "Tracking invasive species along the River Leça",
     start_url: "/",

@@ -14,7 +14,7 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
-  title: "Rio Leça Conservação",
+  title: "Monitorização Leça",
   description: "Tracking invasive species along the River Leça",
 };
 

@@ -38,7 +38,7 @@ export default function LoginPage() {
         <span style={{ width: 64, height: 64, borderRadius: 999, background: "var(--color-accent-2-600)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "var(--shadow-md)" }}>
           <Icon name="leaf" size={30} color="var(--color-accent-2-100)" />
         </span>
-        <h1 className="page-h1">Guardiões do Leça</h1>
+        <h1 className="page-h1">Monitorização Leça</h1>
         <span style={{ fontSize: 16, color: "var(--color-neutral-700)" }}>Invasive plants of the Rio Leça · Porto</span>
       </div>
 
