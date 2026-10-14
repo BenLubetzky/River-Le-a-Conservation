@@ -1,4 +1,5 @@
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/$/, "");
+// The API, through this site's own /api path (see next.config.ts), so the login cookie is first-party.
+const API_URL = "/api";
 
 /** The API answered 401: there's no valid login (or, for /auth/login, the credentials were wrong). */
 export class AuthError extends Error {}

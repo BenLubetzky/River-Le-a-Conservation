@@ -50,4 +50,13 @@ Accounts are created, and reports deleted, on the admin page, a small [Streamlit
 npm run admin
 ```
 
-It opens on http://localhost:8502. The API runs on http://localhost:8000.
+It opens on http://localhost:8502. The API runs on http://localhost:8000; the website reaches it through its own `/api` path, which Next.js forwards to the API.
+
+## Deploying
+
+The website and the API are deployed separately, for example the website on Vercel and the API on Render, Railway or Fly.io. Supabase stays as the database and photo storage.
+
+- **Website:** set `BACKEND_URL` to the API's address (e.g. `https://api.example.org`) before building. The browser only talks to the website, which forwards `/api/...` to the API, so the login cookie is first-party wherever the two are hosted.
+- **API:** set the same variables as in `backend/.env`, plus `COOKIE_SECURE=true`. Run `python -m alembic upgrade head` on each deploy, and start it with `python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
+- **Admin page:** don't host it. It has no login of its own. Run it on your own computer with `backend/.env` pointing at the production database.
+- **Photos:** uploads go through the website to the API, up to 10 MB each. After deploying, try uploading a large photo once, since some hosts limit request sizes.

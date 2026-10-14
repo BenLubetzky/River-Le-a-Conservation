@@ -1,5 +1,5 @@
 import { request } from "@/api/client";
-import type { NewReport, Report } from "@/types/report";
+import type { CheckupInput, NewReport, Report } from "@/types/report";
 
 export const fetchReports = () => request<Report[]>("/reports");
 
@@ -16,3 +16,7 @@ export const createReport = (r: NewReport) => request<Report>("/reports", { meth
 /** Replaces every field of the report: a field left out is cleared. The photo only changes if a new one is sent or `remove_photo` is set. */
 export const updateReport = (id: number, r: NewReport & { remove_photo?: boolean }) =>
   request<Report>(`/reports/${id}`, { method: "PUT", body: toForm(r) });
+
+/** Record a checkup that needed no edit. Anyone can, once the report is due. */
+export const checkReport = (id: number, c: CheckupInput) =>
+  request<Report>(`/reports/${id}/checkup`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(c) });

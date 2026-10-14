@@ -1,14 +1,15 @@
 import logging
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from app.api.deps import DB, CurrentUser
 from app.core.config import get_settings
-from app.models import Abundance, GrowthStage, Phenology, Report, Species
-from app.schemas import ReportOut
+from app.models import Abundance, CheckupOutcome, GrowthStage, Phenology, Report, ReportCheckup, Species, User
+from app.schemas import CheckupIn, ReportOut
 from app.services import storage
 
 log = logging.getLogger("uvicorn.error")
@@ -30,9 +31,36 @@ def sign_photos(paths: list[str | None]) -> dict[str, str]:
         return {}
 
 
+def today() -> date:
+    # Checkup dates are whole days; UTC is close enough to Portugal's time for that.
+    return datetime.now(UTC).date()
+
+
+def is_due(report: Report) -> bool:
+    """Its checkup day has come, and it hasn't been closed."""
+    return report.closed_at is None and report.checkup_due is not None and report.checkup_due <= today()
+
+
+def check_next_checkup(day: date | None) -> date | None:
+    if day is not None and day <= today():
+        raise HTTPException(422, "The checkup date must be after today.")
+    return day
+
+
+def record_checkup(db: DB, report: Report, user: User, outcome: CheckupOutcome) -> None:
+    db.add(ReportCheckup(report_id=report.id, user_id=user.id, checked_by=user.username, outcome=outcome))
+
+
+def get_report(db: DB, report_id: int) -> Report:
+    report = db.get(Report, report_id)
+    if report is None:
+        raise HTTPException(404, "That report doesn't exist.")
+    return report
+
+
 @router.get("")
 def list_reports(db: DB) -> list[ReportOut]:
-    rows = db.scalars(select(Report).order_by(Report.observed_at.desc())).all()
+    rows = db.scalars(select(Report).order_by(Report.observed_at.desc()).options(selectinload(Report.checkups))).all()
     urls = sign_photos([r.photo_path for r in rows])
     return [ReportOut.from_model(r, urls.get(r.photo_path or "")) for r in rows]
 
@@ -48,6 +76,7 @@ def report_fields(
     longitude: Annotated[float | None, Form(ge=-180, le=180)] = None,
     location_text: Annotated[str | None, Form(max_length=200)] = None,
     notes: Annotated[str | None, Form(max_length=2000)] = None,
+    checkup_due: Annotated[date | None, Form(description="Day to check the spot again; leave out for no checkup")] = None,
 ) -> dict:
     """The report form's fields, checked. Shared by create and edit; a field left out is saved as empty."""
     if db.get(Species, species_id) is None:
@@ -63,6 +92,7 @@ def report_fields(
         abundance=abundance, stage=stage, phenology=phenology,
         latitude=latitude, longitude=longitude,
         location_text=clean(location_text), notes=clean(notes),
+        checkup_due=check_next_checkup(checkup_due),
     )
 
 
@@ -115,12 +145,14 @@ def update_report(
     photo: UploadFile | None = None,
     remove_photo: Annotated[bool, Form(description="Remove the current photo (ignored if a new one is sent)")] = False,
 ) -> ReportOut:
-    """Replace a report's details. Only the user who made it can. Deleting is done on the admin page."""
-    report = db.get(Report, report_id)
-    if report is None:
-        raise HTTPException(404, "That report doesn't exist.")
-    if report.user_id != user.id:
-        raise HTTPException(403, "You can only edit your own reports.")
+    """Replace a report's details. Its author can always; anyone can once its checkup is due, and
+    that counts as the checkup. Closed reports can't be edited. Deleting is done on the admin page."""
+    report = get_report(db, report_id)
+    if report.closed_at is not None:
+        raise HTTPException(409, "This report is closed: the plants were found gone.")
+    due = is_due(report)
+    if report.user_id != user.id and not due:
+        raise HTTPException(403, "You can only edit your own reports, or reports that need a checkup.")
 
     for key, value in fields.items():
         setattr(report, key, value)
@@ -129,8 +161,28 @@ def update_report(
         report.photo_path = new_photo
     elif remove_photo:
         report.photo_path = None
+    if due:
+        record_checkup(db, report, user, CheckupOutcome.updated)
     db.commit()
     db.refresh(report)
     if old_photo and old_photo != report.photo_path:
         storage.delete_photos_quietly([old_photo])
+    return report_out(report)
+
+
+@router.post("/{report_id}/checkup")
+def check_report(db: DB, user: CurrentUser, report_id: int, body: CheckupIn) -> ReportOut:
+    """Record a checkup that needed no edit: the plants are still there (optionally with another
+    checkup date), or they're gone, which closes the report. Anyone can, once the report is due."""
+    report = get_report(db, report_id)
+    if not is_due(report):
+        raise HTTPException(409, "This report doesn't need a checkup now.")
+    if body.outcome == CheckupOutcome.gone:
+        report.closed_at = datetime.now(UTC)
+        report.checkup_due = None
+    else:
+        report.checkup_due = check_next_checkup(body.next_checkup)
+    record_checkup(db, report, user, body.outcome)
+    db.commit()
+    db.refresh(report)
     return report_out(report)

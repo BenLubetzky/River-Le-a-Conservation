@@ -27,7 +27,13 @@ Needs Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 
 From the project root, `npm run install:backend`, `npm run db:migrate` and `npm run dev:backend` do the same.
 
-On Windows, call Alembic and Uvicorn through `python -m` as above. Smart App Control blocks their `.exe` launchers.
+On Windows, call Alembic and Uvicorn through `python -m` as above. Smart App Control blocks their `.exe` launchers. It also blocks the Python builds uv downloads (their unsigned DLLs include SSL, which the database connection needs). So on a Windows computer with Smart App Control, tell uv to use the installed Python by adding this line to `%APPDATA%\uv\uv.toml` (create the file if needed):
+
+```toml
+python-preference = "only-system"
+```
+
+That's a setting for your computer, not the project, so servers can still use a Python that uv downloads.
 
 ## API
 
@@ -48,7 +54,7 @@ Everything except `/health` and `/auth/login` needs a logged-in user, and answer
 
 The API connects as the database owner. Supabase's own public Data API is locked out of these tables: row-level security is on with no policies, and the `anon`/`authenticated` grants are revoked. The only way in is this API. People can edit their own reports through the API, but not delete them. Reports are deleted only on the admin page, which also removes their photo from storage.
 
-Users have only a username (case-sensitive) and a password hash (Argon2). Logging in creates a row in `sessions` and sets an httpOnly `session` cookie holding a random token; the table stores only the token's SHA-256. Sessions last `SESSION_TTL_DAYS` (30 by default). Set `COOKIE_SECURE=true` wherever the API is served over HTTPS. Each report can be linked to the user who made it through `reports.user_id`. If that user is deleted, the link is set to NULL and the report stays.
+Users have only a username (case-sensitive) and a password hash (Argon2). Logging in creates a row in `sessions` and sets an httpOnly `session` cookie holding a random token; the table stores only the token's SHA-256. Sessions last `SESSION_TTL_DAYS` (30 by default). Set `COOKIE_SECURE=true` wherever the API is served over HTTPS. After 5 wrong passwords for a username within 5 minutes (`LOGIN_MAX_FAILURES`, `LOGIN_LOCKOUT_SECONDS`), that username is blocked for the rest of those 5 minutes. The count is kept in memory, so it resets when the API restarts. Each report can be linked to the user who made it through `reports.user_id`. If that user is deleted, the link is set to NULL and the report stays.
 
 ## Admin page
 

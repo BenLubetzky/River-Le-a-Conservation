@@ -5,6 +5,11 @@ export type Phenology = "none" | "flower" | "fruit" | "both";
 
 export type Option<T extends string> = { value: T; label: string };
 
+export type CheckupOutcome = "still_there" | "updated" | "gone";
+export type Checkup = { outcome: CheckupOutcome; checked_by: string; checked_at: string };
+// A checkup that needed no edit (POST /reports/{id}/checkup).
+export type CheckupInput = { outcome: "still_there"; next_checkup: string | null } | { outcome: "gone" };
+
 // A report as returned by the backend (see backend/app/schemas/report.py).
 export type Report = {
   id: number;
@@ -22,6 +27,11 @@ export type Report = {
   notes: string | null;
   photo_url: string | null;
   created_at: string;
+  /** Day ("YYYY-MM-DD") from which the spot should be checked again; null for none. */
+  checkup_due: string | null;
+  /** Set when a checkup found the plants gone. */
+  closed_at: string | null;
+  checkups: Checkup[];
 };
 
 // What the report form sends to the backend.
@@ -35,5 +45,6 @@ export type NewReport = {
   longitude?: number;
   location_text?: string;
   notes?: string;
+  checkup_due?: string;
   photo?: File;
 };

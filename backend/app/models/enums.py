@@ -25,6 +25,12 @@ class Phenology(enum.StrEnum):
     both = "both"
 
 
+class CheckupOutcome(enum.StrEnum):
+    still_there = "still_there"  # checked, nothing to change
+    updated = "updated"  # checked, and the report was edited
+    gone = "gone"  # the plants are no longer there; the report is closed
+
+
 def pg_enum(cls: type[enum.Enum], name: str) -> Enum:
     # Store the enum's values (not its member names) in a named Postgres enum type.
     return Enum(cls, name=name, values_callable=lambda e: [m.value for m in e])

@@ -25,6 +25,8 @@ export type Species = {
   habitat: string;
   legal_status: string;
   caution: string;
+  /** Suggested days until a report of it is checked again. */
+  checkup_days: number;
   photos: string[];
   characteristics: Characteristic[];
   removal_steps: RemovalStep[];

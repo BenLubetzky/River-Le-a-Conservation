@@ -1,4 +1,5 @@
-"""Admin page for Guardiões do Leça: manage the accounts people use to log in to the website, and delete reports.
+"""Admin page for Guardiões do Leça: manage the accounts people use to log in to the website, delete
+reports, and set how long until each species' reports are checked again.
 
 Run from the backend folder with `uv run python -m streamlit run admin.py` (or `npm run admin` from
 the project root). It talks to the database directly with the backend's own models, so it needs the
@@ -17,9 +18,27 @@ MIN_PASSWORD = 8
 MAX_PASSWORD = 200  # matches the API's login form
 REPORTS_SHOWN = 50
 
-st.set_page_config(page_title="Guardiões do Leça · Admin", page_icon="🌿")
+st.set_page_config(page_title="Guardiões do Leça · Admin", page_icon="🌿", layout="wide")
+# Wide layout, capped at a readable width, so the rows have room for their buttons; and button
+# labels never wrap or get cut off.
+st.html("""<style>
+  [data-testid="stMainBlockContainer"] { max-width: 1040px; }
+  [data-testid="stPopover"] button, [data-testid="stPopover"] button * { white-space: nowrap; text-overflow: clip; overflow: visible; }
+  [data-testid="stPopover"] { flex-shrink: 0; }
+</style>""")
+
+
+def md(text: str) -> str:
+    """Text safe to put inside Markdown, e.g. a username with * or _ in it."""
+    return "".join("\\" + c if c in "\\`*_{}[]()<>#+-.!|~" else c for c in text)
+
+
+def fmt_time(dt) -> str:
+    local = dt.astimezone()
+    return f"{local.day} {local:%b %Y, %H:%M}"
+
 st.title("Guardiões do Leça")
-st.caption("Admin · users and reports")
+st.caption("Admin · users, reports and checkups")
 
 
 def validate_password(password: str, confirm: str) -> str | None:
@@ -120,23 +139,25 @@ if result := st.session_state.pop("users_result", None):
 
 # Plain rows rather than st.dataframe: that needs pandas, whose DLLs Windows Smart App Control blocks.
 if users:
-    widths = [3, 2, 1, 1.3, 1.1]
-    for col, label in zip(st.columns(widths), ["Username", "Created", "Reports", "", ""]):
-        col.caption(label)
     for u in users:
-        name, created, reports, password, remove = st.columns(widths, vertical_alignment="center")
-        name.text(u.username)
-        local = u.created_at.astimezone()
-        created.text(f"{local.day} {local:%b %Y, %H:%M}")
-        reports.text(str(u.reports))
-        with password.popover("Password", width="stretch"):
-            st.markdown(f"New password for **{u.username}**")
+        with st.container(border=True):
+            # A row that sizes the buttons to their labels and gives the rest of the space to the text.
+            row = st.container(horizontal=True, vertical_alignment="center")
+            info = row.container(width="stretch", gap=None)
+            info.markdown(f"**{md(u.username)}**")
+            info.caption(f"Created {fmt_time(u.created_at)} · {u.reports} {'report' if u.reports == 1 else 'reports'}")
+            # The buttons in their own group, so on a narrow screen they move below the text together.
+            actions = row.container(horizontal=True, width="content", gap="small")
+            password_box = actions.popover("Password", icon=":material/key:")
+            remove_box = actions.popover("Delete", icon=":material/delete:")
+        with password_box:
+            st.markdown(f"New password for **{md(u.username)}**")
             st.text_input("New password", key=f"pw_{u.id}", type="password", max_chars=MAX_PASSWORD)
             st.text_input("Repeat new password", key=f"pw2_{u.id}", type="password", max_chars=MAX_PASSWORD)
             st.caption("They'll be logged out everywhere and have to log in with the new password.")
             st.button("Change password", key=f"change_{u.id}", type="primary", on_click=change_password, args=(u.id, u.username))
-        with remove.popover("Delete", width="stretch"):
-            st.markdown(f"Delete **{u.username}**?")
+        with remove_box:
+            st.markdown(f"Delete **{md(u.username)}**?")
             st.caption(
                 f"They'll be logged out and can't log in again. Reports they made ({u.reports}) stay on the "
                 "website, no longer linked to a user. This can't be undone."
@@ -184,18 +205,17 @@ if reports:
     if len(reports) > REPORTS_SHOWN:
         st.caption(f"Showing the {REPORTS_SHOWN} most recent. Search to find older ones.")
         reports = reports[:REPORTS_SHOWN]
-    widths = [0.7, 2, 2, 1.6, 2, 1.1]
-    for col, label in zip(st.columns(widths), ["#", "Species", "Observed", "Reported by", "Place", ""]):
-        col.caption(label)
     for r in reports:
-        num, sp, observed, reporter, place, remove = st.columns(widths, vertical_alignment="center")
-        num.text(str(r.id))
-        sp.text(r.common_name)
-        local = r.observed_at.astimezone()
-        observed.text(f"{local.day} {local:%b %Y, %H:%M}")
-        reporter.text(r.reporter_name or "Anonymous")
-        place.text(r.location_text or "—")
-        with remove.popover("Delete", width="stretch"):
+        with st.container(border=True):
+            row = st.container(horizontal=True, vertical_alignment="center")
+            info = row.container(width="stretch", gap=None)
+            info.markdown(f"**#{r.id} · {md(r.common_name)}**")
+            details = [f"Observed {fmt_time(r.observed_at)}", f"by {r.reporter_name or 'Anonymous'}"]
+            if r.location_text:
+                details.append(r.location_text)
+            info.caption(md(" · ".join(details)))
+            remove_box = row.popover("Delete", icon=":material/delete:")
+        with remove_box:
             st.markdown(f"Delete report **#{r.id}** ({r.common_name})?")
             st.caption(("Its photo will be deleted too. " if r.photo_path else "") + "This can't be undone.")
             st.button("Delete report", key=f"delete_report_{r.id}", type="primary", on_click=delete_report, args=(r.id,))
@@ -203,3 +223,27 @@ elif search.strip():
     st.info("No reports match that search.")
 else:
     st.info("No reports yet.")
+
+
+def save_checkup_days() -> None:
+    with SessionLocal() as db:
+        for sp in db.scalars(select(Species)):
+            sp.checkup_days = int(st.session_state[f"checkup_days_{sp.id}"])
+        db.commit()
+    st.session_state.checkup_result = ("success", "Saved. New reports will suggest these.")
+
+
+st.subheader("Checkup intervals")
+st.caption(
+    "How many days after a report its checkup is suggested, per species. People can still choose "
+    "another date, or none, when they submit. Changing these doesn't move checkups already planned."
+)
+with SessionLocal() as db:
+    all_species = db.execute(select(Species.id, Species.common_name, Species.latin_name, Species.checkup_days).order_by(Species.display_order)).all()
+with st.form("checkup-days"):
+    for sp in all_species:
+        st.number_input(f"{sp.common_name} ({sp.latin_name})", key=f"checkup_days_{sp.id}", min_value=1, max_value=3650, step=1, value=sp.checkup_days)
+    st.form_submit_button("Save intervals", type="primary", on_click=save_checkup_days)
+if result := st.session_state.pop("checkup_result", None):
+    kind, message = result
+    (st.success if kind == "success" else st.error)(message)

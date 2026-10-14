@@ -33,6 +33,7 @@ class SpeciesOut(BaseModel):
     habitat: str
     legal_status: str
     caution: str
+    checkup_days: int  # suggested days until a report is checked again
     photos: list[str]  # public URLs, main photo first
     characteristics: list[CharacteristicOut]
     removal_steps: list[RemovalStepOut]
@@ -43,7 +44,7 @@ class SpeciesOut(BaseModel):
         return cls(
             id=s.id, common_name=s.common_name, latin_name=s.latin_name, local_name=s.local_name,
             family=s.family, native_range=s.native_range, flowering=s.flowering, habitat=s.habitat,
-            legal_status=s.legal_status, caution=s.caution,
+            legal_status=s.legal_status, caution=s.caution, checkup_days=s.checkup_days,
             photos=[p.url for p in s.photos],
             characteristics=[CharacteristicOut(label=c.label, text=c.text) for c in s.characteristics],
             removal_steps=[RemovalStepOut(title=r.title, text=r.text) for r in s.removal_steps],

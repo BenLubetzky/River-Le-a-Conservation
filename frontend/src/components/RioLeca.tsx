@@ -10,8 +10,10 @@ import ReportsPage, { NO_FILTERS, type Filters } from "@/components/reports/Repo
 import Lightbox from "@/components/species/Lightbox";
 import PlantDetail from "@/components/species/PlantDetail";
 import SpeciesGrid from "@/components/species/SpeciesGrid";
+import { checkReport } from "@/api/reports";
 import { useReports } from "@/hooks/useReports";
 import { useSpecies } from "@/hooks/useSpecies";
+import { isDue } from "@/lib/checkup";
 import { speciesNames } from "@/lib/species";
 import type { LookAlike } from "@/types/plant";
 import type { Report } from "@/types/report";
@@ -55,7 +57,7 @@ export default function RioLeca({ user }: { user: User }) {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-bg)", color: "var(--color-text)", fontFamily: "var(--font-body)" }}>
-      <SiteHeader page={page} onNavigate={navigate} username={user.username} />
+      <SiteHeader page={page} onNavigate={navigate} username={user.username} dueCount={reports?.filter(isDue).length ?? 0} />
 
       {page === "main" && !species && (
         <main className="page-main" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", paddingTop: 120, textAlign: "center" }}>
@@ -87,7 +89,9 @@ export default function RioLeca({ user }: { user: User }) {
           names={speciesNames(species, viewed.species_id)}
           src={srcOf(viewed)}
           onClose={() => setView(null)}
-          onEdit={viewed.user_id === user.id && species ? () => setEditing(viewed) : undefined}
+          checkupDays={species?.find((s) => s.id === viewed.species_id)?.checkup_days}
+          onEdit={!viewed.closed_at && (viewed.user_id === user.id || isDue(viewed)) && species ? () => setEditing(viewed) : undefined}
+          onCheckup={isDue(viewed) ? async (c) => replaceReport(await checkReport(viewed.id, c)) : undefined}
         />
       )}
 

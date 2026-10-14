@@ -1,16 +1,24 @@
 import type { ReactNode } from "react";
+import CheckupActions from "@/components/reports/CheckupActions";
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
 import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
 import { stop } from "@/lib/events";
+import { OUTCOME_LABELS, dueFor, fmtDay, isDue } from "@/lib/checkup";
 import { fmtCoords, fmtDate, labelOf } from "@/lib/format";
-import type { Report } from "@/types/report";
+import type { CheckupInput, Report } from "@/types/report";
 
-export default function ReportView({ r, names: p, src, onClose, onEdit }: {
-  r: Report; names: { common: string; latin: string }; src: string; onClose: () => void;
-  /** Only given for the logged-in user's own reports. */
+export default function ReportView({ r, names: p, src, checkupDays, onClose, onEdit, onCheckup }: {
+  r: Report; names: { common: string; latin: string }; src: string;
+  /** The species' suggested days until the next checkup. */
+  checkupDays?: number;
+  onClose: () => void;
+  /** Given when the viewer may edit: their own report, or any report whose checkup is due. */
   onEdit?: () => void;
+  /** Given when the report's checkup is due. */
+  onCheckup?: (c: CheckupInput) => Promise<void>;
 }) {
+  const due = isDue(r);
   const hasCoords = r.latitude != null && r.longitude != null;
   const fields: [string, ReactNode][] = [
     ["Date and time", fmtDate(r.observed_at)],
@@ -19,6 +27,7 @@ export default function ReportView({ r, names: p, src, onClose, onEdit }: {
     ["State", labelOf(STAGE, r.stage)],
     ["Flower or fruit", labelOf(PHENOLOGY, r.phenology)],
     ["Reported by", r.reporter_name || "Anonymous"],
+    ["Next checkup", r.closed_at ? "None, report closed" : r.checkup_due ? fmtDay(r.checkup_due) : "None planned"],
   ];
   if (hasCoords) {
     const href = `https://www.openstreetmap.org/?mlat=${r.latitude}&mlon=${r.longitude}#map=17/${r.latitude}/${r.longitude}`;
@@ -44,6 +53,20 @@ export default function ReportView({ r, names: p, src, onClose, onEdit }: {
             <span style={{ fontFamily: "var(--font-heading)", fontSize: 30, lineHeight: 1.1 }}>{p.common}</span>
             <span style={{ fontSize: 15, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{p.latin}</span>
           </div>
+          {due && (
+            <div role="status" style={{ display: "flex", gap: "var(--space-3)", alignItems: "flex-start", padding: "var(--space-3) var(--space-4)", borderRadius: "var(--radius-md)", background: "var(--color-accent-100)", color: "var(--color-accent-800)", border: "1.5px solid var(--color-accent-400)" }}>
+              <Icon name="alert" size={20} style={{ flex: "none", marginTop: 1 }} />
+              <span style={{ fontSize: 14 }}>
+                <strong>Checkup {dueFor(r.checkup_due!)}.</strong> Go back to the spot and record what you found below. Anyone can do this.
+              </span>
+            </div>
+          )}
+          {r.closed_at && (
+            <div role="status" style={{ display: "flex", gap: "var(--space-3)", alignItems: "center", padding: "var(--space-3) var(--space-4)", borderRadius: "var(--radius-md)", background: "var(--color-neutral-200)", color: "var(--color-neutral-800)", fontSize: 14 }}>
+              <Icon name="check" size={18} style={{ flex: "none" }} />
+              Closed on {fmtDate(r.closed_at)}: the plants were no longer there.
+            </div>
+          )}
           <div className="view-fields">
             {fields.map(([label, value]) => (
               <div key={label} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -58,8 +81,20 @@ export default function ReportView({ r, names: p, src, onClose, onEdit }: {
               <p style={{ margin: 0, fontSize: 15, textWrap: "pretty", whiteSpace: "pre-line" }}>{r.notes}</p>
             </div>
           )}
+          {r.checkups.length > 0 && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <h6 style={{ margin: 0, color: "var(--color-accent-2-800)" }}>Checkups</h6>
+              {r.checkups.map((c, i) => (
+                <span key={i} style={{ fontSize: 15 }}>
+                  {OUTCOME_LABELS[c.outcome]} <span style={{ color: "var(--color-neutral-700)" }}>· {c.checked_by} · {fmtDate(c.checked_at)}</span>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
-        {onEdit && (
+        {due && onCheckup && onEdit ? (
+          <CheckupActions suggested={checkupDays ? { days: checkupDays, species: p.common } : undefined} onCheckup={onCheckup} onEdit={onEdit} />
+        ) : onEdit && (
           <div className="view-actions" style={{ gridTemplateColumns: "minmax(0, 1fr)" }}>
             <button className="view-btn view-btn-edit" onClick={onEdit}>
               <Icon name="pencil" size={18} />

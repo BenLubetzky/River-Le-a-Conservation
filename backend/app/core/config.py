@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     session_ttl_days: int = 30
     # Send the session cookie over HTTPS only. Turn on wherever the API is served over HTTPS.
     cookie_secure: bool = False
+    # Wrong passwords allowed per username within the lockout window, before it's blocked for the
+    # rest of that window.
+    login_max_failures: int = 5
+    login_lockout_seconds: int = 5 * 60
 
     @field_validator("database_url")
     @classmethod

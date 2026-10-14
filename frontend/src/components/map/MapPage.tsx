@@ -14,7 +14,8 @@ export default function MapPage({ reports, species, userId, error, onRetry, onVi
 }) {
   const [mine, setMine] = useState(false);
 
-  const shown = useMemo(() => (reports ?? []).filter((r) => !mine || r.user_id === userId), [reports, mine, userId]);
+  // Closed reports (plants found gone) aren't current sightings, so they stay off the map.
+  const shown = useMemo(() => (reports ?? []).filter((r) => !r.closed_at && (!mine || r.user_id === userId)), [reports, mine, userId]);
   const points = useMemo(
     () => shown.flatMap((r): MapPoint[] => {
       const at = riverPoint(r);

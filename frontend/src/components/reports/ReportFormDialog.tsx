@@ -1,9 +1,11 @@
 import { useState, type ChangeEvent } from "react";
 import { createReport, updateReport } from "@/api/reports";
+import CheckupDateInput from "@/components/reports/CheckupDateInput";
 import Field from "@/components/ui/Field";
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
 import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
+import { daysFromToday, today } from "@/lib/checkup";
 import { stop } from "@/lib/events";
 import { fmtCoords, nowLocalInput, toLocalInput } from "@/lib/format";
 import type { Species } from "@/types/plant";
@@ -26,6 +28,10 @@ type ReportForm = {
   locationError: string;
   locationText: string;
   notes: string;
+  /** "YYYY-MM-DD", or "" for no checkup. */
+  checkup: string;
+  /** The checkup was chosen by hand, so changing species no longer resets it. */
+  checkupSet: boolean;
   submitting: boolean;
   error: string;
   sent: boolean;
@@ -36,13 +42,16 @@ const emptyForm = (species: Species[], sp: number): ReportForm => {
   return {
     sp: p ? sp : -1, query: p ? p.common_name : "", list: false, photo: null, photoUrl: "", removePhoto: false, date: nowLocalInput(),
     abundance: "", stage: "", phenology: "", coords: null, locating: false, locationError: "", locationText: "",
-    notes: "", submitting: false, error: "", sent: false,
+    notes: "", checkup: p ? daysFromToday(p.checkup_days) : "", checkupSet: false, submitting: false, error: "", sent: false,
   };
 };
 
-// The form filled in with an existing report, for editing it.
+// The form filled in with an existing report, for editing it. If its checkup is due, this edit is
+// the checkup, so the date starts at the next suggested one.
 const formFrom = (species: Species[], r: Report): ReportForm => ({
   ...emptyForm(species, species.findIndex((p) => p.id === r.species_id)),
+  ...(r.checkup_due && r.checkup_due > today() ? { checkup: r.checkup_due } : r.checkup_due ? {} : { checkup: "" }),
+  checkupSet: true,
   photoUrl: r.photo_url ?? "",
   date: toLocalInput(new Date(r.observed_at)),
   abundance: r.abundance ?? "", stage: r.stage ?? "", phenology: r.phenology ?? "",
@@ -77,6 +86,10 @@ export default function ReportFormDialog({ species, username, initialSp, initial
   };
   const submit = async () => {
     if (rep.sp < 0 || !rep.date || rep.submitting) return;
+    if (rep.checkup && rep.checkup <= today()) {
+      setRep({ error: "Choose a checkup date after today, or no checkup." });
+      return;
+    }
     setRep({ submitting: true, error: "", list: false });
     try {
       const fields = {
@@ -90,6 +103,7 @@ export default function ReportFormDialog({ species, username, initialSp, initial
         longitude: rep.coords?.lng,
         location_text: rep.locationText.trim() || undefined,
         notes: rep.notes.trim() || undefined,
+        checkup_due: rep.checkup || undefined,
         photo: rep.photo ?? undefined,
       };
       if (editing) {
@@ -174,7 +188,7 @@ export default function ReportFormDialog({ species, username, initialSp, initial
               {rep.list && (
                 <div role="listbox" style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, right: 0, zIndex: 5, background: "var(--color-bg)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", padding: "var(--space-2)", maxHeight: 260, overflowY: "auto", display: "flex", flexDirection: "column", gap: 2 }}>
                   {options.map(({ p, i }) => (
-                    <button key={p.id} role="option" aria-selected={i === rep.sp} className="species-opt" onClick={() => setRep({ sp: i, query: p.common_name, list: false })}>
+                    <button key={p.id} role="option" aria-selected={i === rep.sp} className="species-opt" onClick={() => setRep({ sp: i, query: p.common_name, list: false, ...(rep.checkupSet ? {} : { checkup: daysFromToday(p.checkup_days) }) })}>
                       <span style={{ width: 32, height: 32, flex: "none", borderRadius: "50%", overflow: "hidden", background: "var(--color-surface)" }}>
                         <Photo src={p.photos[0]} />
                       </span>
@@ -238,6 +252,18 @@ export default function ReportFormDialog({ species, username, initialSp, initial
                 </div>
               </Field>
             ))}
+
+            <Field label="Checkup" htmlFor="rep-checkup">
+              <span style={{ display: "block", fontSize: 13, color: "var(--color-neutral-700)", marginBottom: "var(--space-2)" }}>
+                From this day, the report shows up as needing a checkup, so someone goes back to see if the plants are still there.
+              </span>
+              <CheckupDateInput
+                id="rep-checkup"
+                value={rep.checkup}
+                onChange={(checkup) => setRep({ checkup, checkupSet: true })}
+                suggested={rep.sp >= 0 ? { days: species[rep.sp].checkup_days, species: species[rep.sp].common_name } : undefined}
+              />
+            </Field>
 
             {/* Always the logged-in user: the API saves the report under them. */}
             <Field label="Reported by" htmlFor="rep-name">

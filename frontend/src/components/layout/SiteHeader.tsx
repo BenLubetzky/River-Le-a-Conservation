@@ -5,7 +5,11 @@ import Icon from "@/components/ui/Icon";
 
 export type Page = "main" | "reports" | "map";
 
-export default function SiteHeader({ page, onNavigate, username }: { page: Page; onNavigate: (page: Page) => void; username: string }) {
+export default function SiteHeader({ page, onNavigate, username, dueCount }: {
+  page: Page; onNavigate: (page: Page) => void; username: string;
+  /** Reports whose checkup is due, shown as a badge on View reports. */
+  dueCount: number;
+}) {
   const router = useRouter();
   const [leaving, setLeaving] = useState(false);
   const link = (target: Page) => ({
@@ -35,7 +39,10 @@ export default function SiteHeader({ page, onNavigate, username }: { page: Page;
         </div>
         <div className="nav-links" style={{ display: "flex", gap: "var(--space-2)" }}>
           <a {...link("main")}>Main</a>
-          <a {...link("reports")}>View reports</a>
+          <a {...link("reports")} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            View reports
+            {dueCount > 0 && <span className="nav-badge" title={`${dueCount} need a checkup`} aria-label={`${dueCount} need a checkup`}>{dueCount}</span>}
+          </a>
           <a {...link("map")}>Map</a>
         </div>
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>

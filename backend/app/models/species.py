@@ -21,6 +21,8 @@ class Species(Base):
     legal_status: Mapped[str] = mapped_column(Text)
     caution: Mapped[str] = mapped_column(Text)  # warning shown above the removal steps
     display_order: Mapped[int] = mapped_column(Integer)
+    # Suggested days until a report of this species is checked again; the reporter can change it.
+    checkup_days: Mapped[int] = mapped_column(Integer, server_default="90")
 
     photos: Mapped[list["SpeciesPhoto"]] = relationship(order_by="SpeciesPhoto.position", cascade="all, delete-orphan")
     characteristics: Mapped[list["Characteristic"]] = relationship(order_by="Characteristic.position", cascade="all, delete-orphan")

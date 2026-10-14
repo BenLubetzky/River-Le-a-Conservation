@@ -1,3 +1,4 @@
+import math
 from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
@@ -6,20 +7,33 @@ from sqlalchemy import delete, select
 
 from app.api.deps import DB, SESSION_COOKIE, CurrentUser
 from app.core.config import get_settings
+from app.core.ratelimit import FailedAttempts
 from app.core.security import hash_token, new_session_token, verify_password
 from app.models import User, UserSession
 from app.schemas import LoginIn, UserOut
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+# Wrong passwords per username. Counted by username rather than by address, because behind the
+# site's proxy and the host's load balancer the address isn't reliably the visitor's.
+failed_logins = FailedAttempts(get_settings().login_max_failures, get_settings().login_lockout_seconds)
+
 
 @router.post("/login")
 def login(db: DB, body: LoginIn, response: Response) -> UserOut:
+    if wait := failed_logins.blocked_for(body.username):
+        minutes = math.ceil(wait / 60)
+        raise HTTPException(
+            429, f"Too many wrong passwords. Try again in {minutes} minute{'' if minutes == 1 else 's'}.",
+            headers={"Retry-After": str(wait)},
+        )
     # Usernames are case-sensitive, so this is an exact match.
     user = db.scalar(select(User).where(User.username == body.username))
     # The password is checked even for an unknown username; `user is None` only narrows the type.
     if not verify_password(body.password, user.password_hash if user else None) or user is None:
+        failed_logins.fail(body.username)
         raise HTTPException(401, "Wrong username or password.")
+    failed_logins.clear(body.username)
 
     settings = get_settings()
     token = new_session_token()

@@ -1,9 +1,10 @@
-from datetime import datetime
+from datetime import date, datetime
 
-from sqlalchemy import BigInteger, CheckConstraint, DateTime, ForeignKey, Identity, String, func
+from sqlalchemy import BigInteger, CheckConstraint, Date, DateTime, ForeignKey, Identity, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base
+from app.models.checkup import ReportCheckup
 from app.models.enums import Abundance, GrowthStage, Phenology, pg_enum
 from app.models.species import Species
 from app.models.user import User
@@ -35,6 +36,11 @@ class Report(Base):
     # Path of the photo inside the Supabase Storage bucket.
     photo_path: Mapped[str | None] = mapped_column(String(300))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    # The day from which the spot should be checked again. NULL: no checkup planned.
+    checkup_due: Mapped[date | None] = mapped_column(Date, index=True)
+    # Set when a checkup found the plants gone. A closed report is kept, but is no longer due or editable.
+    closed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
+    checkups: Mapped[list[ReportCheckup]] = relationship(order_by=ReportCheckup.checked_at, passive_deletes=True)
     species: Mapped[Species] = relationship()
     user: Mapped[User | None] = relationship()
