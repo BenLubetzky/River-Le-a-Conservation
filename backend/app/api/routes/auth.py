@@ -46,7 +46,7 @@ def login(db: DB, body: LoginIn, response: Response) -> UserOut:
     response.set_cookie(
         SESSION_COOKIE, token, max_age=int(ttl.total_seconds()),
         httponly=True, samesite="lax", secure=settings.cookie_secure,
-    )
+    ) 
     return UserOut.model_validate(user)
 
  
