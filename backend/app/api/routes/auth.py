@@ -49,7 +49,7 @@ def login(db: DB, body: LoginIn, response: Response) -> UserOut:
     )
     return UserOut.model_validate(user)
 
-
+ 
 @router.post("/logout", status_code=204)
 def logout(db: DB, response: Response, session: Annotated[str | None, Cookie(alias=SESSION_COOKIE)] = None) -> None:
     if session:
