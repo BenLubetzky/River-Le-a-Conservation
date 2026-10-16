@@ -50,7 +50,7 @@ def is_due(report: Report) -> bool:
 
 def check_next_checkup(day: date | None) -> date | None:
     if day is not None and day <= today():
-        raise HTTPException(422, "The checkup date must be after today.")
+        raise HTTPException(422, "A data de verificação tem de ser depois de hoje.")
     return day
 
 
@@ -66,7 +66,7 @@ def record_checkup(
 def get_report(db: DB, report_id: int) -> Report:
     report = db.get(Report, report_id)
     if report is None:
-        raise HTTPException(404, "That report doesn't exist.")
+        raise HTTPException(404, "Esse registo não existe.")
     return report
 
 
@@ -92,13 +92,13 @@ def report_fields(
 ) -> dict:
     """The report form's fields, checked. Shared by create and edit; a field left out is saved as empty."""
     if db.get(Species, species_id) is None:
-        raise HTTPException(422, "Unknown species.")
+        raise HTTPException(422, "Espécie desconhecida.")
     if observed_at.tzinfo is None:
-        raise HTTPException(422, "observed_at must include a timezone.")
+        raise HTTPException(422, "observed_at tem de incluir o fuso horário.")
     if observed_at > datetime.now(UTC) + timedelta(days=1):
-        raise HTTPException(422, "The observation date is in the future.")
+        raise HTTPException(422, "A data da observação está no futuro.")
     if (latitude is None) != (longitude is None):
-        raise HTTPException(422, "Send both latitude and longitude, or neither.")
+        raise HTTPException(422, "Envie a latitude e a longitude, ou nenhuma das duas.")
     return dict(
         species_id=species_id, observed_at=observed_at,
         abundance=abundance, stage=stage, phenology=phenology,
@@ -116,16 +116,16 @@ def save_photo(photo: UploadFile | None) -> str | None:
     if photo is None or not photo.filename:
         return None
     if photo.content_type not in storage.ALLOWED_TYPES:
-        raise HTTPException(422, "The photo must be a JPEG, PNG, WebP or HEIC image.")
+        raise HTTPException(422, "A fotografia tem de ser uma imagem JPEG, PNG, WebP ou HEIC.")
     max_bytes = get_settings().max_photo_bytes
     data = photo.file.read(max_bytes + 1)
     if len(data) > max_bytes:
-        raise HTTPException(413, "The photo is larger than 10 MB.")
+        raise HTTPException(413, "A fotografia tem mais de 10 MB.")
     try:
         return storage.upload_photo(data, photo.content_type)
     except Exception:
         log.exception("Photo upload failed")
-        raise HTTPException(502, "The photo couldn't be saved. Please try again.")
+        raise HTTPException(502, "Não foi possível guardar a fotografia. Tente novamente.")
 
 
 def report_out(report: Report) -> ReportOut:
@@ -160,10 +160,10 @@ def update_report(
     that counts as the checkup. Closed reports can't be edited. Deleting is done on the admin page."""
     report = get_report(db, report_id)
     if report.closed_at is not None:
-        raise HTTPException(409, "This report is closed: the plants were found gone.")
+        raise HTTPException(409, "Este registo está encerrado: as plantas já não existiam.")
     due = is_due(report)
     if report.user_id != user.id and not due:
-        raise HTTPException(403, "You can only edit your own reports, or reports that need a checkup.")
+        raise HTTPException(403, "Só pode editar os seus próprios registos, ou registos que precisem de verificação.")
 
     for key, value in fields.items():
         setattr(report, key, value)
@@ -187,7 +187,7 @@ def check_report(db: DB, user: CurrentUser, report_id: int, body: CheckupIn) -> 
     checkup date), or they're gone, which closes the report. Anyone can, once the report is due."""
     report = get_report(db, report_id)
     if not is_due(report):
-        raise HTTPException(409, "This report doesn't need a checkup now.")
+        raise HTTPException(409, "Este registo não precisa de verificação neste momento.")
     if body.outcome == CheckupOutcome.gone:
         report.closed_at = datetime.now(UTC)
         report.checkup_due = None
@@ -213,11 +213,11 @@ def postpone_checkup(
     report is due, as many times as needed."""
     report = get_report(db, report_id)
     if not is_due(report):
-        raise HTTPException(409, "This report doesn't need a checkup now.")
+        raise HTTPException(409, "Este registo não precisa de verificação neste momento.")
     report.checkup_due = check_next_checkup(next_checkup)
     photos = [f for f in photos or [] if f.filename]
     if len(photos) > MAX_CHECKUP_PHOTOS:
-        raise HTTPException(422, f"Add at most {MAX_CHECKUP_PHOTOS} photos.")
+        raise HTTPException(422, f"Adicione no máximo {MAX_CHECKUP_PHOTOS} fotografias.")
     saved: list[str] = []
     try:
         for f in photos:

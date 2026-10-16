@@ -26,13 +26,13 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
   const due = isDue(r);
   const hasCoords = r.latitude != null && r.longitude != null;
   const fields: [string, ReactNode][] = [
-    ["Date and time", fmtDate(r.observed_at)],
-    ["Location", r.location_text || (hasCoords ? "" : "Not specified")],
-    ["Abundance", labelOf(ABUNDANCE, r.abundance)],
-    ["State", labelOf(STAGE, r.stage)],
-    ["Flower or fruit", labelOf(PHENOLOGY, r.phenology)],
-    ["Reported by", r.reporter_name || "Anonymous"],
-    ["Next checkup", r.closed_at ? "None, report closed" : r.checkup_due ? fmtDay(r.checkup_due) : "None planned"],
+    ["Data e hora", fmtDate(r.observed_at)],
+    ["Local", r.location_text || (hasCoords ? "" : "Não indicado")],
+    ["Abundância", labelOf(ABUNDANCE, r.abundance)],
+    ["Estado", labelOf(STAGE, r.stage)],
+    ["Flor ou fruto", labelOf(PHENOLOGY, r.phenology)],
+    ["Registado por", r.reporter_name || "Anónimo"],
+    ["Próxima verificação", r.closed_at ? "Nenhuma, registo encerrado" : r.checkup_due ? fmtDay(r.checkup_due) : "Nenhuma planeada"],
   ];
   if (hasCoords) {
     const href = `https://www.openstreetmap.org/?mlat=${r.latitude}&mlon=${r.longitude}#map=17/${r.latitude}/${r.longitude}`;
@@ -45,16 +45,16 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
   }
   return (
     <div className="dialog-backdrop" onClick={onClose} style={{ zIndex: 50 }}>
-      <div className="dialog" onClick={stop} role="dialog" aria-modal="true" aria-label={`Report #${r.id}`} style={{ width: "min(640px,100%)", maxHeight: "calc(100vh - 48px)", overflowY: "auto", padding: 0, gap: 0, scrollbarWidth: "thin", scrollbarColor: "var(--color-neutral-400) transparent" }}>
+      <div className="dialog" onClick={stop} role="dialog" aria-modal="true" aria-label={`Registo n.º ${r.id}`} style={{ width: "min(640px,100%)", maxHeight: "calc(100vh - 48px)", overflowY: "auto", padding: 0, gap: 0, scrollbarWidth: "thin", scrollbarColor: "var(--color-neutral-400) transparent" }}>
         <div style={{ position: "relative", height: 280, background: "var(--color-surface)", flex: "none" }}>
           <Photo src={src} alt={p.common} />
-          <button onClick={onClose} aria-label="Close" style={{ position: "absolute", top: 16, right: 16, width: 44, height: 44, borderRadius: "50%", border: "none", cursor: "pointer", background: "var(--color-bg)", color: "var(--color-text)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "var(--shadow-md)" }}>
+          <button onClick={onClose} aria-label="Fechar" style={{ position: "absolute", top: 16, right: 16, width: 44, height: 44, borderRadius: "50%", border: "none", cursor: "pointer", background: "var(--color-bg)", color: "var(--color-text)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "var(--shadow-md)" }}>
             <Icon name="x" />
           </button>
         </div>
         <div style={{ padding: "var(--space-8)", display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <span style={{ fontSize: 13, color: "var(--color-neutral-700)" }}>Report #{r.id}{!r.photo_url && " · reference photo, none was uploaded"}</span>
+            <span style={{ fontSize: 13, color: "var(--color-neutral-700)" }}>Registo n.º {r.id}{!r.photo_url && " · fotografia de referência, não foi enviada nenhuma"}</span>
             <span style={{ fontFamily: "var(--font-heading)", fontSize: 30, lineHeight: 1.1 }}>{p.common}</span>
             <span style={{ fontSize: 15, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{p.latin}</span>
           </div>
@@ -62,14 +62,14 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
             <div role="status" style={{ display: "flex", gap: "var(--space-3)", alignItems: "flex-start", padding: "var(--space-3) var(--space-4)", borderRadius: "var(--radius-md)", background: "var(--color-accent-100)", color: "var(--color-accent-800)", border: "1.5px solid var(--color-accent-400)" }}>
               <Icon name="alert" size={20} style={{ flex: "none", marginTop: 1 }} />
               <span style={{ fontSize: 14 }}>
-                <strong>Checkup {dueFor(r.checkup_due!)}.</strong> Go back to the spot and record what you found below. Anyone can do this.
+                <strong>Verificação {dueFor(r.checkup_due!)}.</strong> Volte ao local e registe abaixo o que encontrou. Qualquer pessoa o pode fazer.
               </span>
             </div>
           )}
           {r.closed_at && (
             <div role="status" style={{ display: "flex", gap: "var(--space-3)", alignItems: "center", padding: "var(--space-3) var(--space-4)", borderRadius: "var(--radius-md)", background: "var(--color-neutral-200)", color: "var(--color-neutral-800)", fontSize: 14 }}>
               <Icon name="check" size={18} style={{ flex: "none" }} />
-              Closed on {fmtDate(r.closed_at)}: the plants were no longer there.
+              Encerrado a {fmtDate(r.closed_at)}: as plantas já lá não estavam.
             </div>
           )}
           <div className="view-fields">
@@ -82,13 +82,13 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
           </div>
           {r.notes && (
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <h6 style={{ margin: 0, color: "var(--color-accent-2-800)" }}>Notes</h6>
+              <h6 style={{ margin: 0, color: "var(--color-accent-2-800)" }}>Notas</h6>
               <p style={{ margin: 0, fontSize: 15, textWrap: "pretty", whiteSpace: "pre-line" }}>{r.notes}</p>
             </div>
           )}
           {r.checkups.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <h6 style={{ margin: 0, color: "var(--color-accent-2-800)" }}>Checkups</h6>
+              <h6 style={{ margin: 0, color: "var(--color-accent-2-800)" }}>Verificações</h6>
               {r.checkups.map((c, i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)" }}>
                   <span style={{ fontSize: 15 }}>
@@ -98,7 +98,7 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
                   {c.photo_urls.length > 0 && (
                     <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
                       {c.photo_urls.map((url, j) => (
-                        <button key={url} onClick={() => setLb({ photos: c.photo_urls, i: j, title: `${OUTCOME_LABELS[c.outcome]} · ${c.checked_by}` })} aria-label={`Open photo ${j + 1}`} style={{ width: 64, height: 64, padding: 0, border: "none", borderRadius: "var(--radius-md)", overflow: "hidden", cursor: "pointer" }}>
+                        <button key={url} onClick={() => setLb({ photos: c.photo_urls, i: j, title: `${OUTCOME_LABELS[c.outcome]} · ${c.checked_by}` })} aria-label={`Abrir fotografia ${j + 1}`} style={{ width: 64, height: 64, padding: 0, border: "none", borderRadius: "var(--radius-md)", overflow: "hidden", cursor: "pointer" }}>
                           <Photo src={url} washed={false} />
                         </button>
                       ))}
@@ -115,7 +115,7 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
           <div className="view-actions" style={{ gridTemplateColumns: "minmax(0, 1fr)" }}>
             <button className="view-btn view-btn-edit" onClick={onEdit}>
               <Icon name="pencil" size={18} />
-              Edit report
+              Editar registo
             </button>
           </div>
         )}
@@ -123,7 +123,7 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
       {/* Inside the backdrop, so its clicks mustn't reach the backdrop and close the report too. */}
       {lb && (
         <div onClick={stop}>
-          <Lightbox title={lb.title} subtitle={`Report #${r.id}`} images={lb.photos} index={lb.i} onIndex={(i) => setLb((l) => (l ? { ...l, i } : l))} onClose={() => setLb(null)} />
+          <Lightbox title={lb.title} subtitle={`Registo n.º ${r.id}`} images={lb.photos} index={lb.i} onIndex={(i) => setLb((l) => (l ? { ...l, i } : l))} onClose={() => setLb(null)} />
         </div>
       )}
     </div>

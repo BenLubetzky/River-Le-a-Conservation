@@ -11,13 +11,13 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
     // `credentials` sends the session cookie, which the API sets on login.
     res = await fetch(API_URL + path, { ...init, credentials: "include" });
   } catch {
-    throw new Error("Can’t reach the server. Check your connection and try again.");
+    throw new Error("Não foi possível contactar o servidor. Verifique a ligação e tente novamente.");
   }
   if (!res.ok) {
     const body = await res.json().catch(() => null);
     // FastAPI sends {detail: "message"} for our own errors and {detail: [{msg}]} for validation errors.
     const detail = body?.detail;
-    const message = typeof detail === "string" ? detail : detail?.[0]?.msg || `Something went wrong (${res.status}).`;
+    const message = typeof detail === "string" ? detail : detail?.[0]?.msg || `Ocorreu um erro (${res.status}).`;
     if (res.status === 401) {
       // The login expired while the site was open: back to the login page. This runs outside
       // React, so there's no router; a full page load also clears the old user's state.

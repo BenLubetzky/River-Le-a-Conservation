@@ -15,13 +15,13 @@ export const daysFromToday = (days: number) => {
 /** Its checkup day has come and it hasn't been closed. */
 export const isDue = (r: Report) => !r.closed_at && !!r.checkup_due && r.checkup_due <= today();
 
-const DAY_FMT = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+const DAY_FMT = new Intl.DateTimeFormat("pt-PT", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 export const fmtDay = (day: string) => DAY_FMT.format(new Date(day + "T00:00:00Z"));
 
-/** "due today", "due for 3 days" */
+/** "pendente hoje", "pendente há 3 dias" */
 export const dueFor = (day: string) => {
   const days = Math.round((Date.parse(today()) - Date.parse(day)) / 86_400_000);
-  return days <= 0 ? "due today" : `due for ${days} ${days === 1 ? "day" : "days"}`;
+  return days <= 0 ? "pendente hoje" : `pendente há ${days} ${days === 1 ? "dia" : "dias"}`;
 };
 
-export const OUTCOME_LABELS = { still_there: "Still there", updated: "Updated", gone: "No longer there", postponed: "Couldn’t check, postponed" } as const;
+export const OUTCOME_LABELS = { still_there: "Ainda existe", updated: "Atualizado", gone: "Já não existe", postponed: "Não foi possível verificar, adiado" } as const;

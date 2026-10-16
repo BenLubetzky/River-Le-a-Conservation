@@ -52,7 +52,7 @@ export default function ReportMap({ points, onOpen, onPick }: {
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         bounds: area,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }).addTo(m);
       L.rectangle(area, { color: "#728157", weight: 2, dashArray: "6 6", fill: false, interactive: false }).addTo(m);
 
@@ -67,7 +67,7 @@ export default function ReportMap({ points, onOpen, onPick }: {
         where.textContent = fmtCoords(lat, lng);
         const button = document.createElement("button");
         button.className = "btn btn-primary";
-        button.textContent = "Report a sighting here";
+        button.textContent = "Registar uma ocorrência aqui";
         button.addEventListener("click", () => {
           m.closePopup();
           handlers.current.onPick(lat, lng);
@@ -109,5 +109,5 @@ export default function ReportMap({ points, onOpen, onPick }: {
   }, [points]);
 
   // `isolation` keeps Leaflet's own z-indexes (up to 1000) from covering the header and dialogs.
-  return <div ref={el} className="report-map" role="region" aria-label="Map of report locations along the Rio Leça" style={{ height: "100%", width: "100%", isolation: "isolate" }} />;
+  return <div ref={el} className="report-map" role="region" aria-label="Mapa dos locais dos registos ao longo do Rio Leça" style={{ height: "100%", width: "100%", isolation: "isolate" }} />;
 }

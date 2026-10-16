@@ -22,7 +22,7 @@ def current_user(db: DB, session: Annotated[str | None, Cookie(alias=SESSION_COO
         )
         if user is not None:
             return user
-    raise HTTPException(401, "Please log in.")
+    raise HTTPException(401, "Inicie sessão.")
 
 
 CurrentUser = Annotated[User, Depends(current_user)]

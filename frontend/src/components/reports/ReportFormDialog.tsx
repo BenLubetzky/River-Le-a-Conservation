@@ -87,7 +87,7 @@ export default function ReportFormDialog({ species, username, initialSp, initial
   const submit = async () => {
     if (rep.sp < 0 || !rep.date || rep.submitting) return;
     if (rep.checkup && rep.checkup <= today()) {
-      setRep({ error: "Choose a checkup date after today, or no checkup." });
+      setRep({ error: "Escolha uma data de verificação depois de hoje, ou nenhuma verificação." });
       return;
     }
     setRep({ submitting: true, error: "", list: false });
@@ -122,15 +122,15 @@ export default function ReportFormDialog({ species, username, initialSp, initial
   const cur = rep.sp >= 0 ? species[rep.sp].common_name : "";
   const options = species.map((p, i) => ({ p, i })).filter(({ p }) => !q || q === cur.toLowerCase() || (p.common_name + " " + p.latin_name + " " + p.local_name).toLowerCase().includes(q));
   const groups = [
-    { key: "abundance", label: "Abundance", opts: ABUNDANCE },
-    { key: "stage", label: "State", opts: STAGE },
-    { key: "phenology", label: "Flower or fruit", opts: PHENOLOGY },
+    { key: "abundance", label: "Abundância", opts: ABUNDANCE },
+    { key: "stage", label: "Estado", opts: STAGE },
+    { key: "phenology", label: "Flor ou fruto", opts: PHENOLOGY },
   ] as const;
   const onPhoto = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
     if (file.size > 10 * 1024 * 1024) {
-      setRep({ error: "That photo is larger than 10 MB. Please choose a smaller one." });
+      setRep({ error: "Essa fotografia tem mais de 10 MB. Escolha uma mais pequena." });
       return;
     }
     releasePreview(rep.photoUrl);
@@ -142,18 +142,18 @@ export default function ReportFormDialog({ species, username, initialSp, initial
   };
   const locate = () => {
     if (!("geolocation" in navigator)) {
-      setRep({ locationError: "This browser can’t share its location." });
+      setRep({ locationError: "Este navegador não consegue partilhar a localização." });
       return;
     }
     setRep({ locating: true, locationError: "" });
     navigator.geolocation.getCurrentPosition(
       (pos) => setRep({ locating: false, coords: { lat: pos.coords.latitude, lng: pos.coords.longitude } }),
-      (err) => setRep({ locating: false, locationError: err.code === err.PERMISSION_DENIED ? "Location permission was denied." : "Couldn’t get your location. Try again." }),
+      (err) => setRep({ locating: false, locationError: err.code === err.PERMISSION_DENIED ? "A permissão de localização foi recusada." : "Não foi possível obter a sua localização. Tente novamente." }),
       { enableHighAccuracy: true, timeout: 15000 },
     );
   };
 
-  const title = editing ? `Edit report #${editing.id}` : "Report an occurrence";
+  const title = editing ? `Editar registo n.º ${editing.id}` : "Registar ocorrência";
 
   return (
     <div className="dialog-backdrop" onClick={close} style={{ zIndex: 50 }}>
@@ -163,12 +163,12 @@ export default function ReportFormDialog({ species, username, initialSp, initial
             <span className="dialog-title" style={{ fontSize: 28 }}>{title}</span>
             <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>Rio Leça · Porto</span>
           </div>
-          <button className="btn btn-ghost btn-icon" onClick={close} aria-label="Close"><Icon name="x" /></button>
+          <button className="btn btn-ghost btn-icon" onClick={close} aria-label="Fechar"><Icon name="x" /></button>
         </div>
 
         {!rep.sent && (
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-            <Field label="Species" htmlFor="rep-species" style={{ position: "relative" }}>
+            <Field label="Espécie" htmlFor="rep-species" style={{ position: "relative" }}>
               <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
                 <Icon name="search" size={16} color="var(--color-neutral-700)" style={{ position: "absolute", left: 14, pointerEvents: "none" }} />
                 <input
@@ -177,11 +177,11 @@ export default function ReportFormDialog({ species, username, initialSp, initial
                   value={rep.query}
                   onChange={(e) => setRep({ query: e.target.value, list: true, sp: -1 })}
                   onFocus={(e) => { e.target.select(); setRep({ list: true }); }}
-                  placeholder="Search invasive species"
+                  placeholder="Pesquisar espécie invasora"
                   autoComplete="off"
                   style={{ paddingLeft: 38, paddingRight: 40, minHeight: 44, fontSize: 15 }}
                 />
-                <button onClick={() => setRep({ list: !rep.list })} aria-label="Show list" style={{ position: "absolute", right: 6, width: 32, height: 32, border: "none", background: "transparent", borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-text)" }}>
+                <button onClick={() => setRep({ list: !rep.list })} aria-label="Mostrar lista" style={{ position: "absolute", right: 6, width: 32, height: 32, border: "none", background: "transparent", borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-text)" }}>
                   <Icon name="chevronDown" size={16} />
                 </button>
               </div>
@@ -198,47 +198,47 @@ export default function ReportFormDialog({ species, username, initialSp, initial
                       </span>
                     </button>
                   ))}
-                  {options.length === 0 && <span style={{ padding: 10, fontSize: 14, color: "var(--color-neutral-700)" }}>No species match “{rep.query}”</span>}
+                  {options.length === 0 && <span style={{ padding: 10, fontSize: 14, color: "var(--color-neutral-700)" }}>Nenhuma espécie corresponde a “{rep.query}”</span>}
                 </div>
               )}
             </Field>
 
-            <Field label="Photo">
+            <Field label="Fotografia">
               <label className="photo-drop">
                 <input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" onChange={onPhoto} style={{ position: "absolute", opacity: 0, width: 0, height: 0 }} />
                 <span style={{ width: 64, height: 64, flex: "none", borderRadius: "50%", overflow: "hidden", background: "var(--color-accent-2-200)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {rep.photoUrl ? <Photo src={rep.photoUrl} washed={false} /> : <Icon name="camera" size={24} color="var(--color-accent-2-800)" />}
                 </span>
                 <span style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
-                  <span style={{ fontFamily: "var(--font-heading)", fontSize: 16 }}>{rep.photoUrl ? "Change photo" : "Add a photo"}</span>
-                  <span style={{ fontSize: 13, color: "var(--color-neutral-700)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{rep.photo?.name || "JPEG, PNG, WebP or HEIC, up to 10 MB"}</span>
+                  <span style={{ fontFamily: "var(--font-heading)", fontSize: 16 }}>{rep.photoUrl ? "Mudar fotografia" : "Adicionar fotografia"}</span>
+                  <span style={{ fontSize: 13, color: "var(--color-neutral-700)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{rep.photo?.name || "JPEG, PNG, WebP ou HEIC, até 10 MB"}</span>
                 </span>
               </label>
               {rep.photoUrl && (
-                <button className="btn btn-ghost" onClick={removePhoto} style={{ padding: "4px 8px", fontSize: 13, marginTop: "var(--space-1)" }}>Remove photo</button>
+                <button className="btn btn-ghost" onClick={removePhoto} style={{ padding: "4px 8px", fontSize: 13, marginTop: "var(--space-1)" }}>Remover fotografia</button>
               )}
             </Field>
 
-            <Field label="Date and time" htmlFor="rep-date">
+            <Field label="Data e hora" htmlFor="rep-date">
               <input id="rep-date" className="input" type="datetime-local" value={rep.date} max={nowLocalInput()} onChange={(e) => setRep({ date: e.target.value })} style={{ minHeight: 44, fontSize: 15 }} />
             </Field>
 
-            <Field label="Location" htmlFor="rep-location">
+            <Field label="Local" htmlFor="rep-location">
               <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap" }}>
                   <button className="btn btn-secondary" onClick={locate} disabled={rep.locating} style={{ gap: 8, padding: "10px 18px" }}>
                     <Icon name="pin" size={16} />
-                    {rep.locating ? "Finding you…" : rep.coords ? "Update my location" : "Use my location"}
+                    {rep.locating ? "A localizar…" : rep.coords ? "Atualizar a minha localização" : "Usar a minha localização"}
                   </button>
                   {rep.coords && (
                     <span style={{ fontSize: 14, display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
                       {fmtCoords(rep.coords.lat, rep.coords.lng)}
-                      <button className="btn btn-ghost" onClick={() => setRep({ coords: null })} style={{ padding: "4px 8px", fontSize: 13 }}>Remove</button>
+                      <button className="btn btn-ghost" onClick={() => setRep({ coords: null })} style={{ padding: "4px 8px", fontSize: 13 }}>Remover</button>
                     </span>
                   )}
                   {rep.locationError && <span style={{ fontSize: 13, color: "var(--color-accent-700)" }}>{rep.locationError}</span>}
                 </div>
-                <input id="rep-location" className="input" value={rep.locationText} maxLength={200} onChange={(e) => setRep({ locationText: e.target.value })} placeholder="Describe the spot (optional), e.g. right bank near the footbridge" style={{ minHeight: 44, fontSize: 15 }} />
+                <input id="rep-location" className="input" value={rep.locationText} maxLength={200} onChange={(e) => setRep({ locationText: e.target.value })} placeholder="Descreva o local (opcional), p. ex. margem direita junto à ponte pedonal" style={{ minHeight: 44, fontSize: 15 }} />
               </div>
             </Field>
 
@@ -253,9 +253,9 @@ export default function ReportFormDialog({ species, username, initialSp, initial
               </Field>
             ))}
 
-            <Field label="Checkup" htmlFor="rep-checkup">
+            <Field label="Verificação" htmlFor="rep-checkup">
               <span style={{ display: "block", fontSize: 13, color: "var(--color-neutral-700)", marginBottom: "var(--space-2)" }}>
-                From this day, the report shows up as needing a checkup, so someone goes back to see if the plants are still there.
+                A partir deste dia, o registo aparece como a precisar de verificação, para que alguém volte ao local e veja se as plantas ainda lá estão.
               </span>
               <CheckupDateInput
                 id="rep-checkup"
@@ -266,12 +266,12 @@ export default function ReportFormDialog({ species, username, initialSp, initial
             </Field>
 
             {/* Always the logged-in user: the API saves the report under them. */}
-            <Field label="Reported by" htmlFor="rep-name">
+            <Field label="Registado por" htmlFor="rep-name">
               <input id="rep-name" className="input" value={username} readOnly style={{ minHeight: 44, fontSize: 15, color: "var(--color-neutral-700)", cursor: "default" }} />
             </Field>
 
-            <Field label="Notes (optional)" htmlFor="rep-notes">
-              <textarea id="rep-notes" className="input" value={rep.notes} maxLength={2000} onChange={(e) => setRep({ notes: e.target.value })} placeholder="Anything that helps: how it’s spreading, access, nearby landmarks…" style={{ fontSize: 15, borderRadius: "var(--radius-md)", paddingBlock: 10 }} />
+            <Field label="Notas (opcional)" htmlFor="rep-notes">
+              <textarea id="rep-notes" className="input" value={rep.notes} maxLength={2000} onChange={(e) => setRep({ notes: e.target.value })} placeholder="Tudo o que ajude: como se está a espalhar, acessos, pontos de referência próximos…" style={{ fontSize: 15, borderRadius: "var(--radius-md)", paddingBlock: 10 }} />
             </Field>
 
             {rep.error && (
@@ -282,8 +282,8 @@ export default function ReportFormDialog({ species, username, initialSp, initial
             )}
 
             <div className="dialog-actions" style={{ marginTop: 0 }}>
-              <button className="btn btn-ghost" onClick={close}>Cancel</button>
-              <button className="btn btn-primary" onClick={submit} disabled={rep.sp < 0 || !rep.date || rep.submitting}>{editing ? (rep.submitting ? "Saving…" : "Save changes") : rep.submitting ? "Sending…" : "Submit report"}</button>
+              <button className="btn btn-ghost" onClick={close}>Cancelar</button>
+              <button className="btn btn-primary" onClick={submit} disabled={rep.sp < 0 || !rep.date || rep.submitting}>{editing ? (rep.submitting ? "A guardar…" : "Guardar alterações") : rep.submitting ? "A enviar…" : "Enviar registo"}</button>
             </div>
           </div>
         )}
@@ -293,9 +293,9 @@ export default function ReportFormDialog({ species, username, initialSp, initial
             <span style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--color-accent-2-600)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Icon name="check" size={28} color="var(--color-accent-2-100)" />
             </span>
-            <span style={{ fontFamily: "var(--font-heading)", fontSize: 24 }}>Thank you</span>
-            <p style={{ margin: 0, fontSize: 15, textWrap: "pretty" }}>Your report of {cur} has been recorded.</p>
-            <button className="btn btn-primary" onClick={close}>Done</button>
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: 24 }}>Obrigado</span>
+            <p style={{ margin: 0, fontSize: 15, textWrap: "pretty" }}>O seu registo ({cur}) foi guardado.</p>
+            <button className="btn btn-primary" onClick={close}>Concluído</button>
           </div>
         )}
       </div>

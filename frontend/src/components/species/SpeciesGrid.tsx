@@ -6,8 +6,8 @@ export default function SpeciesGrid({ species, onOpen }: { species: Species[]; o
     <main className="page-main">
       <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)", maxWidth: 640, padding: "48px 0 64px" }}>
         <span className="tag tag-accent-2" style={{ alignSelf: "flex-start" }}>Rio Leça · Porto</span>
-        <h1 className="page-h1">Invasive plants along the river</h1>
-        <p style={{ fontSize: 17, margin: 0, color: "var(--color-neutral-700)", textWrap: "pretty" }}>Non-native species crowd out the plants and animals that depend on the Leça’s banks. Learn to recognise them.</p>
+        <h1 className="page-h1">Plantas invasoras ao longo do rio</h1>
+        <p style={{ fontSize: 17, margin: 0, color: "var(--color-neutral-700)", textWrap: "pretty" }}>As espécies exóticas invasoras afastam as plantas e os animais que dependem das margens do Leça. Aprenda a reconhecê-las.</p>
       </section>
 
       <section className="species-grid">

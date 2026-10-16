@@ -11,12 +11,12 @@ export default function Guide() {
       <main className="page-main" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", paddingTop: 120, textAlign: "center" }}>
         {error ? (
           <>
-            <span style={{ fontFamily: "var(--font-heading)", fontSize: 22 }}>Couldn’t check your login</span>
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: 22 }}>Não foi possível verificar a sua sessão</span>
             <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{error}</span>
-            <button className="btn btn-secondary" onClick={retry}>Try again</button>
+            <button className="btn btn-secondary" onClick={retry}>Tentar novamente</button>
           </>
         ) : (
-          <span style={{ fontSize: 15, color: "var(--color-neutral-700)" }}>Loading…</span>
+          <span style={{ fontSize: 15, color: "var(--color-neutral-700)" }}>A carregar…</span>
         )}
       </main>
     );

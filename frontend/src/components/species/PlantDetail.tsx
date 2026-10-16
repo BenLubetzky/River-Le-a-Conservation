@@ -9,12 +9,11 @@ export default function PlantDetail({ plant: P, gi, setGi, onBack, onLookGallery
   const srcs = P.photos;
   const heroSrc = srcs[gi] || srcs[0];
   const facts = [
-    ["Local name", P.local_name],
-    ["Family", P.family],
-    ["Native to", P.native_range],
-    ["Flowering", P.flowering],
-    ["Where on the Leça", P.habitat],
-    ["Status", P.legal_status],
+    ["Família", P.family],
+    ["Origem", P.native_range],
+    ["Floração", P.flowering],
+    ["Onde no Leça", P.habitat],
+    ["Estatuto", P.legal_status],
   ];
 
   return (
@@ -22,10 +21,10 @@ export default function PlantDetail({ plant: P, gi, setGi, onBack, onLookGallery
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
         <button className="btn btn-ghost" onClick={onBack} style={{ alignSelf: "flex-start", marginLeft: -12, whiteSpace: "nowrap", flexShrink: 0 }}>
           <Icon name="arrowLeft" size={16} />
-          All plants
+          Todas as plantas
         </button>
         <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
-          <span className="tag tag-accent">Invasive</span>
+          <span className="tag tag-accent">Invasora</span>
           <span className="tag tag-neutral">{P.family}</span>
         </div>
         <h1 className="detail-h1">{P.common_name}</h1>
@@ -38,18 +37,18 @@ export default function PlantDetail({ plant: P, gi, setGi, onBack, onLookGallery
         </div>
         <div style={{ display: "flex", gap: "var(--space-4)", flexWrap: "wrap", alignItems: "center" }}>
           {srcs.map((src, k) => (
-            <button key={src} className="gallery-thumb" onClick={() => setGi(k)} aria-pressed={k === gi} aria-label={`Photo ${k + 1}`}>
+            <button key={src} className="gallery-thumb" onClick={() => setGi(k)} aria-pressed={k === gi} aria-label={`Fotografia ${k + 1}`}>
               <Photo src={src} />
             </button>
           ))}
-          <span style={{ fontSize: 13, color: "var(--color-neutral-700)" }}>Demo photos · Wikimedia Commons</span>
+          <span style={{ fontSize: 13, color: "var(--color-neutral-700)" }}>Fotografias ilustrativas · Wikimedia Commons</span>
         </div>
       </section>
 
       <div className="detail-grid">
         <div style={{ display: "flex", flexDirection: "column", gap: 72, minWidth: 0 }}>
           <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-            <h2 style={{ fontSize: 36, margin: 0 }}>Characteristics</h2>
+            <h2 style={{ fontSize: 36, margin: 0 }}>Características</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
               {P.characteristics.map(({ label, text }) => (
                 <div key={label} className="char-row">
@@ -62,8 +61,8 @@ export default function PlantDetail({ plant: P, gi, setGi, onBack, onLookGallery
 
           <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-              <h2 style={{ fontSize: 36, margin: 0 }}>Native look-alikes</h2>
-              <p style={{ margin: 0, fontSize: 16, color: "var(--color-neutral-700)", maxWidth: 560 }}>Native plants that can be mistaken for {P.common_name}. Check these differences before removing anything.</p>
+              <h2 style={{ fontSize: 36, margin: 0 }}>Plantas nativas parecidas</h2>
+              <p style={{ margin: 0, fontSize: 16, color: "var(--color-neutral-700)", maxWidth: 560 }}>Plantas nativas que se podem confundir com esta espécie ({P.common_name}). Confirme estas diferenças antes de arrancar seja o que for.</p>
             </div>
             {P.look_alikes.map((l) => (
               <div key={l.id} style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "var(--space-8)", display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
@@ -72,24 +71,24 @@ export default function PlantDetail({ plant: P, gi, setGi, onBack, onLookGallery
                     <Photo src={l.photos[0]} alt={l.common_name} />
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    <span className="tag tag-accent-2" style={{ alignSelf: "flex-start" }}>Native</span>
+                    <span className="tag tag-accent-2" style={{ alignSelf: "flex-start" }}>Nativa</span>
                     <span style={{ fontFamily: "var(--font-heading)", fontSize: 26, lineHeight: 1.1 }}>{l.common_name}</span>
                     <span style={{ fontSize: 15, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{l.latin_name}</span>
                   </div>
                   <button className="btn btn-secondary" onClick={() => onLookGallery(l)} style={{ marginLeft: "auto", alignSelf: "center", whiteSpace: "nowrap", flexShrink: 0, gap: 10, padding: "14px 26px", fontSize: 16 }}>
                     <Icon name="image" size={20} />
-                    More photos
+                    Mais fotografias
                   </button>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: "var(--space-8)" }}>
                   <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
-                    <h6 style={{ margin: 0, color: "var(--color-neutral-700)" }}>Looks similar</h6>
+                    <h6 style={{ margin: 0, color: "var(--color-neutral-700)" }}>Semelhanças</h6>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}>
                       {l.shared_traits.map((t) => <span key={t} className="tag tag-outline" style={{ whiteSpace: "nowrap" }}>{t}</span>)}
                     </div>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
-                    <h6 style={{ margin: 0, color: "var(--color-neutral-700)" }}>How to tell them apart</h6>
+                    <h6 style={{ margin: 0, color: "var(--color-neutral-700)" }}>Como as distinguir</h6>
                     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
                       {l.differences.map((d) => (
                         <div key={d} style={{ display: "flex", gap: "var(--space-3)", alignItems: "baseline" }}>
@@ -105,7 +104,7 @@ export default function PlantDetail({ plant: P, gi, setGi, onBack, onLookGallery
           </section>
 
           <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-            <h2 style={{ fontSize: 36, margin: 0 }}>Procedure</h2>
+            <h2 style={{ fontSize: 36, margin: 0 }}>Como remover</h2>
             <div style={{ background: "var(--color-accent-100)", borderRadius: 999, padding: "var(--space-3) var(--space-6)", display: "flex", gap: "var(--space-3)", alignItems: "center", alignSelf: "flex-start" }}>
               <Icon name="alert" color="var(--color-accent-700)" style={{ flex: "none" }} />
               <span style={{ fontSize: 15, color: "var(--color-accent-800)" }}>{P.caution}</span>
@@ -125,7 +124,7 @@ export default function PlantDetail({ plant: P, gi, setGi, onBack, onLookGallery
         </div>
 
         <aside style={{ position: "sticky", top: 96, background: "var(--color-accent-2-200)", borderRadius: "var(--radius-lg)", padding: "var(--space-8)", display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-          <h3 style={{ margin: 0, fontSize: 24 }}>Key facts</h3>
+          <h3 style={{ margin: 0, fontSize: 24 }}>Dados principais</h3>
           {facts.map(([label, value]) => (
             <div key={label} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <h6 style={{ margin: 0, color: "var(--color-accent-2-800)" }}>{label}</h6>

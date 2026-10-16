@@ -29,19 +29,19 @@ export default function MapPage({ reports, species, userId, error, onRetry, onVi
     <main className="page-main" style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
       <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)", padding: "48px 0 0", maxWidth: 640 }}>
         <span className="tag tag-accent-2" style={{ alignSelf: "flex-start" }}>Rio Leça · Porto</span>
-        <h1 className="page-h1">Map</h1>
-        <p style={{ fontSize: 17, margin: 0, color: "var(--color-neutral-700)", textWrap: "pretty" }}>Where invasive plants have been reported along the river. Select a marker to open its report, or click anywhere along the river to report a sighting there.</p>
+        <h1 className="page-h1">Mapa</h1>
+        <p style={{ fontSize: 17, margin: 0, color: "var(--color-neutral-700)", textWrap: "pretty" }}>Onde foram registadas plantas invasoras ao longo do rio. Selecione um marcador para abrir o registo, ou clique em qualquer ponto junto ao rio para registar aí uma ocorrência.</p>
       </section>
 
       <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)", flexWrap: "wrap" }}>
         <button className="chip" aria-pressed={mine} onClick={() => setMine(!mine)} style={{ display: "flex", alignItems: "center", gap: 6 }}>
           {mine && <Icon name="check" size={15} />}
-          My reports
+          Os meus registos
         </button>
         <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>
           {reports
-            ? `${points.length} ${points.length === 1 ? "report" : "reports"} on the map` + (off ? ` · ${off} without a location along the river` : "")
-            : error ? "" : "Loading reports…"}
+            ? `${points.length} ${points.length === 1 ? "registo" : "registos"} no mapa` + (off ? ` · ${off} sem localização junto ao rio` : "")
+            : error ? "" : "A carregar os registos…"}
         </span>
       </div>
 
@@ -50,9 +50,9 @@ export default function MapPage({ reports, species, userId, error, onRetry, onVi
         <ReportMap points={points} onOpen={onView} onPick={onReportAt} />
         {error && (
           <div style={{ position: "absolute", inset: 0, zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "var(--space-3)", textAlign: "center", background: "color-mix(in srgb, var(--color-bg) 85%, transparent)" }}>
-            <span style={{ fontFamily: "var(--font-heading)", fontSize: 20 }}>Couldn’t load reports</span>
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: 20 }}>Não foi possível carregar os registos</span>
             <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{error}</span>
-            <button className="btn btn-secondary" onClick={onRetry}>Try again</button>
+            <button className="btn btn-secondary" onClick={onRetry}>Tentar novamente</button>
           </div>
         )}
       </section>

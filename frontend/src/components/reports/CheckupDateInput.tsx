@@ -7,7 +7,7 @@ const daysUntil = (day: string) => Math.round((Date.parse(day) - Date.parse(toda
  * When to check a spot again, entered as a number of days from today (the date it lands on is
  * shown alongside), or none. `suggested` is the species' usual number of days.
  */
-export default function CheckupDateInput({ id, value, onChange, suggested, noneLabel = "No checkup" }: {
+export default function CheckupDateInput({ id, value, onChange, suggested, noneLabel = "Sem verificação" }: {
   id: string;
   /** The checkup day, "YYYY-MM-DD", or "" for no checkup. */
   value: string;
@@ -38,7 +38,7 @@ export default function CheckupDateInput({ id, value, onChange, suggested, noneL
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-        <label htmlFor={id} style={{ fontSize: 15 }}>Check again in</label>
+        <label htmlFor={id} style={{ fontSize: 15 }}>Verificar daqui a</label>
         <input
           id={id}
           className="input"
@@ -52,19 +52,19 @@ export default function CheckupDateInput({ id, value, onChange, suggested, noneL
           onChange={(e) => type(e.target.value)}
           style={{ minHeight: 44, fontSize: 15, width: 96, textAlign: "center" }}
         />
-        <span style={{ fontSize: 15 }}>{days === 1 ? "day" : "days"}</span>
-        <span style={{ fontSize: 14, color: "var(--color-neutral-700)", flex: "1 1 auto" }}>{value ? `on ${fmtDay(value)}` : ""}</span>
+        <span style={{ fontSize: 15 }}>{days === 1 ? "dia" : "dias"}</span>
+        <span style={{ fontSize: 14, color: "var(--color-neutral-700)", flex: "1 1 auto" }}>{value ? `a ${fmtDay(value)}` : ""}</span>
         <button type="button" className="chip" aria-pressed={!value} onClick={() => onChange(value ? "" : daysFromToday(suggested?.days ?? 30))}>{noneLabel}</button>
       </div>
       {suggested ? (
         <span style={{ fontSize: 13, color: "var(--color-neutral-700)" }}>
-          Usual for {suggested.species}: {suggested.days} days.
+          Habitual para esta espécie ({suggested.species}): {suggested.days} dias.
           {days !== suggested.days && (
-            <button type="button" className="btn btn-ghost" onClick={() => onChange(daysFromToday(suggested.days))} style={{ padding: "2px 6px", fontSize: 13, marginLeft: 4 }}>Use this</button>
+            <button type="button" className="btn btn-ghost" onClick={() => onChange(daysFromToday(suggested.days))} style={{ padding: "2px 6px", fontSize: 13, marginLeft: 4 }}>Usar este</button>
           )}
         </span>
       ) : (
-        <span style={{ fontSize: 13, color: "var(--color-neutral-700)" }}>Choose a species to see its usual interval.</span>
+        <span style={{ fontSize: 13, color: "var(--color-neutral-700)" }}>Escolha uma espécie para ver o intervalo habitual.</span>
       )}
     </div>
   );

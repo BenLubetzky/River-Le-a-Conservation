@@ -7,7 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Monitorização Leça",
     short_name: "Rio Leça",
-    description: "Tracking invasive species along the River Leça",
+    description: "Monitorização de espécies invasoras ao longo do Rio Leça",
+    lang: "pt-PT",
     start_url: "/",
     display: "standalone",
     background_color: "#f5ead8",

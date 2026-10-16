@@ -63,12 +63,12 @@ export default function RioLeca({ user }: { user: User }) {
         <main className="page-main" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", paddingTop: 120, textAlign: "center" }}>
           {speciesError ? (
             <>
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: 22 }}>Couldn’t load the plants</span>
+              <span style={{ fontFamily: "var(--font-heading)", fontSize: 22 }}>Não foi possível carregar as plantas</span>
               <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{speciesError}</span>
-              <button className="btn btn-secondary" onClick={reloadSpecies}>Try again</button>
+              <button className="btn btn-secondary" onClick={reloadSpecies}>Tentar novamente</button>
             </>
           ) : (
-            <span style={{ fontSize: 15, color: "var(--color-neutral-700)" }}>Loading plants…</span>
+            <span style={{ fontSize: 15, color: "var(--color-neutral-700)" }}>A carregar as plantas…</span>
           )}
         </main>
       )}

@@ -15,12 +15,12 @@ const figtree = Figtree({
 
 export const metadata: Metadata = {
   title: "Monitorização Leça",
-  description: "Tracking invasive species along the River Leça",
+  description: "Monitorização de espécies invasoras ao longo do Rio Leça",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${caprasimo.variable} ${figtree.variable}`}>
+    <html lang="pt-PT" className={`${caprasimo.variable} ${figtree.variable}`}>
       <body>{children}</body>
     </html>
   );

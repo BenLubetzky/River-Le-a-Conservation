@@ -40,16 +40,16 @@ export default function LoginPage() {
           <Logo size={64} />
         </span>
         <h1 className="page-h1">Monitorização Leça</h1>
-        <span style={{ fontSize: 16, color: "var(--color-neutral-700)" }}>Invasive plants of the Rio Leça · Porto</span>
+        <span style={{ fontSize: 16, color: "var(--color-neutral-700)" }}>Plantas invasoras do Rio Leça · Porto</span>
       </div>
 
       <form onSubmit={submit} className="card elev-md" style={{ width: "min(400px, 100%)", padding: "var(--space-8)", gap: "var(--space-6)" }}>
-        <span className="dialog-title" style={{ fontSize: 26 }}>Log in</span>
+        <span className="dialog-title" style={{ fontSize: 26 }}>Iniciar sessão</span>
 
-        <Field label="Username" htmlFor="login-username">
+        <Field label="Nome de utilizador" htmlFor="login-username">
           <input id="login-username" className="input" value={username} maxLength={50} onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false} autoFocus required style={{ minHeight: 44, fontSize: 15, background: "var(--color-bg)" }} />
         </Field>
-        <Field label="Password" htmlFor="login-password">
+        <Field label="Palavra-passe" htmlFor="login-password">
           <input id="login-password" className="input" type="password" value={password} maxLength={200} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required style={{ minHeight: 44, fontSize: 15, background: "var(--color-bg)" }} />
         </Field>
 
@@ -61,11 +61,11 @@ export default function LoginPage() {
         )}
 
         <button type="submit" className="view-btn view-btn-edit" disabled={!username || !password || submitting}>
-          {submitting ? "Logging in…" : "Log in"}
+          {submitting ? "A entrar…" : "Entrar"}
         </button>
       </form>
 
-      <span style={{ fontSize: 13, color: "var(--color-neutral-700)", textAlign: "center" }}>Accounts are created by the project team.</span>
+      <span style={{ fontSize: 13, color: "var(--color-neutral-700)", textAlign: "center" }}>As contas são criadas pela equipa do projeto.</span>
     </main>
   );
 }

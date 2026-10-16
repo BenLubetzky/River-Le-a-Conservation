@@ -24,7 +24,7 @@ def login(db: DB, body: LoginIn, response: Response) -> UserOut:
     if wait := failed_logins.blocked_for(body.username):
         minutes = math.ceil(wait / 60)
         raise HTTPException(
-            429, f"Too many wrong passwords. Try again in {minutes} minute{'' if minutes == 1 else 's'}.",
+            429, f"Demasiadas palavras-passe erradas. Tente novamente daqui a {minutes} minuto{'' if minutes == 1 else 's'}.",
             headers={"Retry-After": str(wait)},
         )
     # Usernames are case-sensitive, so this is an exact match.
@@ -32,7 +32,7 @@ def login(db: DB, body: LoginIn, response: Response) -> UserOut:
     # The password is checked even for an unknown username; `user is None` only narrows the type.
     if not verify_password(body.password, user.password_hash if user else None) or user is None:
         failed_logins.fail(body.username)
-        raise HTTPException(401, "Wrong username or password.")
+        raise HTTPException(401, "Nome de utilizador ou palavra-passe incorretos.")
     failed_logins.clear(body.username)
 
     settings = get_settings()

@@ -37,18 +37,18 @@ export default function SiteHeader({ page, onNavigate, username, dueCount }: {
           <span className="brand-name" style={{ fontFamily: "var(--font-heading)", fontSize: 19 }}>Monitorização Leça</span>
         </div>
         <div className="nav-links" style={{ display: "flex", gap: "var(--space-2)" }}>
-          <a {...link("main")}>Main</a>
+          <a {...link("main")}>Início</a>
           <a {...link("reports")} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            View reports
-            {dueCount > 0 && <span className="nav-badge" title={`${dueCount} need a checkup`} aria-label={`${dueCount} need a checkup`}>{dueCount}</span>}
+            Ver registos
+            {dueCount > 0 && <span className="nav-badge" title={`${dueCount} a precisar de verificação`} aria-label={`${dueCount} a precisar de verificação`}>{dueCount}</span>}
           </a>
-          <a {...link("map")}>Map</a>
+          <a {...link("map")}>Mapa</a>
         </div>
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
           <span className="header-user" style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{username}</span>
-          <button className="nav-pill" onClick={logOut} disabled={leaving} aria-label="Log out" title="Log out" style={{ border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
+          <button className="nav-pill" onClick={logOut} disabled={leaving} aria-label="Terminar sessão" title="Terminar sessão" style={{ border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
             <Icon name="logOut" size={15} />
-            <span className="logout-label">Log out</span>
+            <span className="logout-label">Sair</span>
           </button>
         </div>
       </nav>
