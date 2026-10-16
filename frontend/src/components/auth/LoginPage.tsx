@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { fetchMe, login } from "@/api/auth";
 import Field from "@/components/ui/Field";
 import Icon from "@/components/ui/Icon";
+import Logo from "@/components/ui/Logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -35,8 +36,8 @@ export default function LoginPage() {
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "var(--space-8)", padding: "var(--space-8) 16px" }}>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", textAlign: "center" }}>
-        <span style={{ width: 64, height: 64, borderRadius: 999, background: "var(--color-accent-2-600)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "var(--shadow-md)" }}>
-          <Icon name="leaf" size={30} color="var(--color-accent-2-100)" />
+        <span style={{ borderRadius: 999, display: "flex", boxShadow: "var(--shadow-md)" }}>
+          <Logo size={64} />
         </span>
         <h1 className="page-h1">Monitorização Leça</h1>
         <span style={{ fontSize: 16, color: "var(--color-neutral-700)" }}>Invasive plants of the Rio Leça · Porto</span>

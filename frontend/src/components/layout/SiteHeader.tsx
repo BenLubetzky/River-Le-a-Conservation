@@ -2,6 +2,7 @@ import { useState, type MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import { logout } from "@/api/auth";
 import Icon from "@/components/ui/Icon";
+import Logo from "@/components/ui/Logo";
 
 export type Page = "main" | "reports" | "map";
 
@@ -32,9 +33,7 @@ export default function SiteHeader({ page, onNavigate, username, dueCount }: {
     <header style={{ position: "sticky", top: 0, zIndex: 10, background: "color-mix(in srgb, var(--color-bg) 88%, transparent)", backdropFilter: "blur(8px)", borderBottom: "2px solid var(--color-text)" }}>
       <nav className="site-nav" style={{ maxWidth: 1200, margin: "0 auto", padding: "var(--space-4) var(--space-8)", display: "flex", alignItems: "center", gap: "var(--space-8)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-          <span style={{ width: 30, height: 30, borderRadius: 999, background: "var(--color-accent-2-600)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon name="leaf" size={16} color="var(--color-accent-2-100)" />
-          </span>
+          <Logo size={30} />
           <span className="brand-name" style={{ fontFamily: "var(--font-heading)", fontSize: 19 }}>Monitorização Leça</span>
         </div>
         <div className="nav-links" style={{ display: "flex", gap: "var(--space-2)" }}>
