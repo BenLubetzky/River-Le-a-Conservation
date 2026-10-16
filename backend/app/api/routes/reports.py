@@ -16,6 +16,8 @@ log = logging.getLogger("uvicorn.error")
 
 router = APIRouter(prefix="/reports", tags=["reports"])
 
+MAX_CHECKUP_PHOTOS = 6
+
 
 def clean(s: str | None) -> str | None:
     s = (s or "").strip()
@@ -29,6 +31,11 @@ def sign_photos(paths: list[str | None]) -> dict[str, str]:
     except Exception:
         log.exception("Could not sign photo URLs")
         return {}
+
+
+def photo_paths(report: Report) -> list[str]:
+    """Every photo a report shows: its own and its checkups'."""
+    return [p for p in [report.photo_path, *(p for c in report.checkups for p in c.photo_paths)] if p]
 
 
 def today() -> date:
@@ -47,8 +54,13 @@ def check_next_checkup(day: date | None) -> date | None:
     return day
 
 
-def record_checkup(db: DB, report: Report, user: User, outcome: CheckupOutcome) -> None:
-    db.add(ReportCheckup(report_id=report.id, user_id=user.id, checked_by=user.username, outcome=outcome))
+def record_checkup(
+    db: DB, report: Report, user: User, outcome: CheckupOutcome, notes: str | None = None, photos: list[str] | None = None,
+) -> None:
+    db.add(ReportCheckup(
+        report_id=report.id, user_id=user.id, checked_by=user.username, outcome=outcome,
+        notes=notes, photo_paths=photos or [],
+    ))
 
 
 def get_report(db: DB, report_id: int) -> Report:
@@ -61,8 +73,8 @@ def get_report(db: DB, report_id: int) -> Report:
 @router.get("")
 def list_reports(db: DB) -> list[ReportOut]:
     rows = db.scalars(select(Report).order_by(Report.observed_at.desc()).options(selectinload(Report.checkups))).all()
-    urls = sign_photos([r.photo_path for r in rows])
-    return [ReportOut.from_model(r, urls.get(r.photo_path or "")) for r in rows]
+    urls = sign_photos([p for r in rows for p in photo_paths(r)])
+    return [ReportOut.from_model(r, urls) for r in rows]
 
 
 def report_fields(
@@ -117,8 +129,7 @@ def save_photo(photo: UploadFile | None) -> str | None:
 
 
 def report_out(report: Report) -> ReportOut:
-    urls = sign_photos([report.photo_path] if report.photo_path else [])
-    return ReportOut.from_model(report, urls.get(report.photo_path or ""))
+    return ReportOut.from_model(report, sign_photos(photo_paths(report)))
 
 
 @router.post("", status_code=201)
@@ -184,5 +195,38 @@ def check_report(db: DB, user: CurrentUser, report_id: int, body: CheckupIn) -> 
         report.checkup_due = check_next_checkup(body.next_checkup)
     record_checkup(db, report, user, body.outcome)
     db.commit()
+    db.refresh(report)
+    return report_out(report)
+
+
+@router.post("/{report_id}/postpone")
+def postpone_checkup(
+    db: DB,
+    user: CurrentUser,
+    report_id: int,
+    next_checkup: Annotated[date, Form(description="The day to try the checkup again; must be after today")],
+    notes: Annotated[str | None, Form(max_length=2000, description="Why it couldn't be checked")] = None,
+    photos: list[UploadFile] | None = None,
+) -> ReportOut:
+    """Record that the spot couldn't be checked (no access, flooded…) and move the checkup to a later
+    day, optionally with a note and photos. The report is otherwise unchanged. Anyone can, once the
+    report is due, as many times as needed."""
+    report = get_report(db, report_id)
+    if not is_due(report):
+        raise HTTPException(409, "This report doesn't need a checkup now.")
+    report.checkup_due = check_next_checkup(next_checkup)
+    photos = [f for f in photos or [] if f.filename]
+    if len(photos) > MAX_CHECKUP_PHOTOS:
+        raise HTTPException(422, f"Add at most {MAX_CHECKUP_PHOTOS} photos.")
+    saved: list[str] = []
+    try:
+        for f in photos:
+            saved.append(save_photo(f))
+        record_checkup(db, report, user, CheckupOutcome.postponed, clean(notes), saved)
+        db.commit()
+    except Exception:
+        # Don't leave the photos already uploaded behind if a later one, or the save, failed.
+        storage.delete_photos_quietly(saved)
+        raise
     db.refresh(report)
     return report_out(report)

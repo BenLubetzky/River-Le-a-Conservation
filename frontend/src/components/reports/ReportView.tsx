@@ -1,14 +1,15 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import CheckupActions from "@/components/reports/CheckupActions";
+import Lightbox from "@/components/species/Lightbox";
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
 import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
 import { stop } from "@/lib/events";
 import { OUTCOME_LABELS, dueFor, fmtDay, isDue } from "@/lib/checkup";
 import { fmtCoords, fmtDate, labelOf } from "@/lib/format";
-import type { CheckupInput, Report } from "@/types/report";
+import type { CheckupInput, PostponeInput, Report } from "@/types/report";
 
-export default function ReportView({ r, names: p, src, checkupDays, onClose, onEdit, onCheckup }: {
+export default function ReportView({ r, names: p, src, checkupDays, onClose, onEdit, onCheckup, onPostpone }: {
   r: Report; names: { common: string; latin: string }; src: string;
   /** The species' suggested days until the next checkup. */
   checkupDays?: number;
@@ -17,7 +18,11 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
   onEdit?: () => void;
   /** Given when the report's checkup is due. */
   onCheckup?: (c: CheckupInput) => Promise<void>;
+  /** Given when the report's checkup is due. */
+  onPostpone?: (c: PostponeInput) => Promise<void>;
 }) {
+  // A checkup's photos, open full screen.
+  const [lb, setLb] = useState<{ photos: string[]; i: number; title: string } | null>(null);
   const due = isDue(r);
   const hasCoords = r.latitude != null && r.longitude != null;
   const fields: [string, ReactNode][] = [
@@ -85,15 +90,27 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <h6 style={{ margin: 0, color: "var(--color-accent-2-800)" }}>Checkups</h6>
               {r.checkups.map((c, i) => (
-                <span key={i} style={{ fontSize: 15 }}>
-                  {OUTCOME_LABELS[c.outcome]} <span style={{ color: "var(--color-neutral-700)" }}>· {c.checked_by} · {fmtDate(c.checked_at)}</span>
-                </span>
+                <div key={i} style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)" }}>
+                  <span style={{ fontSize: 15 }}>
+                    {OUTCOME_LABELS[c.outcome]} <span style={{ color: "var(--color-neutral-700)" }}>· {c.checked_by} · {fmtDate(c.checked_at)}</span>
+                  </span>
+                  {c.notes && <p style={{ margin: 0, fontSize: 14, textWrap: "pretty", whiteSpace: "pre-line", paddingLeft: "var(--space-3)", borderLeft: "2px solid var(--color-divider)" }}>{c.notes}</p>}
+                  {c.photo_urls.length > 0 && (
+                    <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
+                      {c.photo_urls.map((url, j) => (
+                        <button key={url} onClick={() => setLb({ photos: c.photo_urls, i: j, title: `${OUTCOME_LABELS[c.outcome]} · ${c.checked_by}` })} aria-label={`Open photo ${j + 1}`} style={{ width: 64, height: 64, padding: 0, border: "none", borderRadius: "var(--radius-md)", overflow: "hidden", cursor: "pointer" }}>
+                          <Photo src={url} washed={false} />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           )}
         </div>
-        {due && onCheckup && onEdit ? (
-          <CheckupActions suggested={checkupDays ? { days: checkupDays, species: p.common } : undefined} onCheckup={onCheckup} onEdit={onEdit} />
+        {due && onCheckup && onPostpone && onEdit ? (
+          <CheckupActions suggested={checkupDays ? { days: checkupDays, species: p.common } : undefined} onCheckup={onCheckup} onPostpone={onPostpone} onEdit={onEdit} />
         ) : onEdit && (
           <div className="view-actions" style={{ gridTemplateColumns: "minmax(0, 1fr)" }}>
             <button className="view-btn view-btn-edit" onClick={onEdit}>
@@ -103,6 +120,12 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
           </div>
         )}
       </div>
+      {/* Inside the backdrop, so its clicks mustn't reach the backdrop and close the report too. */}
+      {lb && (
+        <div onClick={stop}>
+          <Lightbox title={lb.title} subtitle={`Report #${r.id}`} images={lb.photos} index={lb.i} onIndex={(i) => setLb((l) => (l ? { ...l, i } : l))} onClose={() => setLb(null)} />
+        </div>
+      )}
     </div>
   );
 }

@@ -24,4 +24,4 @@ export const dueFor = (day: string) => {
   return days <= 0 ? "due today" : `due for ${days} ${days === 1 ? "day" : "days"}`;
 };
 
-export const OUTCOME_LABELS = { still_there: "Still there", updated: "Updated", gone: "No longer there" } as const;
+export const OUTCOME_LABELS = { still_there: "Still there", updated: "Updated", gone: "No longer there", postponed: "Couldn’t check, postponed" } as const;

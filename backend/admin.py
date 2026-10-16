@@ -11,7 +11,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.core.security import hash_password
 from app.database.session import SessionLocal
-from app.models import Report, Species, User, UserSession
+from app.models import Report, ReportCheckup, Species, User, UserSession
 from app.services import storage
 
 MIN_PASSWORD = 8
@@ -170,13 +170,14 @@ else:
 def delete_report(report_id: int) -> None:
     with SessionLocal() as db:
         photo = db.scalar(select(Report.photo_path).where(Report.id == report_id))
+        checkup_photos = [p for ps in db.scalars(select(ReportCheckup.photo_paths).where(ReportCheckup.report_id == report_id)) for p in ps]
         deleted = db.execute(delete(Report).where(Report.id == report_id)).rowcount
         db.commit()
     if not deleted:
         st.session_state.reports_result = ("error", f"Report #{report_id} no longer exists.")
         return
-    if photo:
-        storage.delete_photos_quietly([photo])
+    if photo or checkup_photos:
+        storage.delete_photos_quietly([p for p in [photo, *checkup_photos] if p])
     st.session_state.reports_result = ("success", f"Deleted report #{report_id}.")
 
 

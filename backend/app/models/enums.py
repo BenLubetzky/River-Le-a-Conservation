@@ -29,6 +29,7 @@ class CheckupOutcome(enum.StrEnum):
     still_there = "still_there"  # checked, nothing to change
     updated = "updated"  # checked, and the report was edited
     gone = "gone"  # the plants are no longer there; the report is closed
+    postponed = "postponed"  # couldn't check; moved to a later day
 
 
 def pg_enum(cls: type[enum.Enum], name: str) -> Enum:

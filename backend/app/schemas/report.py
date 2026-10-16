@@ -12,6 +12,8 @@ class CheckupOut(BaseModel):
     outcome: CheckupOutcome
     checked_by: str
     checked_at: datetime
+    notes: str | None
+    photo_urls: list[str]  # signed URLs, valid for a limited time
 
 
 class CheckupIn(BaseModel):
@@ -42,14 +44,21 @@ class ReportOut(BaseModel):
     checkups: list[CheckupOut]  # oldest first
 
     @classmethod
-    def from_model(cls, r: Report, photo_url: str | None) -> "ReportOut":
+    def from_model(cls, r: Report, urls: dict[str, str]) -> "ReportOut":
+        """`urls`: signed photo URLs by path, for the report's and its checkups' photos."""
         return cls(
             id=r.id, species_id=r.species_id, observed_at=r.observed_at,
             abundance=r.abundance, stage=r.stage, phenology=r.phenology,
             latitude=r.latitude, longitude=r.longitude, location_text=r.location_text,
             reporter_name=r.reporter_name, user_id=r.user_id, notes=r.notes,
-            photo_url=photo_url,
+            photo_url=urls.get(r.photo_path or ""),
             created_at=r.created_at,
             checkup_due=r.checkup_due, closed_at=r.closed_at,
-            checkups=[CheckupOut(outcome=c.outcome, checked_by=c.checked_by, checked_at=c.checked_at) for c in r.checkups],
+            checkups=[
+                CheckupOut(
+                    outcome=c.outcome, checked_by=c.checked_by, checked_at=c.checked_at, notes=c.notes,
+                    photo_urls=[urls[p] for p in c.photo_paths if p in urls],
+                )
+                for c in r.checkups
+            ],
         )

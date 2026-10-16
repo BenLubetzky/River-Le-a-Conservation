@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import BigInteger, DateTime, ForeignKey, Identity, String, func
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -19,3 +20,7 @@ class ReportCheckup(Base):
     checked_by: Mapped[str] = mapped_column(String(50))
     outcome: Mapped[CheckupOutcome] = mapped_column(pg_enum(CheckupOutcome, "checkup_outcome"))
     checked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    # What they wrote and photographed, if anything (so far only for postponed checkups).
+    notes: Mapped[str | None] = mapped_column(String(2000))
+    # Paths of the photos inside the Supabase Storage bucket.
+    photo_paths: Mapped[list[str]] = mapped_column(ARRAY(String(300)), server_default="{}", default=list)

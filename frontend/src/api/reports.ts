@@ -1,5 +1,5 @@
 import { request } from "@/api/client";
-import type { CheckupInput, NewReport, Report } from "@/types/report";
+import type { CheckupInput, NewReport, PostponeInput, Report } from "@/types/report";
 
 export const fetchReports = () => request<Report[]>("/reports");
 
@@ -20,3 +20,12 @@ export const updateReport = (id: number, r: NewReport & { remove_photo?: boolean
 /** Record a checkup that needed no edit. Anyone can, once the report is due. */
 export const checkReport = (id: number, c: CheckupInput) =>
   request<Report>(`/reports/${id}/checkup`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(c) });
+
+/** Record that the spot couldn't be checked, and move the checkup to a later day. Anyone can, once the report is due. */
+export function postponeCheckup(id: number, c: PostponeInput) {
+  const form = new FormData();
+  form.append("next_checkup", c.next_checkup);
+  if (c.notes) form.append("notes", c.notes);
+  for (const photo of c.photos) form.append("photos", photo);
+  return request<Report>(`/reports/${id}/postpone`, { method: "POST", body: form });
+}

@@ -10,7 +10,7 @@ import ReportsPage, { NO_FILTERS, type Filters } from "@/components/reports/Repo
 import Lightbox from "@/components/species/Lightbox";
 import PlantDetail from "@/components/species/PlantDetail";
 import SpeciesGrid from "@/components/species/SpeciesGrid";
-import { checkReport } from "@/api/reports";
+import { checkReport, postponeCheckup } from "@/api/reports";
 import { useReports } from "@/hooks/useReports";
 import { useSpecies } from "@/hooks/useSpecies";
 import { isDue } from "@/lib/checkup";
@@ -92,6 +92,7 @@ export default function RioLeca({ user }: { user: User }) {
           checkupDays={species?.find((s) => s.id === viewed.species_id)?.checkup_days}
           onEdit={!viewed.closed_at && (viewed.user_id === user.id || isDue(viewed)) && species ? () => setEditing(viewed) : undefined}
           onCheckup={isDue(viewed) ? async (c) => replaceReport(await checkReport(viewed.id, c)) : undefined}
+          onPostpone={isDue(viewed) ? async (c) => replaceReport(await postponeCheckup(viewed.id, c)) : undefined}
         />
       )}
 

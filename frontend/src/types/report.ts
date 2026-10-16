@@ -5,10 +5,12 @@ export type Phenology = "none" | "flower" | "fruit" | "both";
 
 export type Option<T extends string> = { value: T; label: string };
 
-export type CheckupOutcome = "still_there" | "updated" | "gone";
-export type Checkup = { outcome: CheckupOutcome; checked_by: string; checked_at: string };
+export type CheckupOutcome = "still_there" | "updated" | "gone" | "postponed";
+export type Checkup = { outcome: CheckupOutcome; checked_by: string; checked_at: string; notes: string | null; photo_urls: string[] };
 // A checkup that needed no edit (POST /reports/{id}/checkup).
 export type CheckupInput = { outcome: "still_there"; next_checkup: string | null } | { outcome: "gone" };
+// A checkup that couldn't be done, moved to a later day (POST /reports/{id}/postpone).
+export type PostponeInput = { next_checkup: string; notes?: string; photos: File[] };
 
 // A report as returned by the backend (see backend/app/schemas/report.py).
 export type Report = {
