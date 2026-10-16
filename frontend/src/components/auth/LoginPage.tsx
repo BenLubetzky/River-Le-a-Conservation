@@ -6,6 +6,7 @@ import { fetchMe, login } from "@/api/auth";
 import Field from "@/components/ui/Field";
 import Icon from "@/components/ui/Icon";
 import Logo from "@/components/ui/Logo";
+import { photo } from "@/data/photos";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -34,23 +35,23 @@ export default function LoginPage() {
   };
 
   return (
-    <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "var(--space-8)", padding: "var(--space-8) 16px" }}>
+    <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "var(--space-8)", padding: "var(--space-8) 16px", background: `linear-gradient(rgba(0, 32, 30, 0.55), rgba(0, 32, 30, 0.7)), url("${photo("rio-leca-bosque")}") center / cover` }}>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", textAlign: "center" }}>
-        <span style={{ borderRadius: 999, display: "flex", boxShadow: "var(--shadow-md)" }}>
+        <span style={{ borderRadius: 999, display: "flex", boxShadow: "0 0 0 4px rgba(255, 255, 255, 0.9)" }}>
           <Logo size={64} />
         </span>
-        <h1 className="page-h1">Monitorização Leça</h1>
-        <span style={{ fontSize: 16, color: "var(--color-neutral-700)" }}>Plantas invasoras do Rio Leça · Porto</span>
+        <h1 className="page-h1" style={{ color: "#fff" }}>Monitorização Leça</h1>
+        <span style={{ fontSize: 17, color: "rgba(255, 255, 255, 0.9)" }}>Plantas invasoras do Rio Leça · Porto</span>
       </div>
 
-      <form onSubmit={submit} className="card elev-md" style={{ width: "min(400px, 100%)", padding: "var(--space-8)", gap: "var(--space-6)" }}>
-        <span className="dialog-title" style={{ fontSize: 26 }}>Iniciar sessão</span>
+      <form onSubmit={submit} className="card elev-lg" style={{ width: "min(420px, 100%)", padding: "40px", gap: "var(--space-6)", borderTop: "6px solid var(--color-lime)" }}>
+        <span className="dialog-title" style={{ fontSize: 28, color: "var(--color-heading)" }}>Iniciar sessão</span>
 
         <Field label="Nome de utilizador" htmlFor="login-username">
-          <input id="login-username" className="input" value={username} maxLength={50} onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false} autoFocus required style={{ minHeight: 44, fontSize: 15, background: "var(--color-bg)" }} />
+          <input id="login-username" className="input" value={username} maxLength={50} onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false} autoFocus required style={{ minHeight: 44, fontSize: 15, background: "#fff" }} />
         </Field>
         <Field label="Palavra-passe" htmlFor="login-password">
-          <input id="login-password" className="input" type="password" value={password} maxLength={200} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required style={{ minHeight: 44, fontSize: 15, background: "var(--color-bg)" }} />
+          <input id="login-password" className="input" type="password" value={password} maxLength={200} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required style={{ minHeight: 44, fontSize: 15, background: "#fff" }} />
         </Field>
 
         {error && (
@@ -65,7 +66,7 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <span style={{ fontSize: 13, color: "var(--color-neutral-700)", textAlign: "center" }}>As contas são criadas pela equipa do projeto.</span>
+      <span style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.85)", textAlign: "center" }}>As contas são criadas pela equipa do projeto.</span>
     </main>
   );
 }

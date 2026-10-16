@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import { Caprasimo, Figtree } from "next/font/google";
+import { Bitter, Rubik } from "next/font/google";
 import "./globals.css";
 
-const caprasimo = Caprasimo({
-  variable: "--font-caprasimo",
-  weight: "400",
+const bitter = Bitter({
+  variable: "--font-bitter",
   subsets: ["latin"],
 });
 
-const figtree = Figtree({
-  variable: "--font-figtree",
+const rubik = Rubik({
+  variable: "--font-rubik",
   subsets: ["latin"],
 });
 
@@ -20,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-PT" className={`${caprasimo.variable} ${figtree.variable}`}>
+    <html lang="pt-PT" className={`${bitter.variable} ${rubik.variable}`}>
       <body>{children}</body>
     </html>
   );

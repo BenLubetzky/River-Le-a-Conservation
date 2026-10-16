@@ -1,9 +1,9 @@
 import Icon from "@/components/ui/Icon";
 
-/** The "Registar ocorrência" button floating at the bottom of every page. */
+/** The "Registar ocorrência" button floating at the bottom of every page, on narrow screens (wider ones have it in the header). */
 export default function ReportButton({ onClick }: { onClick: () => void }) {
   return (
-    <div style={{ position: "fixed", left: 0, right: 0, bottom: "var(--space-6)", display: "flex", justifyContent: "center", pointerEvents: "none", zIndex: 20 }}>
+    <div className="report-fab" style={{ position: "fixed", left: 0, right: 0, bottom: "var(--space-6)", display: "flex", justifyContent: "center", pointerEvents: "none", zIndex: 20 }}>
       <button className="btn btn-primary" onClick={onClick} style={{ pointerEvents: "auto", padding: "14px 28px", fontSize: 16, boxShadow: "var(--shadow-lg)", gap: 10, whiteSpace: "nowrap" }}>
         <Icon name="pin" />
         Registar ocorrência

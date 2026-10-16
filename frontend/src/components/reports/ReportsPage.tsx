@@ -1,5 +1,7 @@
+import PageHero from "@/components/layout/PageHero";
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
+import { photo } from "@/data/photos";
 import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
 import { stop } from "@/lib/events";
 import { dueFor, fmtDay, isDue } from "@/lib/checkup";
@@ -52,12 +54,11 @@ export default function ReportsPage({ reports, species, userId, error, onRetry, 
   const count = list.length === all.length ? `${all.length} ${all.length === 1 ? "registo" : "registos"}` : `A mostrar ${list.length} de ${all.length} registos`;
 
   return (
-    <main className="page-main" style={{ paddingBottom: 140, display: "flex", flexDirection: "column", gap: "var(--space-8)" }}>
-      <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)", padding: "48px 0 8px", maxWidth: 640 }}>
-        <span className="tag tag-accent-2" style={{ alignSelf: "flex-start" }}>Rio Leça · Porto</span>
-        <h1 className="page-h1">Registos</h1>
-        <p style={{ fontSize: 17, margin: 0, color: "var(--color-neutral-700)", textWrap: "pretty" }}>Todas as ocorrências de plantas invasoras ao longo do rio. Abra um registo para o ver completo.</p>
-      </section>
+    <>
+    <PageHero image={photo("rio-leca-balio")} kicker="Rio Leça · Porto" title="Registos">
+      Todas as ocorrências de plantas invasoras ao longo do rio. Abra um registo para o ver completo.
+    </PageHero>
+    <main className="page-main" style={{ paddingTop: 48, paddingBottom: 140, display: "flex", flexDirection: "column", gap: "var(--space-8)" }}>
 
       {/* Always shown, so people know checkups exist; it only calls for attention when some are due. */}
       {dueCount > 0 ? (
@@ -105,7 +106,7 @@ export default function ReportsPage({ reports, species, userId, error, onRetry, 
           {hasFilters && <button className="btn btn-ghost" onClick={clearFilters} style={{ padding: "6px 12px", fontSize: 14 }}>Limpar filtros</button>}
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
             <span style={{ fontSize: 14, color: "var(--color-neutral-700)", whiteSpace: "nowrap" }}>Ordenar por data</span>
-            <div role="group" aria-label="Ordenar por data" style={{ display: "flex", gap: 4, padding: 4, borderRadius: 999, background: "var(--color-surface)", boxShadow: "inset 0 0 0 1.5px var(--color-divider)" }}>
+            <div role="group" aria-label="Ordenar por data" style={{ display: "flex", gap: 4, padding: 4, borderRadius: "var(--radius-md)", background: "#fff", boxShadow: "inset 0 0 0 1px var(--color-neutral-400)" }}>
               {([["new", "Mais recentes"], ["old", "Mais antigos"]] as const).map(([k, label]) => (
                 <button key={k} className="sort-opt" onClick={() => setF({ sort: k })} aria-pressed={f.sort === k}>
                   <Icon name="arrowDown" size={15} style={{ transform: k === "new" ? "none" : "rotate(180deg)" }} />
@@ -117,7 +118,7 @@ export default function ReportsPage({ reports, species, userId, error, onRetry, 
         </div>
       </section>
 
-      <section style={{ overflowX: "auto", background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "var(--space-2) var(--space-4)" }}>
+      <section style={{ overflowX: "auto", background: "#fff", boxShadow: "var(--shadow-sm)", border: "1px solid var(--color-divider)", padding: "var(--space-2) var(--space-4)" }}>
         <table className="table" style={{ width: "100%", minWidth: 980 }}>
           <thead>
             <tr>
@@ -187,5 +188,6 @@ export default function ReportsPage({ reports, species, userId, error, onRetry, 
         )}
       </section>
     </main>
+    </>
   );
 }

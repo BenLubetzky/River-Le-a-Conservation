@@ -2,14 +2,15 @@
 
 import { useCallback, useState } from "react";
 import ReportButton from "@/components/layout/ReportButton";
+import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader, { type Page } from "@/components/layout/SiteHeader";
+import HomePage from "@/components/home/HomePage";
 import MapPage from "@/components/map/MapPage";
 import ReportFormDialog from "@/components/reports/ReportFormDialog";
 import ReportView from "@/components/reports/ReportView";
 import ReportsPage, { NO_FILTERS, type Filters } from "@/components/reports/ReportsPage";
 import Lightbox from "@/components/species/Lightbox";
 import PlantDetail from "@/components/species/PlantDetail";
-import SpeciesGrid from "@/components/species/SpeciesGrid";
 import { checkReport, postponeCheckup } from "@/api/reports";
 import { useReports } from "@/hooks/useReports";
 import { useSpecies } from "@/hooks/useSpecies";
@@ -57,22 +58,18 @@ export default function RioLeca({ user }: { user: User }) {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-bg)", color: "var(--color-text)", fontFamily: "var(--font-body)" }}>
-      <SiteHeader page={page} onNavigate={navigate} username={user.username} dueCount={reports?.filter(isDue).length ?? 0} />
+      <SiteHeader page={page} onNavigate={navigate} username={user.username} dueCount={reports?.filter(isDue).length ?? 0} onReport={() => setReporting(true)} />
 
-      {page === "main" && !species && (
-        <main className="page-main" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)", paddingTop: 120, textAlign: "center" }}>
-          {speciesError ? (
-            <>
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: 22 }}>Não foi possível carregar as plantas</span>
-              <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{speciesError}</span>
-              <button className="btn btn-secondary" onClick={reloadSpecies}>Tentar novamente</button>
-            </>
-          ) : (
-            <span style={{ fontSize: 15, color: "var(--color-neutral-700)" }}>A carregar as plantas…</span>
-          )}
-        </main>
+      {page === "main" && !plant && (
+        <HomePage
+          species={species} speciesError={speciesError} onRetry={reloadSpecies} reports={reports}
+          onOpenPlant={openPlant}
+          onReports={() => navigate("reports")}
+          onDue={() => { setFilters({ ...NO_FILTERS, due: true }); navigate("reports"); }}
+          onMap={() => navigate("map")}
+          onReport={() => setReporting(true)}
+        />
       )}
-      {page === "main" && species && !plant && <SpeciesGrid species={species} onOpen={openPlant} />}
       {page === "main" && plant && (
         <PlantDetail plant={plant} gi={gi} setGi={setGi} onBack={() => navigate("main")} onLookGallery={(look) => setLb({ look, i: 0 })} />
       )}
@@ -95,6 +92,8 @@ export default function RioLeca({ user }: { user: User }) {
           onPostpone={isDue(viewed) ? async (c) => replaceReport(await postponeCheckup(viewed.id, c)) : undefined}
         />
       )}
+
+      <SiteFooter onNavigate={navigate} />
 
       <ReportButton onClick={() => setReporting(true)} />
 

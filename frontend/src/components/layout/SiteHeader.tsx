@@ -6,10 +6,12 @@ import Logo from "@/components/ui/Logo";
 
 export type Page = "main" | "reports" | "map";
 
-export default function SiteHeader({ page, onNavigate, username, dueCount }: {
+export default function SiteHeader({ page, onNavigate, username, dueCount, onReport }: {
   page: Page; onNavigate: (page: Page) => void; username: string;
   /** Reports whose checkup is due, shown as a badge on View reports. */
   dueCount: number;
+  /** Open the report form (the header's call to action). */
+  onReport: () => void;
 }) {
   const router = useRouter();
   const [leaving, setLeaving] = useState(false);
@@ -30,16 +32,16 @@ export default function SiteHeader({ page, onNavigate, username, dueCount }: {
   };
 
   return (
-    <header style={{ position: "sticky", top: 0, zIndex: 10, background: "color-mix(in srgb, var(--color-bg) 88%, transparent)", backdropFilter: "blur(8px)", borderBottom: "2px solid var(--color-text)" }}>
-      <nav className="site-nav" style={{ maxWidth: 1200, margin: "0 auto", padding: "var(--space-4) var(--space-8)", display: "flex", alignItems: "center", gap: "var(--space-8)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-          <Logo size={30} />
-          <span className="brand-name" style={{ fontFamily: "var(--font-heading)", fontSize: 19 }}>Monitorização Leça</span>
-        </div>
-        <div className="nav-links" style={{ display: "flex", gap: "var(--space-2)" }}>
+    <header className="site-header">
+      <nav className="site-nav">
+        <a href="#" className="brand" onClick={(e) => { e.preventDefault(); onNavigate("main"); }}>
+          <Logo size={40} />
+          <span className="brand-name">Monitorização Leça<small>Plantas invasoras do Rio Leça</small></span>
+        </a>
+        <div className="nav-links">
           <a {...link("main")}>Início</a>
           <a {...link("reports")} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            Ver registos
+            Registos
             {dueCount > 0 && <span className="nav-badge" title={`${dueCount} a precisar de verificação`} aria-label={`${dueCount} a precisar de verificação`}>{dueCount}</span>}
           </a>
           <a {...link("map")}>Mapa</a>
@@ -49,6 +51,10 @@ export default function SiteHeader({ page, onNavigate, username, dueCount }: {
           <button className="nav-pill" onClick={logOut} disabled={leaving} aria-label="Terminar sessão" title="Terminar sessão" style={{ border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
             <Icon name="logOut" size={15} />
             <span className="logout-label">Sair</span>
+          </button>
+          <button className="btn btn-primary header-cta" onClick={onReport} style={{ gap: 8 }}>
+            <Icon name="pin" size={16} />
+            Registar ocorrência
           </button>
         </div>
       </nav>

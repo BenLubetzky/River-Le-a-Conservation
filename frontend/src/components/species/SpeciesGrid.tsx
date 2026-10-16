@@ -1,28 +1,21 @@
 import Photo from "@/components/ui/Photo";
 import type { Species } from "@/types/plant";
 
+/** A card per invasive species: photo, then its names. */
 export default function SpeciesGrid({ species, onOpen }: { species: Species[]; onOpen: (i: number) => void }) {
   return (
-    <main className="page-main">
-      <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)", maxWidth: 640, padding: "48px 0 64px" }}>
-        <span className="tag tag-accent-2" style={{ alignSelf: "flex-start" }}>Rio Leça · Porto</span>
-        <h1 className="page-h1">Plantas invasoras ao longo do rio</h1>
-        <p style={{ fontSize: 17, margin: 0, color: "var(--color-neutral-700)", textWrap: "pretty" }}>As espécies exóticas invasoras afastam as plantas e os animais que dependem das margens do Leça. Aprenda a reconhecê-las.</p>
-      </section>
-
-      <section className="species-grid">
-        {species.map((p, i) => (
-          <button key={p.id} className="species-card" onClick={() => onOpen(i)}>
-            <div className="species-circle">
-              <Photo src={p.photos[0]} alt={p.common_name} />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 2, padding: "0 var(--space-2)" }}>
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: 21, lineHeight: 1.15 }}>{p.common_name}</span>
-              <span style={{ fontSize: 14, fontStyle: "italic", color: "var(--color-accent-2-700)" }}>{p.latin_name}</span>
-            </div>
-          </button>
-        ))}
-      </section>
-    </main>
+    <div className="species-grid">
+      {species.map((p, i) => (
+        <button key={p.id} className="species-card" onClick={() => onOpen(i)}>
+          <div className="species-circle">
+            <Photo src={p.photos[0]} alt={p.common_name} />
+          </div>
+          <div className="species-card-body">
+            <span style={{ fontFamily: "var(--font-heading)", fontWeight: 600, fontSize: 22, lineHeight: 1.2, color: "var(--color-heading)" }}>{p.common_name}</span>
+            <span style={{ fontSize: 15, fontStyle: "italic", color: "var(--color-neutral-700)" }}>{p.latin_name}</span>
+          </div>
+        </button>
+      ))}
+    </div>
   );
 }

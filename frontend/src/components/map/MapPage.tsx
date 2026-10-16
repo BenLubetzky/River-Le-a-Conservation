@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
+import PageHero from "@/components/layout/PageHero";
 import ReportMap, { type MapPoint } from "@/components/map/ReportMap";
 import Icon from "@/components/ui/Icon";
+import { photo } from "@/data/photos";
 import { RIVER_AREA_ASPECT, riverPoint } from "@/lib/riverArea";
 import { speciesNames } from "@/lib/species";
 import type { Species } from "@/types/plant";
@@ -26,12 +28,11 @@ export default function MapPage({ reports, species, userId, error, onRetry, onVi
   const off = shown.length - points.length;
 
   return (
-    <main className="page-main" style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-      <section style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)", padding: "48px 0 0", maxWidth: 640 }}>
-        <span className="tag tag-accent-2" style={{ alignSelf: "flex-start" }}>Rio Leça · Porto</span>
-        <h1 className="page-h1">Mapa</h1>
-        <p style={{ fontSize: 17, margin: 0, color: "var(--color-neutral-700)", textWrap: "pretty" }}>Onde foram registadas plantas invasoras ao longo do rio. Selecione um marcador para abrir o registo, ou clique em qualquer ponto junto ao rio para registar aí uma ocorrência.</p>
-      </section>
+    <>
+    <PageHero image={photo("ponte-sao-lazaro")} kicker="Rio Leça · Porto" title="Mapa">
+      Onde foram registadas plantas invasoras ao longo do rio. Selecione um marcador para abrir o registo, ou clique em qualquer ponto junto ao rio para registar aí uma ocorrência.
+    </PageHero>
+    <main className="page-main" style={{ paddingTop: 40, display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
 
       <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)", flexWrap: "wrap" }}>
         <button className="chip" aria-pressed={mine} onClick={() => setMine(!mine)} style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -46,7 +47,7 @@ export default function MapPage({ reports, species, userId, error, onRetry, onVi
       </div>
 
       {/* Shaped like the river area, so at the widest zoom the map shows exactly that area. */}
-      <section style={{ position: "relative", width: "100%", aspectRatio: RIVER_AREA_ASPECT, maxHeight: "75vh", minHeight: 300, borderRadius: "var(--radius-lg)", overflow: "hidden", background: "var(--color-surface)", boxShadow: "var(--shadow-sm)" }}>
+      <section style={{ position: "relative", width: "100%", aspectRatio: RIVER_AREA_ASPECT, maxHeight: "75vh", minHeight: 300, overflow: "hidden", background: "var(--color-surface)", boxShadow: "var(--shadow-md)" }}>
         <ReportMap points={points} onOpen={onView} onPick={onReportAt} />
         {error && (
           <div style={{ position: "absolute", inset: 0, zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "var(--space-3)", textAlign: "center", background: "color-mix(in srgb, var(--color-bg) 85%, transparent)" }}>
@@ -57,5 +58,6 @@ export default function MapPage({ reports, species, userId, error, onRetry, onVi
         )}
       </section>
     </main>
+    </>
   );
 }
