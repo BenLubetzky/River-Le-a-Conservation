@@ -6,12 +6,10 @@ import Logo from "@/components/ui/Logo";
 
 export type Page = "main" | "reports" | "map";
 
-export default function SiteHeader({ page, onNavigate, username, dueCount, onReport }: {
+export default function SiteHeader({ page, onNavigate, username, dueCount }: {
   page: Page; onNavigate: (page: Page) => void; username: string;
   /** Reports whose checkup is due, shown as a badge on View reports. */
   dueCount: number;
-  /** Open the report form (the header's call to action). */
-  onReport: () => void;
 }) {
   const router = useRouter();
   const [leaving, setLeaving] = useState(false);
@@ -51,10 +49,6 @@ export default function SiteHeader({ page, onNavigate, username, dueCount, onRep
           <button className="nav-pill" onClick={logOut} disabled={leaving} aria-label="Terminar sessão" title="Terminar sessão" style={{ border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
             <Icon name="logOut" size={15} />
             <span className="logout-label">Sair</span>
-          </button>
-          <button className="btn btn-primary header-cta" onClick={onReport} style={{ gap: 8 }}>
-            <Icon name="pin" size={16} />
-            Registar ocorrência
           </button>
         </div>
       </nav>

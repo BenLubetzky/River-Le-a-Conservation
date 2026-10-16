@@ -8,18 +8,20 @@ import type { Species } from "@/types/plant";
 import type { Report } from "@/types/report";
 
 /**
- * The main page: a banner over the river, what the project is, the ways in (cards), a few figures,
- * the invasive plants, and how to help.
+ * The main page. Guardians open it to report a plant, so the plants come first, right under a slim
+ * banner; the rest (ways in, figures, how to help) follows below.
  */
-export default function HomePage({ species, speciesError, onRetry, reports, onOpenPlant, onReports, onDue, onMap, onReport }: {
+export default function HomePage({ species, speciesError, onRetry, reports, onOpenPlant, onReportPlant, onReport, onReports, onDue, onMap }: {
   species: Species[] | null; speciesError: string; onRetry: () => void;
   reports: Report[] | null;
   onOpenPlant: (i: number) => void;
+  /** The report form, with this species chosen. */
+  onReportPlant: (i: number) => void;
+  onReport: () => void;
   onReports: () => void;
   /** The reports page, showing only those whose checkup is due. */
   onDue: () => void;
   onMap: () => void;
-  onReport: () => void;
 }) {
   const toPlants = () => document.getElementById("plantas")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -42,32 +44,60 @@ export default function HomePage({ species, speciesError, onRetry, reports, onOp
 
   return (
     <main>
-      <PageHero
-        home
-        image={photo("rio-leca-bosque")}
-        kicker="Rio Leça · Porto"
-        title="Proteger as margens do Leça das plantas invasoras"
-        actions={
-          <>
-            <button className="btn btn-primary btn-lg" onClick={onReport} style={{ gap: 8 }}><Icon name="pin" size={18} />Registar ocorrência</button>
-            <button className="btn btn-light btn-lg" onClick={toPlants}>Conhecer as plantas</button>
-          </>
-        }
-      >
-        Registamos, acompanhamos e removemos as espécies exóticas que afastam a vegetação nativa do rio.
+      <PageHero home image={photo("rio-leca-bosque")} kicker="Rio Leça · Porto" title="Plantas invasoras do Rio Leça">
+        Viu uma destas plantas junto ao rio? Toque em Registar para a assinalar, ou abra a planta para a conhecer.
       </PageHero>
 
-      <section className="section-wash" style={{ paddingBottom: 80 }}>
-        <div className="intro">
-          <span className="intro-mark" aria-hidden="true"><Reeds /></span>
-          <h2 className="section-title" style={{ margin: 0 }}>O rio é de todos. Cuidamos dele juntos.</h2>
-          <p>
-            Cada ocorrência registada ajuda a perceber onde as invasoras se estão a espalhar e onde a remoção está a resultar.
-            Qualquer guardião pode registar, verificar e acompanhar.
-          </p>
+      {due > 0 && (
+        <div className="section-inner" style={{ paddingTop: 24 }}>
+          <button className="checkup-callout" onClick={onDue}>
+            <span className="checkup-callout-icon"><Icon name="alert" size={22} /></span>
+            <span style={{ display: "flex", flexDirection: "column", gap: 2, textAlign: "left", flex: 1, minWidth: 0 }}>
+              <span style={{ fontFamily: "var(--font-heading)", fontWeight: 600, fontSize: 19 }}>{due} {due === 1 ? "registo precisa" : "registos precisam"} de verificação</span>
+              <span className="callout-sub" style={{ fontSize: 14, opacity: 0.85 }}>Passa perto de algum destes locais? Veja se as plantas ainda lá estão.</span>
+            </span>
+            <span className="checkup-callout-cta">Ver</span>
+          </button>
         </div>
+      )}
 
-        <div className="section-inner" style={{ marginTop: 64 }}>
+      <section id="plantas" className="section" style={{ paddingTop: 36, scrollMarginTop: 72 }}>
+        <div className="section-inner">
+          {species ? (
+            <SpeciesGrid species={species} onOpen={onOpenPlant} onReport={onReportPlant} />
+          ) : speciesError ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "var(--space-3)" }}>
+              <span style={{ fontFamily: "var(--font-heading)", fontSize: 22 }}>Não foi possível carregar as plantas</span>
+              <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{speciesError}</span>
+              <button className="btn btn-secondary" onClick={onRetry}>Tentar novamente</button>
+            </div>
+          ) : (
+            <span style={{ fontSize: 15, color: "var(--color-neutral-700)" }}>A carregar as plantas…</span>
+          )}
+        </div>
+      </section>
+
+      <section className="section section-wash">
+        <div className="section-inner" style={{ display: "flex", flexDirection: "column", gap: 56 }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 12 }}>
+            <span className="intro-mark" aria-hidden="true"><Reeds /></span>
+            <h2 className="section-title" style={{ margin: 0 }}>O rio é de todos. Cuidamos dele juntos.</h2>
+            <p className="section-lead">
+              Cada ocorrência registada ajuda a perceber onde as invasoras se estão a espalhar e onde a remoção está a resultar.
+            </p>
+          </div>
+
+          {stats && (
+            <div className="stats">
+              {stats.map((s) => (
+                <div key={s.label} className="stat">
+                  <span className="stat-figure">{s.figure}</span>
+                  <span className="stat-label">{s.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="feature-cards">
             {cards.map((c) => (
               <button key={c.title} className="feature-card" onClick={c.onClick}>
@@ -80,41 +110,6 @@ export default function HomePage({ species, speciesError, onRetry, reports, onOp
               </button>
             ))}
           </div>
-        </div>
-      </section>
-
-      {stats && (
-        <section className="section">
-          <div className="section-inner">
-            <div className="stats">
-              {stats.map((s) => (
-                <div key={s.label} className="stat">
-                  <span className="stat-figure">{s.figure}</span>
-                  <span className="stat-label">{s.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      <section id="plantas" className="section section-wash" style={{ scrollMarginTop: 72 }}>
-        <div className="section-inner" style={{ display: "flex", flexDirection: "column", gap: 40 }}>
-          <div>
-            <h2 className="section-title">Plantas invasoras ao longo do rio</h2>
-            <p className="section-lead">As espécies exóticas invasoras afastam as plantas e os animais que dependem das margens do Leça. Aprenda a reconhecê-las.</p>
-          </div>
-          {species ? (
-            <SpeciesGrid species={species} onOpen={onOpenPlant} />
-          ) : speciesError ? (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "var(--space-3)" }}>
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: 22 }}>Não foi possível carregar as plantas</span>
-              <span style={{ fontSize: 14, color: "var(--color-neutral-700)" }}>{speciesError}</span>
-              <button className="btn btn-secondary" onClick={onRetry}>Tentar novamente</button>
-            </div>
-          ) : (
-            <span style={{ fontSize: 15, color: "var(--color-neutral-700)" }}>A carregar as plantas…</span>
-          )}
         </div>
       </section>
 

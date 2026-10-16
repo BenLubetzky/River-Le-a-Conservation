@@ -292,12 +292,10 @@ a:hover { color: var(--color-accent-2-600); }
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(0, 32, 30, 0.15) 0%, rgba(0, 32, 30, 0.35) 45%, rgba(0, 32, 30, 0.78) 100%);
 }
-.hero--home { min-height: min(78vh, 720px); align-items: center; }
-.hero--home::before { background: linear-gradient(90deg, rgba(0, 32, 30, 0.78) 0%, rgba(0, 32, 30, 0.45) 55%, rgba(0, 32, 30, 0.1) 100%); }
+.hero--home { min-height: 300px; }
 .hero-inner { position: relative; width: 100%; max-width: 1240px; margin: 0 auto; padding: 56px 32px; display: flex; flex-direction: column; gap: 14px; }
 .hero-kicker { font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-lime); }
 .hero-title { margin: 0; color: #fff; font-size: 54px; line-height: 1.08; max-width: 780px; text-wrap: balance; }
-.hero--home .hero-title { font-size: 66px; }
 .hero-sub { margin: 0; font-size: 19px; max-width: 620px; color: rgba(255, 255, 255, 0.92); text-wrap: pretty; }
 .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
 .btn-light { border: 2px solid #fff; color: #fff; }
@@ -366,14 +364,25 @@ a:hover { color: var(--color-accent-2-600); }
 /* — species — */
 .species-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
 .species-card {
-  display: flex; flex-direction: column; text-align: left; cursor: pointer; background: #fff; border: none; padding: 0;
-  font: inherit; color: inherit; box-shadow: var(--shadow-sm); transition: box-shadow .25s, transform .25s;
+  display: flex; flex-direction: column; background: #fff; box-shadow: var(--shadow-sm); transition: box-shadow .25s, transform .25s;
 }
-.species-card:hover, .species-card:focus-visible { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.species-card:hover, .species-card:focus-within { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.species-card-open {
+  display: flex; flex-direction: column; flex: 1; text-align: left; cursor: pointer; background: none; border: none; padding: 0;
+  font: inherit; color: inherit;
+}
 .species-circle { width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: var(--color-surface); }
 .species-circle img { transition: transform .5s; }
-.species-card:hover .species-circle img { transform: scale(1.05); }
-.species-card-body { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 2px; border-top: 4px solid var(--color-accent-2-600); }
+.species-card-open:hover .species-circle img { transform: scale(1.05); }
+.species-card-body { padding: 16px 20px 14px; display: flex; flex-direction: column; gap: 2px; border-top: 4px solid var(--color-accent-2-600); }
+.species-card-report {
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 20px 18px; min-height: 46px;
+  border: 2px solid var(--color-accent); border-radius: var(--radius-md); background: #fff; color: var(--color-accent-700);
+  font: inherit; font-weight: 500; font-size: 16px; cursor: pointer; transition: background .15s, color .15s;
+}
+.species-card-report:hover { background: var(--color-accent); color: #fff; }
+.species-name { font-family: var(--font-heading); font-weight: 600; font-size: 22px; line-height: 1.2; color: var(--color-heading); }
+.species-latin { font-size: 15px; font-style: italic; color: var(--color-neutral-700); }
 
 .gallery-thumb {
   width: 92px; height: 69px; padding: 0; border-radius: var(--radius-sm); overflow: hidden; cursor: pointer;
@@ -470,7 +479,6 @@ a:hover { color: var(--color-accent-2-600); }
   .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filters > :first-child { grid-column: 1 / -1; }
   .help-band { grid-template-columns: minmax(0, 1fr); }
-  .header-cta { display: none !important; }
 }
 @media (max-width: 640px) {
   .page-main, .section-inner, .hero-inner { padding-inline: 16px; }
@@ -481,8 +489,13 @@ a:hover { color: var(--color-accent-2-600); }
   .nav-pill { padding: 8px 10px; font-size: 14px; }
   .nav-pill[aria-current='page']::after { left: 10px; right: 10px; }
   .hero { min-height: 260px; }
-  .hero-title, .hero--home .hero-title { font-size: 36px; }
+  .hero-title { font-size: 36px; }
   .hero-sub { font-size: 16px; }
+  /* Home: just the title over the photo, so the plants show on the first screen. */
+  .hero--home { min-height: 150px; }
+  .hero--home .hero-inner { padding-block: 28px 22px; gap: 6px; }
+  .hero--home .hero-sub, .hero--home .hero-kicker, .callout-sub { display: none; }
+  .hero--home .hero-title { font-size: 30px; }
   .intro { margin: -40px 16px 0; padding: 32px 20px; }
   .feature-cards, .stats { grid-template-columns: minmax(0, 1fr); }
   .stat-figure { font-size: 44px; }
@@ -490,7 +503,11 @@ a:hover { color: var(--color-accent-2-600); }
   .help-panel { padding: 40px 20px; }
   .footer-inner { grid-template-columns: minmax(0, 1fr); padding: 40px 16px 20px; gap: 28px; }
   .footer-bottom { padding-inline: 16px; }
-  .species-grid { grid-template-columns: minmax(0, 1fr); }
+  .species-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .species-card-body { padding: 10px 12px; }
+  .species-name { font-size: 17px; }
+  .species-latin { font-size: 13px; }
+  .species-card-report { margin: 0 10px 10px; min-height: 42px; font-size: 15px; }
   .page-h1 { font-size: 38px; }
   .detail-h1 { font-size: 44px; }
   .char-row { grid-template-columns: minmax(0, 1fr); gap: 2px; }
@@ -500,8 +517,23 @@ a:hover { color: var(--color-accent-2-600); }
   .checkup-choices { grid-template-columns: minmax(0, 1fr); }
   .checkup-callout { flex-wrap: wrap; padding: var(--space-4); }
 }
-@media (min-width: 901px) {
-  .report-fab { display: none !important; }
+
+/* — the floating report button — */
+.report-fab {
+  position: fixed; left: 0; right: 0; bottom: 24px; z-index: 20;
+  display: flex; justify-content: center; pointer-events: none;
+}
+.report-fab-btn {
+  pointer-events: auto; gap: 12px; padding: 16px 34px; font-size: 18px; white-space: nowrap;
+  border-radius: 999px; box-shadow: 0 0 0 4px #fff, 0 14px 34px color-mix(in srgb, #0f3a36 38%, transparent);
+  transition: transform .2s, background .2s;
+}
+.report-fab-btn:hover { transform: translateY(-2px); }
+/* Room at the bottom of every page, so the button never hides the last of the content. */
+.site-footer { padding-bottom: 96px; }
+@media (max-width: 640px) {
+  .report-fab { bottom: 16px; }
+  .report-fab-btn { padding: 14px 26px; font-size: 17px; }
 }
 
 /* Checkups: reports whose checkup is due are meant to catch the eye. */

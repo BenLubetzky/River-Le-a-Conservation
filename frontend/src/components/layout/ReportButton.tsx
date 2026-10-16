@@ -1,12 +1,18 @@
 import Icon from "@/components/ui/Icon";
 
-/** The "Registar ocorrência" button floating at the bottom of every page, on narrow screens (wider ones have it in the header). */
-export default function ReportButton({ onClick }: { onClick: () => void }) {
+/**
+ * The "Registar ocorrência" button floating at the bottom centre of every page: reporting is what
+ * guardians come to do, so it's always one tap away. On a plant's page it names that plant.
+ */
+export default function ReportButton({ onClick, species }: { onClick: () => void; species?: string }) {
   return (
-    <div className="report-fab" style={{ position: "fixed", left: 0, right: 0, bottom: "var(--space-6)", display: "flex", justifyContent: "center", pointerEvents: "none", zIndex: 20 }}>
-      <button className="btn btn-primary" onClick={onClick} style={{ pointerEvents: "auto", padding: "14px 28px", fontSize: 16, boxShadow: "var(--shadow-lg)", gap: 10, whiteSpace: "nowrap" }}>
-        <Icon name="pin" />
-        Registar ocorrência
+    <div className="report-fab">
+      <button className="btn btn-primary report-fab-btn" onClick={onClick}>
+        <Icon name="pin" size={22} />
+        <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", lineHeight: 1.15 }}>
+          Registar ocorrência
+          {species && <small style={{ fontSize: 13, fontWeight: 400, opacity: 0.92 }}>{species}</small>}
+        </span>
       </button>
     </div>
   );

@@ -31,6 +31,7 @@ export default function RioLeca({ user }: { user: User }) {
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
   const [view, setView] = useState<number | null>(null); // id of the report open in the viewer
   const [reporting, setReporting] = useState(false);
+  const [reportSp, setReportSp] = useState(-1); // species chosen from a plant card's report button
   const [reportAt, setReportAt] = useState<{ lat: number; lng: number } | undefined>(); // spot picked on the map
   const [editing, setEditing] = useState<Report | null>(null); // own report open in the form
   const [lb, setLb] = useState<{ look: LookAlike; i: number } | null>(null);
@@ -58,7 +59,7 @@ export default function RioLeca({ user }: { user: User }) {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-bg)", color: "var(--color-text)", fontFamily: "var(--font-body)" }}>
-      <SiteHeader page={page} onNavigate={navigate} username={user.username} dueCount={reports?.filter(isDue).length ?? 0} onReport={() => setReporting(true)} />
+      <SiteHeader page={page} onNavigate={navigate} username={user.username} dueCount={reports?.filter(isDue).length ?? 0} />
 
       {page === "main" && !plant && (
         <HomePage
@@ -67,6 +68,7 @@ export default function RioLeca({ user }: { user: User }) {
           onReports={() => navigate("reports")}
           onDue={() => { setFilters({ ...NO_FILTERS, due: true }); navigate("reports"); }}
           onMap={() => navigate("map")}
+          onReportPlant={(i) => { setReportSp(i); setReporting(true); }}
           onReport={() => setReporting(true)}
         />
       )}
@@ -95,7 +97,7 @@ export default function RioLeca({ user }: { user: User }) {
 
       <SiteFooter onNavigate={navigate} />
 
-      <ReportButton onClick={() => setReporting(true)} />
+      <ReportButton onClick={() => setReporting(true)} species={plant?.common_name} />
 
       {lb && (
         <Lightbox
@@ -113,7 +115,7 @@ export default function RioLeca({ user }: { user: User }) {
       )}
 
       {reporting && (
-        <ReportFormDialog species={species ?? []} username={user.username} initialSp={page === "main" ? sel : -1} initialCoords={reportAt} onClose={() => { setReporting(false); setReportAt(undefined); }} onSaved={addReport} />
+        <ReportFormDialog species={species ?? []} username={user.username} initialSp={reportSp >= 0 ? reportSp : page === "main" ? sel : -1} initialCoords={reportAt} onClose={() => { setReporting(false); setReportAt(undefined); setReportSp(-1); }} onSaved={addReport} />
       )}
     </div>
   );
