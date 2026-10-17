@@ -23,7 +23,7 @@ services:
       - key: DATABASE_URL
         sync: false
       # Supabase → Project Settings → Data API → Project URL.
-      - key: SUPABASE_URL
+      - key: SUPABASE_URL 
         sync: false
       # Supabase → Project Settings → API Keys → Secret key.
       - key: SUPABASE_SECRET_KEY
