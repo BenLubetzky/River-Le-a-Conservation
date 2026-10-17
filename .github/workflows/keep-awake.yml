@@ -19,4 +19,4 @@ jobs:
       - run: curl --fail --silent --show-error --retry 3 --retry-all-errors --max-time 90 "$HEALTH_URL"
         env:
           # Override in Settings → Secrets and variables → Actions → Variables.
-          HEALTH_URL: ${{ vars.HEALTH_URL || 'https://guardioes-do-leca.benlubetzky.workers.dev/api/health' }}
+          HEALTH_URL: ${{ vars.HEALTH_URL || 'https://conservacao-leca.benlubetzky.workers.dev/api/health' }}

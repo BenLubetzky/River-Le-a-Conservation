@@ -56,11 +56,11 @@ It opens on http://localhost:8502. The API runs on http://localhost:8000; the we
 
 | Part | Where | Address |
 | --- | --- | --- |
-| Website | Cloudflare Workers | https://guardioes-do-leca.benlubetzky.workers.dev |
-| API | Railway (EU West); trial move to Render (Frankfurt) | https://api-production-9c06f.up.railway.app |
+| Website | Cloudflare Workers | https://conservacao-leca.benlubetzky.workers.dev |
+| API | Render (Frankfurt), on trial; Railway (EU West) until it is stopped | https://conservacao-leca-api.onrender.com |
 | Database and photos | Supabase | |
 
-The browser only talks to the website. `npm run build` exports the site as static files (`frontend/out/`), and a small Cloudflare Worker ([frontend/worker/index.ts](frontend/worker/index.ts)) serves them and forwards `/api/...` to the API on Railway. So the login cookie is first-party. During `npm run dev`, Next.js does that forwarding instead.
+The browser only talks to the website. `npm run build` exports the site as static files (`frontend/out/`), and a small Cloudflare Worker ([frontend/worker/index.ts](frontend/worker/index.ts)) serves them and forwards `/api/...` to the API on Render. So the login cookie is first-party. During `npm run dev`, Next.js does that forwarding instead.
 
 Neither is deployed from GitHub; you deploy from your computer:
 

@@ -1,8 +1,8 @@
 // Cloudflare Workers config for the website: the static export in out/ (from `npm run build`),
-// plus worker/index.ts, which forwards /api/... to the backend on Railway.
+// plus worker/index.ts, which forwards /api/... to the backend on Render.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "guardioes-do-leca",
+  "name": "conservacao-leca",
   "main": "worker/index.ts",
   "compatibility_date": "2026-10-01",
   "assets": {
@@ -15,6 +15,6 @@
     "run_worker_first": ["/api/*"]
   },
   "vars": {
-    "BACKEND_URL": "https://api-production-9c06f.up.railway.app"
+    "BACKEND_URL": "https://conservacao-leca-api.onrender.com"
   }
 }

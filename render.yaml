@@ -2,7 +2,7 @@
 # Render → New → Blueprint → this repository. It asks for the values marked `sync: false`.
 services:
   - type: web
-    name: guardioes-do-leca-api
+    name: conservacao-leca-api
     runtime: python
     # Closest Render region to the Supabase database (eu-west-1, Ireland).
     region: frankfurt
