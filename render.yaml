@@ -1,4 +1,4 @@
-# Render Blueprint for the API (trial move from Railway; see README "Deploying").
+# Render Blueprint for the API (see README "Deploying").
 # Render → New → Blueprint → this repository. It asks for the values marked `sync: false`.
 services:
   - type: web
@@ -11,7 +11,7 @@ services:
     # Python version: backend/.python-version. uv is used because backend/uv.lock is there.
     # The admin page's group (Streamlit) isn't needed on the server.
     buildCommand: uv sync --frozen --no-group admin
-    # Free services have no pre-deploy step, so migrations run on start, as on Railway.
+    # Free services have no pre-deploy step, so migrations run on start.
     startCommand: uv run --no-sync python -m alembic upgrade head && uv run --no-sync python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     # Only deploy when the API changes, not the website.
