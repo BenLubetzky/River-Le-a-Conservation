@@ -4,7 +4,7 @@
 interface Env {
   /** The static files in out/. */
   ASSETS: { fetch(request: Request): Promise<Response> };
-  /** The backend's address, e.g. https://api-production-9c06f.up.railway.app */
+  /** The backend's address, e.g. https://conservacao-leca-api.onrender.com */
   BACKEND_URL: string;
 }
 
