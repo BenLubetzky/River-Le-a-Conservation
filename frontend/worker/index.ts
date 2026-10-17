@@ -19,6 +19,17 @@ const worker = {
     }
     return env.ASSETS.fetch(request);
   },
+
+  // Runs on the cron in wrangler.jsonc. Calling /health keeps the API awake (Render's free plan
+  // sleeps after 15 idle minutes) and, since /health queries it, the Supabase free-tier database too.
+  async scheduled(_controller: unknown, env: Env, ctx: { waitUntil(promise: Promise<unknown>): void }): Promise<void> {
+    const health = env.BACKEND_URL.replace(/\/$/, "") + "/health";
+    ctx.waitUntil(
+      fetch(health).then((res) => {
+        if (!res.ok) throw new Error(`${health} answered ${res.status}`);
+      }),
+    );
+  },
 };
 
 export default worker;

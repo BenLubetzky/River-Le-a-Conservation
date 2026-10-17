@@ -16,5 +16,9 @@
   },
   "vars": {
     "BACKEND_URL": "https://conservacao-leca-api.onrender.com"
+  },
+  // Pings the API's /health every 10 minutes (the scheduled handler in worker/index.ts).
+  "triggers": {
+    "crons": ["*/10 * * * *"]
   }
 }
