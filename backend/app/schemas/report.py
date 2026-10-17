@@ -6,6 +6,14 @@ from pydantic import BaseModel
 
 from app.models.enums import Abundance, CheckupOutcome, GrowthStage, Phenology
 from app.models.report import Report
+from app.services.storage import thumb_path
+
+
+def thumb_url(path: str | None, urls: dict[str, str]) -> str | None:
+    """The signed URL of a photo's thumbnail, falling back to the photo's own."""
+    if not path:
+        return None
+    return urls.get(thumb_path(path)) or urls.get(path)
 
 
 class CheckupOut(BaseModel):
@@ -14,6 +22,7 @@ class CheckupOut(BaseModel):
     checked_at: datetime
     notes: str | None
     photo_urls: list[str]  # signed URLs, valid for a limited time
+    thumb_urls: list[str]  # one per photo URL: its thumbnail, or the photo itself if it has none
 
 
 class CheckupIn(BaseModel):
@@ -38,6 +47,7 @@ class ReportOut(BaseModel):
     user_id: int | None  # who made it, and so who can edit it; None once that user is deleted
     notes: str | None
     photo_url: str | None  # signed URL, valid for a limited time
+    thumb_url: str | None  # the photo's thumbnail, or the photo itself if it has none
     created_at: datetime
     checkup_due: date | None
     closed_at: datetime | None  # set when a checkup found the plants gone
@@ -52,12 +62,14 @@ class ReportOut(BaseModel):
             latitude=r.latitude, longitude=r.longitude, location_text=r.location_text,
             reporter_name=r.reporter_name, user_id=r.user_id, notes=r.notes,
             photo_url=urls.get(r.photo_path or ""),
+            thumb_url=thumb_url(r.photo_path, urls),
             created_at=r.created_at,
             checkup_due=r.checkup_due, closed_at=r.closed_at,
             checkups=[
                 CheckupOut(
                     outcome=c.outcome, checked_by=c.checked_by, checked_at=c.checked_at, notes=c.notes,
                     photo_urls=[urls[p] for p in c.photo_paths if p in urls],
+                    thumb_urls=[thumb_url(p, urls) for p in c.photo_paths if p in urls],
                 )
                 for c in r.checkups
             ],

@@ -6,5 +6,11 @@ Thumbs.db
 .vscode/
 .idea/
 
-# env files
+# env files (secrets). The example, which only has placeholders, is kept.
 .env*
+!.env.example
+
+# Personal notes and source documents, kept out of the repository
+/Costs of operation*.txt
+/Things to ask.txt
+/Invasoras.pdf

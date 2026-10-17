@@ -22,3 +22,7 @@ default-groups = ["admin"]
 admin = [
     "streamlit>=1.65.0",
 ]
+# For backup.py, run by .github/workflows/backup.yml.
+backup = [
+    "boto3>=1.35",
+]

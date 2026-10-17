@@ -8,6 +8,7 @@ import { ABUNDANCE, PHENOLOGY, STAGE } from "@/data/reportOptions";
 import { daysFromToday, today } from "@/lib/checkup";
 import { stop } from "@/lib/events";
 import { fmtCoords, nowLocalInput, toLocalInput } from "@/lib/format";
+import { preparePhoto, type PreparedPhoto } from "@/lib/photos";
 import type { Species } from "@/types/plant";
 import type { Abundance, Phenology, Report, Stage } from "@/types/report";
 
@@ -15,8 +16,11 @@ type ReportForm = {
   sp: number;
   query: string;
   list: boolean;
-  photo: File | null;
+  /** The picked photo, shrunk and with its thumbnail. */
+  photo: PreparedPhoto | null;
   photoUrl: string;
+  /** The picked photo is being shrunk. */
+  preparing: boolean;
   /** Editing: take the report's current photo off. */
   removePhoto: boolean;
   date: string;
@@ -40,7 +44,7 @@ type ReportForm = {
 const emptyForm = (species: Species[], sp: number): ReportForm => {
   const p = species[sp];
   return {
-    sp: p ? sp : -1, query: p ? p.common_name : "", list: false, photo: null, photoUrl: "", removePhoto: false, date: nowLocalInput(),
+    sp: p ? sp : -1, query: p ? p.common_name : "", list: false, photo: null, photoUrl: "", preparing: false, removePhoto: false, date: nowLocalInput(),
     abundance: "", stage: "", phenology: "", coords: null, locating: false, locationError: "", locationText: "",
     notes: "", checkup: p ? daysFromToday(p.checkup_days) : "", checkupSet: false, submitting: false, error: "", sent: false,
   };
@@ -85,7 +89,7 @@ export default function ReportFormDialog({ species, username, initialSp, initial
     onClose();
   };
   const submit = async () => {
-    if (rep.sp < 0 || !rep.date || rep.submitting) return;
+    if (rep.sp < 0 || !rep.date || rep.submitting || rep.preparing) return;
     if (rep.checkup && rep.checkup <= today()) {
       setRep({ error: "Escolha uma data de verificação depois de hoje, ou nenhuma verificação." });
       return;
@@ -104,7 +108,8 @@ export default function ReportFormDialog({ species, username, initialSp, initial
         location_text: rep.locationText.trim() || undefined,
         notes: rep.notes.trim() || undefined,
         checkup_due: rep.checkup || undefined,
-        photo: rep.photo ?? undefined,
+        photo: rep.photo?.file,
+        photo_thumb: rep.photo?.thumb,
       };
       if (editing) {
         onSaved(await updateReport(editing.id, { ...fields, remove_photo: rep.removePhoto }));
@@ -126,15 +131,17 @@ export default function ReportFormDialog({ species, username, initialSp, initial
     { key: "stage", label: "Estado", opts: STAGE },
     { key: "phenology", label: "Flor ou fruto", opts: PHENOLOGY },
   ] as const;
-  const onPhoto = (e: ChangeEvent<HTMLInputElement>) => {
+  const onPhoto = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    if (file.size > 10 * 1024 * 1024) {
-      setRep({ error: "Essa fotografia tem mais de 10 MB. Escolha uma mais pequena." });
-      return;
+    setRep({ preparing: true, error: "" });
+    try {
+      const photo = await preparePhoto(file);
+      releasePreview(rep.photoUrl);
+      setRep({ photo, photoUrl: URL.createObjectURL(photo.thumb ?? photo.file), preparing: false });
+    } catch (err) {
+      setRep({ preparing: false, error: (err as Error).message });
     }
-    releasePreview(rep.photoUrl);
-    setRep({ photo: file, photoUrl: URL.createObjectURL(file), error: "" });
   };
   const removePhoto = () => {
     releasePreview(rep.photoUrl);
@@ -210,8 +217,8 @@ export default function ReportFormDialog({ species, username, initialSp, initial
                   {rep.photoUrl ? <Photo src={rep.photoUrl} washed={false} /> : <Icon name="camera" size={24} color="var(--color-accent-2-800)" />}
                 </span>
                 <span style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
-                  <span style={{ fontFamily: "var(--font-heading)", fontSize: 16 }}>{rep.photoUrl ? "Mudar fotografia" : "Adicionar fotografia"}</span>
-                  <span style={{ fontSize: 13, color: "var(--color-neutral-700)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{rep.photo?.name || "JPEG, PNG, WebP ou HEIC, até 10 MB"}</span>
+                  <span style={{ fontFamily: "var(--font-heading)", fontSize: 16 }}>{rep.preparing ? "A preparar a fotografia…" : rep.photoUrl ? "Mudar fotografia" : "Adicionar fotografia"}</span>
+                  <span style={{ fontSize: 13, color: "var(--color-neutral-700)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{rep.photo?.file.name || "JPEG, PNG, WebP ou HEIC, até 10 MB"}</span>
                 </span>
               </label>
               {rep.photoUrl && (
@@ -283,7 +290,7 @@ export default function ReportFormDialog({ species, username, initialSp, initial
 
             <div className="dialog-actions" style={{ marginTop: 0 }}>
               <button className="btn btn-ghost" onClick={close}>Cancelar</button>
-              <button className="btn btn-primary" onClick={submit} disabled={rep.sp < 0 || !rep.date || rep.submitting}>{editing ? (rep.submitting ? "A guardar…" : "Guardar alterações") : rep.submitting ? "A enviar…" : "Enviar registo"}</button>
+              <button className="btn btn-primary" onClick={submit} disabled={rep.sp < 0 || !rep.date || rep.submitting || rep.preparing}>{editing ? (rep.submitting ? "A guardar…" : "Guardar alterações") : rep.submitting ? "A enviar…" : "Enviar registo"}</button>
             </div>
           </div>
         )}

@@ -2,7 +2,7 @@ import logging
 from datetime import UTC, date, datetime, timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
@@ -24,10 +24,11 @@ def clean(s: str | None) -> str | None:
     return s or None
 
 
-def sign_photos(paths: list[str | None]) -> dict[str, str]:
-    """Signed URLs by photo path. If signing fails, reports are still returned, just without photos."""
+def sign_photos(paths: list[str]) -> dict[str, str]:
+    """Signed URLs by path, for the photos and their thumbnails. If signing fails, reports are still
+    returned, just without photos."""
     try:
-        return storage.signed_urls([p for p in paths if p])
+        return storage.signed_urls([q for p in paths for q in (p, storage.thumb_path(p))])
     except Exception:
         log.exception("Could not sign photo URLs")
         return {}
@@ -111,8 +112,24 @@ def report_fields(
 ReportFields = Annotated[dict, Depends(report_fields)]
 
 
-def save_photo(photo: UploadFile | None) -> str | None:
-    """Upload the photo, if one was sent, and return its path in the bucket."""
+def read_thumb(thumb: UploadFile | None) -> bytes | None:
+    """The thumbnail's bytes, checked. None if none was sent, or it's empty (the website sends an
+    empty one for a photo it couldn't make a thumbnail of)."""
+    if thumb is None or not thumb.filename:
+        return None
+    max_bytes = get_settings().max_thumb_bytes
+    data = thumb.file.read(max_bytes + 1)
+    if not data:
+        return None
+    if thumb.content_type != storage.THUMB_TYPE:
+        raise HTTPException(422, "A miniatura tem de ser uma imagem JPEG.")
+    if len(data) > max_bytes:
+        raise HTTPException(413, f"A miniatura tem mais de {max_bytes // 1024} KB.")
+    return data
+
+
+def save_photo(photo: UploadFile | None, thumb: UploadFile | None = None) -> str | None:
+    """Upload the photo, if one was sent, with its thumbnail, and return its path in the bucket."""
     if photo is None or not photo.filename:
         return None
     if photo.content_type not in storage.ALLOWED_TYPES:
@@ -120,9 +137,10 @@ def save_photo(photo: UploadFile | None) -> str | None:
     max_bytes = get_settings().max_photo_bytes
     data = photo.file.read(max_bytes + 1)
     if len(data) > max_bytes:
-        raise HTTPException(413, "A fotografia tem mais de 10 MB.")
+        raise HTTPException(413, f"A fotografia tem mais de {max_bytes // (1024 * 1024)} MB.")
+    thumb_data = read_thumb(thumb)
     try:
-        return storage.upload_photo(data, photo.content_type)
+        return storage.upload_photo(data, photo.content_type, thumb_data)
     except Exception:
         log.exception("Photo upload failed")
         raise HTTPException(502, "Não foi possível guardar a fotografia. Tente novamente.")
@@ -133,13 +151,15 @@ def report_out(report: Report) -> ReportOut:
 
 
 @router.post("", status_code=201)
-def create_report(db: DB, user: CurrentUser, fields: ReportFields, photo: UploadFile | None = None) -> ReportOut:
+def create_report(
+    db: DB, user: CurrentUser, fields: ReportFields, photo: UploadFile | None = None, photo_thumb: UploadFile | None = None,
+) -> ReportOut:
     report = Report(
         **fields,
         user_id=user.id,
         # Always the logged-in user's name. Kept on the report, so it still shows if the user is deleted.
         reporter_name=user.username,
-        photo_path=save_photo(photo),
+        photo_path=save_photo(photo, photo_thumb),
     )
     db.add(report)
     db.commit()
@@ -154,6 +174,7 @@ def update_report(
     report_id: int,
     fields: ReportFields,
     photo: UploadFile | None = None,
+    photo_thumb: UploadFile | None = None,
     remove_photo: Annotated[bool, Form(description="Remove the current photo (ignored if a new one is sent)")] = False,
 ) -> ReportOut:
     """Replace a report's details. Its author can always; anyone can once its checkup is due, and
@@ -168,7 +189,7 @@ def update_report(
     for key, value in fields.items():
         setattr(report, key, value)
     old_photo = report.photo_path
-    if new_photo := save_photo(photo):
+    if new_photo := save_photo(photo, photo_thumb):
         report.photo_path = new_photo
     elif remove_photo:
         report.photo_path = None
@@ -207,6 +228,9 @@ def postpone_checkup(
     next_checkup: Annotated[date, Form(description="The day to try the checkup again; must be after today")],
     notes: Annotated[str | None, Form(max_length=2000, description="Why it couldn't be checked")] = None,
     photos: list[UploadFile] | None = None,
+    photo_thumbs: Annotated[
+        list[UploadFile] | None, File(description="One per photo, in the same order; an empty file for none")
+    ] = None,
 ) -> ReportOut:
     """Record that the spot couldn't be checked (no access, flooded…) and move the checkup to a later
     day, optionally with a note and photos. The report is otherwise unchanged. Anyone can, once the
@@ -218,10 +242,13 @@ def postpone_checkup(
     photos = [f for f in photos or [] if f.filename]
     if len(photos) > MAX_CHECKUP_PHOTOS:
         raise HTTPException(422, f"Adicione no máximo {MAX_CHECKUP_PHOTOS} fotografias.")
+    thumbs = photo_thumbs or []
+    if thumbs and len(thumbs) != len(photos):
+        raise HTTPException(422, "Envie uma miniatura por fotografia, ou nenhuma.")
     saved: list[str] = []
     try:
-        for f in photos:
-            saved.append(save_photo(f))
+        for i, f in enumerate(photos):
+            saved.append(save_photo(f, thumbs[i] if thumbs else None))
         record_checkup(db, report, user, CheckupOutcome.postponed, clean(notes), saved)
         db.commit()
     except Exception:

@@ -1,0 +1,1124 @@
+{
+ "species": [
+  {
+   "id": "ipomoea",
+   "latin_name": "Ipomoea indica",
+   "common_name": "Bons-dias (Blue morning glory)",
+   "local_name": "Bons-dias",
+   "family": "Convolvulaceae",
+   "native_range": "Zonas tropicais da América do Sul, Ásia e Havai",
+   "flowering": "Junho – novembro",
+   "habitat": "Sebes, taludes e árvores junto às margens do rio",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "Não deixe fragmentos de caule ou raiz no solo: enraízam com facilidade e formam novos focos de invasão.",
+   "display_order": 0,
+   "checkup_days": 14,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Bons-dias_%28Ipomoea_indica%29_em_terreno_baldio_em_Bag%C3%A9.jpg/1280px-Bons-dias_%28Ipomoea_indica%29_em_terreno_baldio_em_Bag%C3%A9.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Bons-dias_%28Ipomoea_indica%29_em_terreno_baldio_em_Bag%C3%A9_-_54958650515.jpg/1280px-Bons-dias_%28Ipomoea_indica%29_em_terreno_baldio_em_Bag%C3%A9_-_54958650515.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Ipomoea_August_2007-1.jpg/1280px-Ipomoea_August_2007-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ],
+   "characteristics": [
+    {
+     "label": "Porte",
+     "text": "Planta trepadeira."
+    },
+    {
+     "label": "Flores",
+     "text": "Normalmente azuis a roxas, por vezes brancas."
+    },
+    {
+     "label": "Folhas",
+     "text": "Inteiras a tripartidas, acuminadas, largamente ovadas a cordiformes."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual",
+     "text": "Arranque à mão, de preferência na época das chuvas, com o solo húmido, para facilitar a remoção do sistema radicular. Garanta que não ficam fragmentos no solo (novos focos de invasão)."
+    },
+    {
+     "title": "Corte sucessivo (se estiver misturada com nativas)",
+     "text": "Se estiver enredada numa árvore ou arbusto nativo (salgueiro ou amieiro), não puxe os caules à força, pois pode partir os ramos da árvore. Corte o caule da Ipomoea rente ao chão e concentre-se em arrancar a raiz do solo."
+    },
+    {
+     "title": "Após a remoção",
+     "text": "Retire o material arrancado do local para posterior destruição. Coloque-o num saco fechado para o lixo comum (indiferenciado) ou deixe-o secar completamente ao sol, em cima de uma lona e longe da água, até estar totalmente desidratado («morto»)."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte entre 2 e 4 semanas após a primeira intervenção e, depois, mensalmente durante o primeiro verão e outono."
+    },
+    {
+     "title": "Monitorização",
+     "text": "Controle a área nas mudanças de estação, com especial atenção na primavera e no verão. Recomenda-se fazer a remoção inicial no inverno: o sucesso nota-se na primavera seguinte, que revela se há sementes dormentes no solo a germinar. Monitorize durante, pelo menos, 2 a 3 anos."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "calystegia-sepium",
+     "shared_traits": [
+      "Mesmo hábito trepador"
+     ],
+     "differences": [
+      "Flores grandes e brancas"
+     ]
+    },
+    {
+     "native_plant_id": "convolvulus-arvensis",
+     "shared_traits": [
+      "Trepadeira da mesma família, com flores em funil"
+     ],
+     "differences": [
+      "Mais rasteira e mais pequena",
+      "Flores brancas ou rosadas"
+     ]
+    },
+    {
+     "native_plant_id": "solanum-dulcamara",
+     "shared_traits": [
+      "Trepadeira",
+      "Flores roxas ou azuladas"
+     ],
+     "differences": [
+      "Flores pequenas (cerca de 1–1,5 cm), em forma de estrela, com as pétalas viradas para trás e o centro amarelo; as da Ipomoea são grandes (6–8 cm) e em forma de funil",
+      "Produz bagas vermelhas e brilhantes"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "arundo",
+   "latin_name": "Arundo donax",
+   "common_name": "Cana (Giant reed)",
+   "local_name": "Cana",
+   "family": "Poaceae",
+   "native_range": "Origem incerta; presumivelmente Europa oriental e Ásia temperada e tropical",
+   "flowering": "Agosto – outubro",
+   "habitat": "Margens do rio, valas e zonas húmidas; também bermas e terrenos agrícolas",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "Nunca deixe rizomas ou caules perto da água: os fragmentos são levados pela corrente e enraízam a jusante.",
+   "display_order": 1,
+   "checkup_days": 14,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Botanischer_Garten_Berlin-Dahlem_10-2014_photo21_Arundo_donax.jpg/1280px-Botanischer_Garten_Berlin-Dahlem_10-2014_photo21_Arundo_donax.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Giant_Reed_%28Canna_Comune%29_%28Arundo_donax%29_-_Rome%2C_Italy_2024-03-02.jpg/1280px-Giant_Reed_%28Canna_Comune%29_%28Arundo_donax%29_-_Rome%2C_Italy_2024-03-02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/8/84/Rizoma_ca%C3%B1a_com%C3%BAn.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://upload.wikimedia.org/wikipedia/commons/5/55/Arundo_donax_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ],
+   "characteristics": [
+    {
+     "label": "Porte",
+     "text": "Erva perene robusta, com colmos (caules) simples ou pouco ramificados e os nós envolvidos pelas bainhas das folhas."
+    },
+    {
+     "label": "Folhas",
+     "text": "Lanceolado-lineares, de margens cortantes, com aurículas verde-amareladas na base e longamente atenuadas em ponta fina; até 8 cm de largura."
+    },
+    {
+     "label": "Flores",
+     "text": "Reunidas em panículas violáceas, oblongas, densas e contraídas, com pedúnculo curto e ráquila glabra."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual (plantas jovens)",
+     "text": "Preferível para plantas jovens, com rizomas pequenos, até 2 m de altura. Faça-o na época das chuvas, para facilitar a remoção dos rizomas."
+    },
+    {
+     "title": "Corte (plantas grandes)",
+     "text": "Para plantas de maiores dimensões, com rizomas muito extensos."
+    },
+    {
+     "title": "Após a remoção",
+     "text": "Retire os rizomas removidos do local para posterior queima. Os caules devem depois ser destroçados."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte 2 a 4 semanas após a primeira remoção e, depois, a cada 2 a 3 meses durante o primeiro ano."
+    },
+    {
+     "title": "Monitorização",
+     "text": "Controle a área nas mudanças de estação, com especial atenção na primavera e no verão. Faça inspeções regulares, sobretudo no final da primavera e no outono, e monitorize de forma contínua durante 3 a 5 anos."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "arundo-plinii",
+     "shared_traits": [
+      "Aspeto muito semelhante"
+     ],
+     "differences": [
+      "Cespitoso: caules muito juntos, formando tufos",
+      "Menores dimensões"
+     ]
+    },
+    {
+     "native_plant_id": "phragmites-australis",
+     "shared_traits": [
+      "Cana alta de margens húmidas"
+     ],
+     "differences": [
+      "Menores dimensões: caules mais finos, colmos mais baixos e folhas mais estreitas (até 3,5 cm)",
+      "Panícula com pelos compridos, de aspeto mais plumoso do que a da A. donax"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fallopia",
+   "latin_name": "Fallopia japonica",
+   "common_name": "Sanguinária-do-Japão (Japanese knotweed)",
+   "local_name": "Sanguinária-do-Japão",
+   "family": "Polygonaceae",
+   "native_range": "Ásia oriental (Japão, Coreia e China)",
+   "flowering": "Julho – setembro",
+   "habitat": "Margens de linhas de água e terrenos degradados, sobretudo nas zonas mais frescas do Norte",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "Nunca use motorroçadoras nem corta-relvas: picam os rebentos e multiplicam o foco.",
+   "display_order": 2,
+   "checkup_days": 15,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Reynoutria_japonica_in_Brastad_1.jpg/1280px-Reynoutria_japonica_in_Brastad_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Japanese_Knotweed_%28Fallopia_japonica%29_%2822310124056%29.jpg/1280px-Japanese_Knotweed_%28Fallopia_japonica%29_%2822310124056%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Riesenknoeterich.jpg/1280px-Riesenknoeterich.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/b/bf/Knotweed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ],
+   "characteristics": [
+    {
+     "label": "Caules",
+     "text": "Aéreos e anuais, ocos e carnudos, com nós e entrenós bem marcados e manchas avermelhadas ou púrpuras (fazem lembrar o bambu)."
+    },
+    {
+     "label": "Folhas",
+     "text": "Ovadas (em forma de pá), truncadas na base, alternas, com pecíolos avermelhados; lembram um escudo ou um coração."
+    },
+    {
+     "label": "Flores",
+     "text": "Pequenas, esbranquiçadas, reunidas em fascículos de 2 a 5 flores."
+    },
+    {
+     "label": "Frutos",
+     "text": "Secos, trigonais e negros."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual",
+     "text": "Arranque à mão e passe a terra por um crivo para recolher todos os fragmentos de rizoma. Os rizomas chegam a 3 m de profundidade, por isso a remoção é trabalhosa e demorada."
+    },
+    {
+     "title": "Após a remoção",
+     "text": "Retire todos os fragmentos extraídos do local para destruição completa (deixar secar e queimar). Limpe as ferramentas usadas, para não transportar fragmentos para outros locais e evitar novos focos de invasão."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte a cada 15 dias durante o período vegetativo, durante pelo menos 2 anos."
+    },
+    {
+     "title": "Monitorização",
+     "text": "Após 2 anos, se a planta parecer erradicada, monitorize de 2 em 2 ou de 3 em 3 meses, com foco nas épocas críticas: meio da primavera (maio/junho) e fim do verão (setembro/outubro). Verifique sempre as margens até 10 a 20 metros a jusante."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "rumex-obtusifolius",
+     "shared_traits": [
+      "Planta alta, de folhas largas, em margens húmidas"
+     ],
+     "differences": [
+      "O caule floral é estriado, maciço (não é oco) e não se ramifica da mesma forma",
+      "As flores formam uma espiga densa e vertical, que fica completamente castanha e seca no final do verão"
+     ]
+    },
+    {
+     "native_plant_id": "rumex-crispus",
+     "shared_traits": [
+      "Planta alta, de folhas largas, em margens húmidas"
+     ],
+     "differences": [
+      "O caule floral é estriado, maciço (não é oco) e não se ramifica da mesma forma",
+      "As flores formam uma espiga densa e vertical, que fica completamente castanha e seca no final do verão"
+     ]
+    },
+    {
+     "native_plant_id": "ligustrum-vulgare",
+     "shared_traits": [
+      "Porte arbustivo, com caules eretos"
+     ],
+     "differences": [
+      "Arbusto lenhoso (com madeira)",
+      "Folhas opostas (nascem aos pares, uma em frente à outra) e muito mais pequenas"
+     ]
+    },
+    {
+     "native_plant_id": "fallopia-convolvulus",
+     "shared_traits": [
+      "Mesma família, com folhas de forma semelhante"
+     ],
+     "differences": [
+      "Trepadeira volúvel",
+      "Folhas muito mais pequenas"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tradescantia",
+   "latin_name": "Tradescantia fluminensis",
+   "common_name": "Erva-da-fortuna (Small-leaf spiderwort)",
+   "local_name": "Erva-da-fortuna",
+   "family": "Commelinaceae",
+   "native_range": "América do Sul (do sudeste do Brasil à Argentina)",
+   "flowering": "Maio – julho",
+   "habitat": "Bosque ribeirinho sombrio e húmido e zonas perturbadas",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "Qualquer pequeno fragmento de caule com um nó enraíza e dá origem a uma nova planta.",
+   "display_order": 3,
+   "checkup_days": 15,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Tradescantia_fluminensis_%28Flower%29.jpg/1280px-Tradescantia_fluminensis_%28Flower%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Tradescantia_fluminensis_%28Flowers%29.jpg/1280px-Tradescantia_fluminensis_%28Flowers%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Tradescantia_fluminensis1.jpg/1280px-Tradescantia_fluminensis1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Tradescantia_fluminensis_1.jpg/1280px-Tradescantia_fluminensis_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ],
+   "characteristics": [
+    {
+     "label": "Porte",
+     "text": "Erva rastejante perene, de caules compridos que enraízam nos nós."
+    },
+    {
+     "label": "Folhas",
+     "text": "Ovadas a ovado-oblongas, um tanto suculentas, verde-brilhantes na página superior, lisas e sem pelos."
+    },
+    {
+     "label": "Flores",
+     "text": "Com 3 pétalas brancas e triangulares."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual",
+     "text": "Arranque à mão, de preferência na época das chuvas."
+    },
+    {
+     "title": "Após a remoção",
+     "text": "Retire todos os fragmentos extraídos do local para destruição completa (deixar secar e queimar). Limpe as ferramentas usadas, para não transportar fragmentos para outros locais e evitar novos focos de invasão."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte a cada 15 a 30 dias nos primeiros 6 meses e, depois, a cada 3 meses durante 1 a 2 anos."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "myosotis-stolonifera",
+     "shared_traits": [
+      "Planta rasteira de sítios húmidos e sombrios",
+      "Flores pequenas"
+     ],
+     "differences": [
+      "Inflorescência com pequenas flores de 5 pétalas azul-claras (por vezes rosadas), com o centro amarelo",
+      "Folhas e caules cobertos de pequenos pelos"
+     ]
+    },
+    {
+     "native_plant_id": "myosotis-lamottiana",
+     "shared_traits": [
+      "Planta rasteira de sítios húmidos e sombrios",
+      "Flores pequenas"
+     ],
+     "differences": [
+      "Inflorescência com pequenas flores de 5 pétalas azul-claras (por vezes rosadas), com o centro amarelo",
+      "Folhas e caules cobertos de pequenos pelos"
+     ]
+    },
+    {
+     "native_plant_id": "stellaria-nemorum",
+     "shared_traits": [
+      "Planta rasteira com pequenas flores brancas"
+     ],
+     "differences": [
+      "Cada uma das 5 pétalas brancas está tão dividida ao meio que a flor parece ter 10 pétalas (a Tradescantia tem apenas 3 pétalas inteiras e bem definidas)",
+      "Caule muito fino e delicado"
+     ]
+    },
+    {
+     "native_plant_id": "stellaria-alsine",
+     "shared_traits": [
+      "Planta rasteira com pequenas flores brancas"
+     ],
+     "differences": [
+      "Cada uma das 5 pétalas brancas está tão dividida ao meio que a flor parece ter 10 pétalas (a Tradescantia tem apenas 3 pétalas inteiras e bem definidas)",
+      "Caule muito fino e delicado"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "phytolacca",
+   "latin_name": "Phytolacca americana",
+   "common_name": "Tintureira (American pokeweed)",
+   "local_name": "Tintureira",
+   "family": "Phytolaccaceae",
+   "native_range": "América do Norte",
+   "flowering": "Maio – dezembro",
+   "habitat": "Terrenos perturbados, bermas de caminhos e orlas de bosque",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "A planta é tóxica (caules, folhas, bagas e raízes). Use luvas e mantenha as bagas longe de crianças e animais.",
+   "display_order": 4,
+   "checkup_days": 60,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/%28MHNT%29_Phytolacca_americana_-_immature_inflorescence.jpg/1280px-%28MHNT%29_Phytolacca_americana_-_immature_inflorescence.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/20151101_041_Kessel_Weerdbeemden_Westerse_karmozijnbes_Phytolacca_americana_%2822648948556%29.jpg/1280px-20151101_041_Kessel_Weerdbeemden_Westerse_karmozijnbes_Phytolacca_americana_%2822648948556%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/20151101_042_Kessel_Weerdbeemden_Westerse_karmozijnbes_Phytolacca_americana_%2822686148671%29.jpg/1280px-20151101_042_Kessel_Weerdbeemden_Westerse_karmozijnbes_Phytolacca_americana_%2822686148671%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ],
+   "characteristics": [
+    {
+     "label": "Porte",
+     "text": "Parece um arbusto, com caule cor-de-rosa."
+    },
+    {
+     "label": "Folhas",
+     "text": "Longas, de forma lanceolada."
+    },
+    {
+     "label": "Flores",
+     "text": "Brancas, em cacho."
+    },
+    {
+     "label": "Frutos",
+     "text": "Lembram um cacho de uvas; verdes ou negro-púrpura, conforme o estado de maturação."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual",
+     "text": "Arranque à mão, de preferência na época das chuvas."
+    },
+    {
+     "title": "Após a remoção",
+     "text": "Ensaque em sacos de plástico e envie para o lixo comum (nunca para pilhas de compostagem verde). Os caules e as raízes tuberosas devem ser colocados sobre lonas impermeáveis, a secar ao sol e isolados da terra; depois podem ser triturados."
+    },
+    {
+     "title": "Bagas",
+     "text": "Se houver bagas, ensaque-as e queime-as ou envie-as para aterro, para não atraírem aves."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte a cada 2 a 3 meses (verão e outono) durante os primeiros 2 anos, com visitas mensais na primavera."
+    },
+    {
+     "title": "Monitorização",
+     "text": "Após os 3 anos, faça 2 vistorias por ano até aos 5 anos."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "atropa-belladonna",
+     "shared_traits": [
+      "Bagas escuras, negro-púrpura"
+     ],
+     "differences": [
+      "Flores isoladas, em forma de campânula, roxo-escuras ou acastanhadas (as da tintureira surgem em cachos)",
+      "Bagas isoladas (as da tintureira crescem juntas num cacho pendente)"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "delairea",
+   "latin_name": "Delairea odorata",
+   "common_name": "Erva-de-Santiago (Cape ivy)",
+   "local_name": "Erva-de-Santiago",
+   "family": "Asteraceae",
+   "native_range": "África do Sul (Região do Cabo)",
+   "flowering": "Dezembro – fevereiro",
+   "habitat": "Margens de linhas de água, sebes e matos, onde cobre árvores e arbustos",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "Todas as partes da planta são tóxicas, e os fragmentos de caule enraízam com facilidade.",
+   "display_order": 5,
+   "checkup_days": 30,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Delairea_odorata_-_Photographed_on_the_western_side_of_Buena_Vista_Park%2C_San_Francisco.jpg/1280px-Delairea_odorata_-_Photographed_on_the_western_side_of_Buena_Vista_Park%2C_San_Francisco.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Starr-090519-8088-Delairea_odorata-flowers_and_leaves-Kula-Maui_%2824325129764%29.jpg/1280px-Starr-090519-8088-Delairea_odorata-flowers_and_leaves-Kula-Maui_%2824325129764%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/63/Delairea_scandens.jpg/1280px-Delairea_scandens.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Starr_070308-5483_Delairea_odorata.jpg/1280px-Starr_070308-5483_Delairea_odorata.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ],
+   "characteristics": [
+    {
+     "label": "Porte",
+     "text": "Trepadeira; apenas se enrola nos suportes, sem se colar a eles."
+    },
+    {
+     "label": "Folhas",
+     "text": "Carnudas."
+    },
+    {
+     "label": "Flores",
+     "text": "Inflorescências de pequenas flores amarelas, sem pétalas salientes."
+    },
+    {
+     "label": "Caules",
+     "text": "Lisos, verde-amarelados ou púrpura."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual",
+     "text": "Arranque à mão, de preferência na época das chuvas."
+    },
+    {
+     "title": "Após a remoção",
+     "text": "Retire o material arrancado do local para posterior destruição."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte mensalmente durante o primeiro ano, passando a cada 15 dias no final do outono e no inverno."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "hedera-helix",
+     "shared_traits": [
+      "Trepadeira",
+      "Folhas verdes com lóbulos pontiagudos"
+     ],
+     "differences": [
+      "Folha rija como couro, opaca e muito mais resistente (as da Delairea são visivelmente suculentas, tenras e translúcidas)",
+      "O caule desenvolve raízes adventícias lenhosas que se colam à casca das árvores"
+     ]
+    },
+    {
+     "native_plant_id": "humulus-lupulus",
+     "shared_traits": [
+      "Trepadeira"
+     ],
+     "differences": [
+      "Extremamente áspero ao toque: caules e folhas com pequenos pelos rígidos em forma de gancho, que se agarram à pele e à roupa (a Delairea é completamente lisa e macia)",
+      "Folhas opostas (as da Delairea são alternas)"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "acacia",
+   "latin_name": "Acacia longifolia",
+   "common_name": "Acácia-de-espigas (Sydney golden wattle)",
+   "local_name": "Acácia-de-espigas",
+   "family": "Fabaceae",
+   "native_range": "Sudeste da Austrália",
+   "flowering": "Dezembro – abril",
+   "habitat": "Margens de linhas de água e dunas costeiras",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "Nunca arraste ramos com sementes pelo solo: estará a semeá-las.",
+   "display_order": 6,
+   "checkup_days": 90,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Acacia-longifolia-branch.jpg/1280px-Acacia-longifolia-branch.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/1/18/Acacia_longifolia_fg01.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ],
+   "characteristics": [
+    {
+     "label": "Porte",
+     "text": "Arbusto ou pequena árvore perene."
+    },
+    {
+     "label": "Flores",
+     "text": "Em espigas amarelo-vivo."
+    },
+    {
+     "label": "Onde surge",
+     "text": "Muito frequente em dunas."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual (plântulas e plantas jovens)",
+     "text": "Arranque à mão, de preferência na época das chuvas."
+    },
+    {
+     "title": "Corte (plantas adultas)",
+     "text": "Corte tão rente ao solo quanto possível, antes da maturação das sementes. Na maioria das vezes, esta operação é suficiente para um controlo eficaz da espécie."
+    },
+    {
+     "title": "Fogo controlado",
+     "text": "Para estimular a germinação do banco de sementes, após o controlo dos indivíduos adultos (com a gestão adequada da biomassa resultante), ou para eliminar plantas jovens (redução do banco de sementes)."
+    },
+    {
+     "title": "Após a remoção – sem flores nem sementes",
+     "text": "Deixe os ramos cortados espalhados pelo chão a cobrir o solo (técnica de mulching). Esta camada ensombra o terreno e dificulta que a luz solar ative a germinação de novas sementes de acácia."
+    },
+    {
+     "title": "Após a remoção – com sementes (vagens castanhas)",
+     "text": "Retire todo o material do local com cuidado e queime-o ou triture-o fora da galeria ripícola."
+    },
+    {
+     "title": "Plantação de nativas (restauro ativo)",
+     "text": "O solo onde estavam as acácias ficou exposto. Ocupe esse espaço o mais depressa possível, plantando espécies da galeria ripícola do Leça (como o salgueiro-preto, o amieiro ou o freixo). A sombra das árvores nativas é a melhor arma natural, a longo prazo, contra a acácia."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Primeiro regresso 3 a 6 meses após a limpeza inicial; segundo regresso no outono seguinte (após as primeiras chuvas) ou ao fim de 1 ano."
+    },
+    {
+     "title": "Monitorização",
+     "text": "Visitas anuais durante 3 a 5 anos."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "salix-salviifolia",
+     "shared_traits": [
+      "Folhas longas, estreitas e lanceoladas (sobretudo quando a acácia é jovem)"
+     ],
+     "differences": [
+      "Folhas aveludadas e acinzentadas",
+      "Uma nervura central principal com ramificações em rede (reticulada); a acácia tem 2 a 4 nervuras longitudinais paralelas"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "oenothera",
+   "latin_name": "Oenothera glazioviana",
+   "common_name": "Erva-dos-burros (Large-flowered evening primrose)",
+   "local_name": "Erva-dos-burros",
+   "family": "Onagraceae",
+   "native_range": "Origem hortícola, do cruzamento espontâneo de duas espécies norte-americanas",
+   "flowering": "Junho – setembro",
+   "habitat": "Margens do rio, bermas de caminhos e terrenos abertos e húmidos",
+   "legal_status": "Não consta da Lista Nacional de Espécies Invasoras (Decreto-Lei n.º 92/2019), mas tem comportamento invasor em Portugal",
+   "caution": "Se já tiver cápsulas de sementes, nunca deixe a planta no solo.",
+   "display_order": 7,
+   "checkup_days": 180,
+   "photos": [
+    "https://upload.wikimedia.org/wikipedia/commons/5/51/Oenothera_glazioviana_03_ies.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://upload.wikimedia.org/wikipedia/commons/2/23/Onagra_glazioviana_2006.07.04_15.19.05-p7040369.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://upload.wikimedia.org/wikipedia/commons/5/53/Oglazioviana.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ],
+   "characteristics": [
+    {
+     "label": "Porte",
+     "text": "Erva com caules verdes ou avermelhados."
+    },
+    {
+     "label": "Flores",
+     "text": "Amarelas, grandes, com 4 pétalas."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual",
+     "text": "Arranque à mão, de preferência no inverno ou no início da primavera, quando a planta está na fase de roseta e o solo está húmido."
+    },
+    {
+     "title": "Após a remoção – antes da floração",
+     "text": "Se a planta for arrancada antes de dar flor, pode ser deixada a secar no local, com as raízes para o ar."
+    },
+    {
+     "title": "Após a remoção – com sementes",
+     "text": "Se já tiver cápsulas de sementes (frutos alongados verdes ou castanhos), nunca a deixe no solo: ensaque-a e retire-a da margem, para evitar que as sementes caiam e colonizem o rio."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte 6 meses após a primeira intervenção (idealmente no início do verão), para remover exemplares que tenham escapado e começado a espigar."
+    },
+    {
+     "title": "Monitorização",
+     "text": "Monitorização anual no mesmo local durante 2 a 3 anos."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "verbascum-thapsus",
+     "shared_traits": [
+      "Flores amarelas numa haste alta"
+     ],
+     "differences": [
+      "Folhas cobertas de pelos (as da erva-dos-burros são mais ásperas e têm muitas vezes a nervura central avermelhada ou rosada)",
+      "Flores com 5 pétalas e estames com pelos roxos ou amarelos; a Oenothera tem sempre 4 pétalas grandes em forma de coração"
+     ]
+    },
+    {
+     "native_plant_id": "verbascum-virgatum",
+     "shared_traits": [
+      "Flores amarelas numa haste alta"
+     ],
+     "differences": [
+      "Folhas cobertas de pelos (as da erva-dos-burros são mais ásperas e têm muitas vezes a nervura central avermelhada ou rosada)",
+      "Flores com 5 pétalas e estames com pelos roxos ou amarelos; a Oenothera tem sempre 4 pétalas grandes em forma de coração"
+     ]
+    },
+    {
+     "native_plant_id": "iris-pseudacorus",
+     "shared_traits": [
+      "Flores amarelas grandes, junto à água"
+     ],
+     "differences": [
+      "Folhas lisas, sem pelos, em forma de espada perfeita (eretas e achatadas)"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bidens",
+   "latin_name": "Bidens frondosa",
+   "common_name": "Erva-rapa (Devil's beggarticks)",
+   "local_name": "Erva-rapa",
+   "family": "Asteraceae",
+   "native_range": "América do Norte",
+   "flowering": "Julho – setembro",
+   "habitat": "Margens húmidas do rio, lodaçais e valas",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "As sementes agarram-se à roupa e ao pelo dos animais: nunca sacuda nem limpe a roupa no local.",
+   "display_order": 8,
+   "checkup_days": 30,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Bidens_frondosa.jpg/1280px-Bidens_frondosa.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/c/c1/Bidens_frondosa_var._frondosa1_eF.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Bidens_frondosa_sl7.jpg/1280px-Bidens_frondosa_sl7.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/9/92/Bidens_frondosa_2005.08.21_15.08.04-p8210033.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ],
+   "characteristics": [
+    {
+     "label": "Flores",
+     "text": "Amarelas, tubulosas, reunidas no mesmo pé e rodeadas por «pequenas folhas» (brácteas) em forma de lança."
+    },
+    {
+     "label": "Folhas",
+     "text": "Em forma de lança, serradas e opostas."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual",
+     "text": "Arranque à mão, de preferência na época das chuvas, no final da primavera ou no início do verão, antes de a planta florescer."
+    },
+    {
+     "title": "Após a remoção – sem sementes",
+     "text": "Se for arrancada antes da formação de sementes, pode ser deixada a secar com as raízes para o ar, longe da água."
+    },
+    {
+     "title": "Após a remoção – com sementes",
+     "text": "Se já tiver sementes (aquénios pretos e achatados, com dois ganchos na ponta), nunca sacuda nem limpe a roupa no local. Ensaque de imediato e queime ou elimine de forma segura, para não contaminar outras margens do rio."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte 1 a 2 meses após a primeira intervenção."
+    },
+    {
+     "title": "Monitorização",
+     "text": "Monitorize no verão seguinte: as sementes que caíram na água podem germinar noutros pontos da margem."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "bidens-tripartita",
+     "shared_traits": [
+      "Mesmo género, com flores amarelas semelhantes, em sítios húmidos"
+     ],
+     "differences": [
+      "Folhas maioritariamente divididas em 3 lóbulos unidos na base; a B. frondosa tem folhas compostas por 3 a 5 folíolos totalmente independentes",
+      "Na B. frondosa, as brácteas externas (folhinhas verdes que rodeiam a base da flor) são muito longas, frondosas e ultrapassam largamente o botão floral"
+     ]
+    },
+    {
+     "native_plant_id": "eupatorium-cannabinum",
+     "shared_traits": [
+      "Planta alta de margens húmidas"
+     ],
+     "differences": [
+      "Flores rosa-pálido ou purpúreas; a B. frondosa tem inflorescências esverdeadas ou amarelo-acastanhadas"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cortaderia",
+   "latin_name": "Cortaderia selloana",
+   "common_name": "Erva-das-pampas (Pampas grass)",
+   "local_name": "Erva-das-pampas",
+   "family": "Poaceae",
+   "native_range": "América do Sul (Argentina e Chile)",
+   "flowering": "Agosto – outubro",
+   "habitat": "Terrenos perturbados e abandonados, bermas e margens soalheiras",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "Use luvas grossas: as folhas são muito cortantes. Nunca sacuda os penachos — cada um contém milhões de sementes.",
+   "display_order": 9,
+   "checkup_days": 90,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Starr_031108-0125_Cortaderia_selloana.jpg/1280px-Starr_031108-0125_Cortaderia_selloana.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Herbe_Pampa_FR_2008.jpg/1280px-Herbe_Pampa_FR_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/5/53/PampasGrass.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ],
+   "characteristics": [
+    {
+     "label": "Folhas",
+     "text": "Em forma de «V», ásperas e cortantes."
+    },
+    {
+     "label": "Flores",
+     "text": "Reunidas em panículas semelhantes a plumas grandes, densas e branco-prateadas."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual (plantas jovens)",
+     "text": "Arranque à mão, de preferência na época das chuvas."
+    },
+    {
+     "title": "Touceiras grandes",
+     "text": "Remoção mecânica, ou corte drástico seguido de aplicação controlada de herbicida na base."
+    },
+    {
+     "title": "Após a remoção – com penacho",
+     "text": "Se já tiver o penacho formado (mesmo que ainda esteja verde), corte-o com cuidado, coloque-o de imediato num saco de plástico fechado e nunca o sacuda: cada penacho contém milhões de sementes, que voam ao mínimo toque. O resto da touceira cortada (sem flor) pode ser deixado a secar."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte 3 a 4 meses após a intervenção, para verificar se há rebentos na base cortada."
+    },
+    {
+     "title": "Monitorização",
+     "text": "Monitorize no final do verão seguinte."
+    }
+   ],
+   "look_alikes": [
+    {
+     "native_plant_id": "tripidium-ravennae",
+     "shared_traits": [
+      "Forma grandes touceiras",
+      "Penachos altos, densos e plumosos no final do verão"
+     ],
+     "differences": [
+      "A folha tem uma nervura central branca muito larga e proeminente, e o caule é maciço; as folhas da erva-das-pampas são em forma de calha (V), extremamente ásperas, e a nervura central não é tão espessa nem esbranquiçada",
+      "Penachos mais acastanhados ou arroxeados; os da erva-das-pampas são branco-prateados ou rosados e muito mais densos (parecem plumas de espanador)"
+     ]
+    },
+    {
+     "native_plant_id": "phragmites-australis",
+     "shared_traits": [
+      "Inflorescências plumosas no topo das hastes, no outono"
+     ],
+     "differences": [
+      "Não cresce em touceiras apertadas: tem canas individuais e eretas, espalhadas ao longo de um rizoma rasteiro subterrâneo",
+      "Folhas largas e planas, distribuídas ao longo de toda a cana; na erva-das-pampas as folhas nascem todas da base e as hastes florais não têm folhas"
+     ]
+    },
+    {
+     "native_plant_id": "typha-latifolia",
+     "shared_traits": [
+      "Folhas longas que podem lembrar uma touceira de erva-das-pampas"
+     ],
+     "differences": [
+      "Folhas moles, direitas e completamente lisas (não cortam), com textura esponjosa por dentro",
+      "A inflorescência é um «charuto» castanho-escuro e cilíndrico, sem penacho plumoso"
+     ]
+    },
+    {
+     "native_plant_id": "typha-domingensis",
+     "shared_traits": [
+      "Folhas longas que podem lembrar uma touceira de erva-das-pampas"
+     ],
+     "differences": [
+      "Folhas moles, direitas e completamente lisas (não cortam), com textura esponjosa por dentro",
+      "A inflorescência é um «charuto» castanho-escuro e cilíndrico, sem penacho plumoso"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "carpobrotus",
+   "latin_name": "Carpobrotus edulis",
+   "common_name": "Chorão-das-praias (Ice plant)",
+   "local_name": "Chorão-das-praias",
+   "family": "Aizoaceae",
+   "native_range": "África do Sul (Região do Cabo)",
+   "flowering": "Março – junho",
+   "habitat": "Areias e taludes junto à foz e ao litoral",
+   "legal_status": "Espécie invasora em Portugal (Decreto-Lei n.º 92/2019)",
+   "caution": "Nunca deixe caules ou folhas caídos sobre a terra: voltam a enraizar.",
+   "display_order": 10,
+   "checkup_days": 90,
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/Carpobrutus_edulis-P9200072.jpg/1280px-Carpobrutus_edulis-P9200072.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Hottentot_Fig_-_Flowering.jpg/1280px-Hottentot_Fig_-_Flowering.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Carpobrotus_April_2008-1.jpg/1280px-Carpobrotus_April_2008-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/2/20/Carpobrutus_edulis_b.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ],
+   "characteristics": [
+    {
+     "label": "Folhas",
+     "text": "Carnudas, com secção transversal rigorosamente triangular."
+    },
+    {
+     "label": "Caules",
+     "text": "Lenhosos na base e muito longos (podem atingir vários metros); os tapetes pesam imenso devido à água retida nas folhas."
+    },
+    {
+     "label": "Flores",
+     "text": "Gigantescas (8–10 cm de diâmetro), solitárias, exclusivamente amarelas ou rosa-purpúreas."
+    },
+    {
+     "label": "Frutos",
+     "text": "Carnudos e comestíveis; verdes, ficam púrpura quando maduros."
+    }
+   ],
+   "removal_steps": [
+    {
+     "title": "Arranque manual",
+     "text": "Puxe as «guias» (caules) e vá enrolando a planta como se fosse um tapete. As raízes saem facilmente do solo."
+    },
+    {
+     "title": "Após a remoção",
+     "text": "Nunca deixe caules ou folhas caídos sobre a terra. Acumule o material sobre superfícies secas (como rochas expostas ao sol), com as raízes para o ar, até secar completamente (solarização), ou ensaque-o e retire-o do local."
+    },
+    {
+     "title": "Voltar ao local",
+     "text": "Volte 3 meses após a remoção, para recolher pequenas folhas ou fragmentos que tenham caído e começado a ganhar raiz."
+    },
+    {
+     "title": "Monitorização",
+     "text": "Monitorização anual (antes do verão), para controlar germinações de sementes espalhadas por pequenos mamíferos, como o coelho, que comem os seus frutos carnudos."
+    }
+   ],
+   "look_alikes": []
+  }
+ ],
+ "native_plants": [
+  {
+   "id": "calystegia-sepium",
+   "latin_name": "Calystegia sepium",
+   "common_name": "Corriola-maior (Hedge bindweed)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Pink_bindweed_%28Calystegia_sepium_ssp_roseata%29.jpg/1280px-Pink_bindweed_%28Calystegia_sepium_ssp_roseata%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Calystegia_April_2008-1.jpg/1280px-Calystegia_April_2008-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Calystegia_sepium_-_tara-seatapp.jpg/1280px-Calystegia_sepium_-_tara-seatapp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "convolvulus-arvensis",
+   "latin_name": "Convolvulus arvensis",
+   "common_name": "Corriola / Verdizela (Field bindweed)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Convolvulus_arvensis_in_Aveyron_%282%29.jpg/1280px-Convolvulus_arvensis_in_Aveyron_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Convolvulus_arvensis_001.JPG/1280px-Convolvulus_arvensis_001.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/20120920Convolvulus_arvensis1.jpg/1280px-20120920Convolvulus_arvensis1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "solanum-dulcamara",
+   "latin_name": "Solanum dulcamara",
+   "common_name": "Doce-amarga (Bittersweet nightshade)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Solanum_dulcamara_%285386574212%29.jpg/1280px-Solanum_dulcamara_%285386574212%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/5/5d/SolanumDulcamara-bloem-sm.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://upload.wikimedia.org/wikipedia/commons/7/7a/Solanum_dulcamara1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "arundo-plinii",
+   "latin_name": "Arundo plinii",
+   "common_name": "Caniço-do-sequeiro (Pliny's reed)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Arundo_plinii_175698127.jpg/1280px-Arundo_plinii_175698127.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "phragmites-australis",
+   "latin_name": "Phragmites australis",
+   "common_name": "Caniço (Common reed)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Byhlener_See_06.JPG/1280px-Byhlener_See_06.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Reed_panicle_at_Brodalen_1.jpg/1280px-Reed_panicle_at_Brodalen_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Phragmites_australis_habitus_15August2009_LagunadeCaracuel.jpg/1280px-Phragmites_australis_habitus_15August2009_LagunadeCaracuel.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "rumex-obtusifolius",
+   "latin_name": "Rumex obtusifolius",
+   "common_name": "Labaça (Broad-leaved dock)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Rumex_obtusifolius_001.JPG/1280px-Rumex_obtusifolius_001.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Rumex-obtusifolius-foliage.JPG/1280px-Rumex-obtusifolius-foliage.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/0/0b/Rumex_obtusifolius.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "rumex-crispus",
+   "latin_name": "Rumex crispus",
+   "common_name": "Labaça (Curled dock)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Rumex_crispus_vallee-de-grace-amiens_80_12062007_3.jpg/1280px-Rumex_crispus_vallee-de-grace-amiens_80_12062007_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Rumex_crispus_plant2_%2814901124830%29.jpg/1280px-Rumex_crispus_plant2_%2814901124830%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/5/52/RumexCrispusValven.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "ligustrum-vulgare",
+   "latin_name": "Ligustrum vulgare",
+   "common_name": "Buxo-da-rocha / Pássara (Wild privet)",
+   "photos": [
+    "https://upload.wikimedia.org/wikipedia/commons/1/15/Ligustrum_vulgare1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Tab%C3%A1ni_Botanikai_Tan%C3%B6sv%C3%A9ny._K%C3%B6z%C3%B6ns%C3%A9ges_fagyal_%28Ligustrum_vulgare%29._-_Budapest.JPG/1280px-Tab%C3%A1ni_Botanikai_Tan%C3%B6sv%C3%A9ny._K%C3%B6z%C3%B6ns%C3%A9ges_fagyal_%28Ligustrum_vulgare%29._-_Budapest.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Olivereta_amb_fruit_verds.JPG/1280px-Olivereta_amb_fruit_verds.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "fallopia-convolvulus",
+   "latin_name": "Fallopia convolvulus",
+   "common_name": "Corriola-bastarda (Black bindweed)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Fallopia_convolvulus1pl.jpg/1280px-Fallopia_convolvulus1pl.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d8/Zwaluwtong_plant_%28Fallopia_convolvulus%29.jpg/1280px-Zwaluwtong_plant_%28Fallopia_convolvulus%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/1/1d/Zwaluwtong_bloeiwijze_%28Fallopia_convolvulus_inflorescens%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "myosotis-stolonifera",
+   "latin_name": "Myosotis stolonifera",
+   "common_name": "Orelha-de-rato-dos-bosques (Pale forget-me-not)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Myosotis_stolonifera_%28Habitus%29.jpg/1280px-Myosotis_stolonifera_%28Habitus%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "myosotis-lamottiana",
+   "latin_name": "Myosotis lamottiana",
+   "common_name": "Orelha-de-rato-dos-bosques (Forget-me-not)",
+   "photos": []
+  },
+  {
+   "id": "stellaria-nemorum",
+   "latin_name": "Stellaria nemorum",
+   "common_name": "Estrelina-dos-bosques (Wood stitchwort)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Stellaria_nemorum_1.jpg/1280px-Stellaria_nemorum_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Stellaria_nemorum_Lehtot%C3%A4htim%C3%B6_V08_C_H4429.jpg/1280px-Stellaria_nemorum_Lehtot%C3%A4htim%C3%B6_V08_C_H4429.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "stellaria-alsine",
+   "latin_name": "Stellaria alsine",
+   "common_name": "Estrelina-dos-bosques (Bog stitchwort)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Quellsternmiere_Stellaria_alsine.jpg/1280px-Quellsternmiere_Stellaria_alsine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/e/e2/Stellaria_alsine_eF.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "atropa-belladonna",
+   "latin_name": "Atropa belladonna",
+   "common_name": "Beladona-maior (Deadly nightshade)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Atropa_belladonna_%2816627871072%29.jpg/1280px-Atropa_belladonna_%2816627871072%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/7/79/Atropa_bella-donna1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://upload.wikimedia.org/wikipedia/commons/3/31/Atropa_belladonna_220605.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "hedera-helix",
+   "latin_name": "Hedera helix",
+   "common_name": "Hera-comum (Common ivy)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Hedera_helix_Dover.jpg/1280px-Hedera_helix_Dover.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Hedera_helix_002.JPG/1280px-Hedera_helix_002.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Efeublatt_inet_uf.jpg/1280px-Efeublatt_inet_uf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "humulus-lupulus",
+   "latin_name": "Humulus lupulus",
+   "common_name": "Húmulo ou Lúpulo (Hop)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Hopfen1.jpg/1280px-Hopfen1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/1/1c/Hop_bloemen_vrouwelijke_plant_Humulus_lupulus_female.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://upload.wikimedia.org/wikipedia/commons/4/46/Hop_mannelijke_plant_Humulus_lupulus_male_plant.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "salix-salviifolia",
+   "latin_name": "Salix salviifolia",
+   "common_name": "Salgueiro-de-folha-estreita (Sage-leaved willow)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Salix_salvifolia_Habitus_12October2009_RioFresnedas_ValledeAlcudia.jpg/1280px-Salix_salvifolia_Habitus_12October2009_RioFresnedas_ValledeAlcudia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "verbascum-thapsus",
+   "latin_name": "Verbascum thapsus",
+   "common_name": "Verbasco (Great mullein)",
+   "photos": [
+    "https://upload.wikimedia.org/wikipedia/commons/3/3a/Starr_040723-0030_Verbascum_thapsus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/20130712Koenigskerze_Hockenheim.jpg/1280px-20130712Koenigskerze_Hockenheim.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/9/9c/Starr_040723-0074_Verbascum_thapsus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "verbascum-virgatum",
+   "latin_name": "Verbascum virgatum",
+   "common_name": "Verbasco (Twiggy mullein)",
+   "photos": [
+    "https://upload.wikimedia.org/wikipedia/commons/1/17/Verbascum_virgatum.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "iris-pseudacorus",
+   "latin_name": "Iris pseudacorus",
+   "common_name": "Lírio-amarelo-dos-pântanos (Yellow flag)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Iris_pseudacorus_iris_des_marais.jpg/1280px-Iris_pseudacorus_iris_des_marais.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/e/e8/Iris_pseudacorus_from_sweden.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://upload.wikimedia.org/wikipedia/commons/c/ca/Iris_pseudacorus_%28Veleka%2C_Bulgaria%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "bidens-tripartita",
+   "latin_name": "Bidens tripartita",
+   "common_name": "Cânhamo-de-água (Trifid bur-marigold)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Bidens_tripartita_ENBLA01.JPG/1280px-Bidens_tripartita_ENBLA01.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/d/d9/Bidens_tripartita_002.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Bidens_tripartita_003.jpg/1280px-Bidens_tripartita_003.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "eupatorium-cannabinum",
+   "latin_name": "Eupatorium cannabinum",
+   "common_name": "Trevo-cervino (Hemp-agrimony)",
+   "photos": [
+    "https://upload.wikimedia.org/wikipedia/commons/6/6f/Eupatorium_cannabinum_ziedai%2C_2006-07-22.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Eupatorium_cannabinum_%28xndr%29.jpg/1280px-Eupatorium_cannabinum_%28xndr%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/3/3c/Eupatorium_cannabinum.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+   ]
+  },
+  {
+   "id": "tripidium-ravennae",
+   "latin_name": "Tripidium ravennae",
+   "common_name": "Açoreira (Ravenna grass)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Saccharum_ravennae_-_J._C._Raulston_Arboretum_-_DSC06214.JPG/1280px-Saccharum_ravennae_-_J._C._Raulston_Arboretum_-_DSC06214.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "typha-latifolia",
+   "latin_name": "Typha latifolia",
+   "common_name": "Tabua (Broadleaf cattail)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Typha_latifolia_02_bgiu.jpg/1280px-Typha_latifolia_02_bgiu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Bulrush_%28Typha_latifolia%29_%288139113636%29.jpg/1280px-Bulrush_%28Typha_latifolia%29_%288139113636%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Typha_latifolia_norway.jpg/1280px-Typha_latifolia_norway.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  },
+  {
+   "id": "typha-domingensis",
+   "latin_name": "Typha domingensis",
+   "common_name": "Tabua (Southern cattail)",
+   "photos": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Typha_domingensis_Habitus_CampodeCalatrava.jpg/1280px-Typha_domingensis_Habitus_CampodeCalatrava.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Typha_domingensis_4.jpg/1280px-Typha_domingensis_4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+   ]
+  }
+ ]
+}

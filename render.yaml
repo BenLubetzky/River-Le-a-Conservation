@@ -1,0 +1,33 @@
+# Render Blueprint for the API (trial move from Railway; see README "Deploying").
+# Render → New → Blueprint → this repository. It asks for the values marked `sync: false`.
+services:
+  - type: web
+    name: guardioes-do-leca-api
+    runtime: python
+    # Closest Render region to the Supabase database (eu-west-1, Ireland).
+    region: frankfurt
+    plan: free
+    rootDir: backend
+    # Python version: backend/.python-version. uv is used because backend/uv.lock is there.
+    # The admin page's group (Streamlit) isn't needed on the server.
+    buildCommand: uv sync --frozen --no-group admin
+    # Free services have no pre-deploy step, so migrations run on start, as on Railway.
+    startCommand: uv run --no-sync python -m alembic upgrade head && uv run --no-sync python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    # Only deploy when the API changes, not the website.
+    buildFilter:
+      paths:
+        - backend/**
+    envVars:
+      # Supabase → Connect → Session pooler connection string.
+      - key: DATABASE_URL
+        sync: false
+      # Supabase → Project Settings → Data API → Project URL.
+      - key: SUPABASE_URL
+        sync: false
+      # Supabase → Project Settings → API Keys → Secret key.
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      # Render serves the API over HTTPS.
+      - key: COOKIE_SECURE
+        value: "true"

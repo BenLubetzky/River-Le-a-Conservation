@@ -55,6 +55,8 @@ export default function RioLeca({ user }: { user: User }) {
   const plant = species && sel >= 0 ? species[sel] : undefined;
   // Reports without an uploaded photo show the species' main photo instead.
   const srcOf = (r: Report) => r.photo_url || species?.find((s) => s.id === r.species_id)?.photos[0] || "";
+  // The same, as a thumbnail when there is one, for lists.
+  const thumbOf = (r: Report) => r.thumb_url || srcOf(r);
   const viewed = view != null ? reports?.find((r) => r.id === view) : undefined;
 
   return (
@@ -76,7 +78,7 @@ export default function RioLeca({ user }: { user: User }) {
         <PlantDetail plant={plant} gi={gi} setGi={setGi} onBack={() => navigate("main")} onLookGallery={(look) => setLb({ look, i: 0 })} />
       )}
       {page === "reports" && (
-        <ReportsPage reports={reports} species={species} userId={user.id} error={reportsError} onRetry={reloadReports} f={filters} setFilters={setFilters} srcOf={srcOf} onView={setView} />
+        <ReportsPage reports={reports} species={species} userId={user.id} error={reportsError} onRetry={reloadReports} f={filters} setFilters={setFilters} srcOf={thumbOf} onView={setView} />
       )}
       {page === "map" && (
         <MapPage reports={reports} species={species} userId={user.id} error={reportsError} onRetry={reloadReports} onView={setView} onReportAt={reportHere} />

@@ -99,7 +99,7 @@ export default function ReportView({ r, names: p, src, checkupDays, onClose, onE
                     <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
                       {c.photo_urls.map((url, j) => (
                         <button key={url} onClick={() => setLb({ photos: c.photo_urls, i: j, title: `${OUTCOME_LABELS[c.outcome]} · ${c.checked_by}` })} aria-label={`Abrir fotografia ${j + 1}`} style={{ width: 64, height: 64, padding: 0, border: "none", borderRadius: "var(--radius-md)", overflow: "hidden", cursor: "pointer" }}>
-                          <Photo src={url} washed={false} />
+                          <Photo src={c.thumb_urls[j] ?? url} washed={false} />
                         </button>
                       ))}
                     </div>

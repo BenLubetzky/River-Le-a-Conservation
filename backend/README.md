@@ -43,10 +43,11 @@ That's a setting for your computer, not the project, so servers can still use a 
 | POST | `/auth/logout` | Ends the session and clears the cookie |
 | GET | `/auth/me` | The logged-in user |
 | GET | `/reports` | All reports, newest first |
-| POST | `/reports` | Submit a report as the logged-in user (multipart form, optional `photo` file). `reporter_name` is always their username |
+| POST | `/reports` | Submit a report as the logged-in user (multipart form, optional `photo` file and its `photo_thumb`, a JPEG of up to 512 KB). `reporter_name` is always their username |
 | PUT | `/reports/{id}` | Edit a report. Only its author can (403 otherwise). Same fields as POST, all replaced; the photo changes only if a new `photo` or `remove_photo=true` is sent |
 | GET | `/species` | The invasive species with all their field-guide content (details, characteristics, removal steps, native look-alikes, photo URLs) |
-| GET | `/health` | Liveness check |
+| POST | `/reports/{id}/postpone` | Move a due checkup to a later day, with optional notes and `photos` (plus `photo_thumbs`, one per photo, an empty file for none) |
+| GET | `/health` | Liveness check: runs `SELECT 1` on the database; 503 if it can't |
 
 Everything except `/health` and `/auth/login` needs a logged-in user, and answers 401 otherwise.
 

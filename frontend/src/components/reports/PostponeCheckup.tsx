@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import Icon from "@/components/ui/Icon";
 import Photo from "@/components/ui/Photo";
 import { daysFromToday, fmtDay, today } from "@/lib/checkup";
+import { preparePhoto, type PreparedPhoto } from "@/lib/photos";
 import type { PostponeInput } from "@/types/report";
 
 const QUICK = [
@@ -11,7 +12,6 @@ const QUICK = [
   { label: "1 mês", days: 30 },
 ];
 const MAX_PHOTOS = 6; // matches the API
-const MAX_BYTES = 10 * 1024 * 1024;
 
 /**
  * The spot couldn't be checked: pick a later day to try again (a quick choice, or any date), and
@@ -23,7 +23,8 @@ export default function PostponeCheckup({ onPostpone, onBack }: {
 }) {
   const [next, setNext] = useState(() => daysFromToday(7));
   const [notes, setNotes] = useState("");
-  const [photos, setPhotos] = useState<{ file: File; url: string }[]>([]);
+  const [photos, setPhotos] = useState<(PreparedPhoto & { url: string })[]>([]);
+  const [preparing, setPreparing] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -34,19 +35,24 @@ export default function PostponeCheckup({ onPostpone, onBack }: {
   }, [photos]);
   useEffect(() => () => shown.current.forEach((p) => URL.revokeObjectURL(p.url)), []);
 
-  const addPhotos = (e: ChangeEvent<HTMLInputElement>) => {
+  const addPhotos = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     e.target.value = ""; // so picking the same file again still fires
-    if (files.some((f) => f.size > MAX_BYTES)) {
-      setError("Cada fotografia tem de ter 10 MB ou menos.");
-      return;
-    }
     if (photos.length + files.length > MAX_PHOTOS) {
       setError(`Adicione no máximo ${MAX_PHOTOS} fotografias.`);
       return;
     }
     setError("");
-    setPhotos([...photos, ...files.map((file) => ({ file, url: URL.createObjectURL(file) }))]);
+    setPreparing(true);
+    try {
+      // Shrunk, with thumbnails, before they're added.
+      const prepared = await Promise.all(files.map(preparePhoto));
+      const added = prepared.map((p) => ({ ...p, url: URL.createObjectURL(p.thumb ?? p.file) }));
+      setPhotos((ps) => [...ps, ...added]);
+    } catch (err) {
+      setError((err as Error).message);
+    }
+    setPreparing(false);
   };
   const removePhoto = (i: number) => {
     URL.revokeObjectURL(photos[i].url);
@@ -61,7 +67,7 @@ export default function PostponeCheckup({ onPostpone, onBack }: {
     setBusy(true);
     setError("");
     try {
-      await onPostpone({ next_checkup: next, notes: notes.trim() || undefined, photos: photos.map((p) => p.file) });
+      await onPostpone({ next_checkup: next, notes: notes.trim() || undefined, photos: photos.map(({ file, thumb }) => ({ file, thumb })) });
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);
@@ -111,7 +117,8 @@ export default function PostponeCheckup({ onPostpone, onBack }: {
             </button>
           </div>
         ))}
-        {photos.length < MAX_PHOTOS && (
+        {preparing && <span style={{ alignSelf: "center", fontSize: 14, color: "var(--color-neutral-700)" }}>A preparar…</span>}
+        {!preparing && photos.length < MAX_PHOTOS && (
           <label className="photo-add" title="Adicionar fotografias (opcional)">
             <input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" multiple onChange={addPhotos} style={{ display: "none" }} />
             <Icon name="imagePlus" size={24} />
@@ -121,7 +128,7 @@ export default function PostponeCheckup({ onPostpone, onBack }: {
       </div>
       <div className="dialog-actions" style={{ marginTop: 0 }}>
         <button className="btn btn-ghost" onClick={onBack} disabled={busy}>Voltar</button>
-        <button className="btn btn-primary" onClick={send} disabled={busy}>{busy ? "A guardar…" : "Confirmar: adiar"}</button>
+        <button className="btn btn-primary" onClick={send} disabled={busy || preparing}>{busy ? "A guardar…" : "Confirmar: adiar"}</button>
       </div>
       {error && <span role="alert" style={{ fontSize: 14, color: "var(--color-accent-800)" }}>{error}</span>}
     </>

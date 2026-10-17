@@ -26,6 +26,10 @@ export function postponeCheckup(id: number, c: PostponeInput) {
   const form = new FormData();
   form.append("next_checkup", c.next_checkup);
   if (c.notes) form.append("notes", c.notes);
-  for (const photo of c.photos) form.append("photos", photo);
+  for (const p of c.photos) form.append("photos", p.file);
+  // One per photo, in the same order; an empty file for a photo without a thumbnail.
+  if (c.photos.some((p) => p.thumb)) {
+    for (const p of c.photos) form.append("photo_thumbs", p.thumb ?? new File([], "nenhuma.jpg", { type: "image/jpeg" }));
+  }
   return request<Report>(`/reports/${id}/postpone`, { method: "POST", body: form });
 }

@@ -20,7 +20,10 @@ class Settings(BaseSettings):
     supabase_secret_key: str
 
     photo_bucket: str = "report-photos"
+    # The website shrinks photos before uploading them (to about 0.5 MB); this limit is for the ones
+    # it can't shrink, which it sends as they are.
     max_photo_bytes: int = 10 * 1024 * 1024
+    max_thumb_bytes: int = 512 * 1024
     # How long a signed photo URL handed to the website stays valid.
     signed_url_ttl_seconds: int = 60 * 60
     # Websites allowed to call the API from a browser.
